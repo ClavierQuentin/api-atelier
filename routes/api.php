@@ -30,6 +30,7 @@ Route::middleware('auth:sanctum','role:admin')->group(function(){
     //     // redirect('http://google.com');
     // });
     Route::post('texte-accueil',[TexteAccueilController::class, 'store']);
+    Route::put('texte-accueil/{texteAccueil}',[TexteAccueilController::class,'update']);
 });
 
 Route::get('texte-accueil/{texteAccueil}',[TexteAccueilController::class, 'show']);
