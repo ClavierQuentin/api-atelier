@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateTexteAccueilRequest extends FormRequest
+class StorePremiereBanniereRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class UpdateTexteAccueilRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -24,10 +24,7 @@ class UpdateTexteAccueilRequest extends FormRequest
     public function rules()
     {
         return [
-            'titre_accueil' =>'string|max:250',
-            'texte_accueil'=>'text',
-            'titre_categories' =>'string|max:250'
-
+            //
         ];
     }
 }

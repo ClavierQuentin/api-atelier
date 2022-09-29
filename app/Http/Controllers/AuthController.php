@@ -15,25 +15,28 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         //Validation de la requête
-        $validate = Validator::make($request->all(),
+        $validator = Validator::make($request->all(),
         [
             'name' =>'required|string|max:250',
             'email'=>'required|email|unique:users,email',
             'password'=>'required',
         ]);
 
-        if($validate->fails()){
+        if($validator->fails()){
             return response()->json([
                 'status'=>false,
                 'message'=>'Une erreur est survenue',
-                'errors'=>$validate->errors()
+                'errors'=>$validator->errors()
             ],401);
         }
 
+        $validated = $validator->validated();
+
+        //Création et insertion en BD
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password'=>Hash::make($request->password)
+            'name'=>$validated['name'],
+            'email'=>$validated['email'],
+            'password'=>Hash::make($validated['password'])
         ]);
         return response()->json([
             'status'=>true,
@@ -58,14 +61,16 @@ class AuthController extends Controller
             ], 401);
         }
 
-        if(!Auth::attempt($request->only(['email', 'password']))){
+        $validatedUser = $validateUser->validate();
+
+        if(!Auth::attempt($validatedUser)){
             return response()->json([
                 'status'=>false,
                 'message'=>'L\'email ou/et le mot de passe ne sont pas reconnus'
             ],401);
         }
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $validatedUser['email'])->first();
 
         return response()->json([
             'status'=>true,

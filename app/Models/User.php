@@ -47,4 +47,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(TexteAccueil::class);
     }
+
+    public function premiereBannieres()
+    {
+        return $this->hasMany(PremiereBanniere::class);
+    }
 }

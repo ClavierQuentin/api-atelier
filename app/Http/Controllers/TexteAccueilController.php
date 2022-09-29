@@ -44,7 +44,7 @@ class TexteAccueilController extends Controller
             ]);
         return response()->json([
             'status'=>true,
-            'message'=>'Enregistrement rÃ©ussi'
+            'message'=>'Enregistrement réussi'
         ],200);
     }
 
