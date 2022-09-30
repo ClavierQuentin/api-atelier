@@ -25,10 +25,6 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/logout', [AuthController::class, 'logout']);
 
 Route::middleware('auth:sanctum','role:admin')->group(function(){
-    // Route::get('/private', function(Request $request){
-    //     return response()->json('Hello '.$request->user()->name);
-    //     // redirect('http://google.com');
-    // });
     Route::post('texte-accueil',[TexteAccueilController::class, 'store']);
     Route::post('texte-accueil/{texteAccueil}',[TexteAccueilController::class,'update']);
     Route::delete('texte-accueil/{texteAccueil}',[TexteAccueilController::class,'destroy']);
