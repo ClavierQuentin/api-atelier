@@ -13,7 +13,7 @@ class StorePremiereBanniereRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class StorePremiereBanniereRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'titre' => 'required|string|max:250',
+            'texte' => 'required|string'
         ];
     }
 }

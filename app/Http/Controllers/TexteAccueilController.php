@@ -76,7 +76,8 @@ class TexteAccueilController extends Controller
      */
     public function update(UpdateTexteAccueilRequest $request, TexteAccueil $texteAccueil)
     {
-        $texteAccueil->update($request->all());
+        $texteAccueil->update($request->only('titre_accueil','texte_accueil','titre_categories'));
+        return response()->json(array('success' => true),200);
     }
 
     /**

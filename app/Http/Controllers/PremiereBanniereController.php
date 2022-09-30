@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PremiereBanniere;
 use App\Http\Requests\StorePremiereBanniereRequest;
 use App\Http\Requests\UpdatePremiereBanniereRequest;
+use Illuminate\Support\Facades\Auth;
 
 class PremiereBanniereController extends Controller
 {
@@ -36,7 +37,10 @@ class PremiereBanniereController extends Controller
      */
     public function store(StorePremiereBanniereRequest $request)
     {
-        //
+        $texte = Auth::user()->premiereBannieres()->create($request->all());
+        return response()->json(array(
+            'status' => true
+        ), 200);
     }
 
     /**
@@ -47,7 +51,8 @@ class PremiereBanniereController extends Controller
      */
     public function show(PremiereBanniere $premiereBanniere)
     {
-        //
+        return response()->json($premiereBanniere, 200);
+
     }
 
     /**
@@ -70,7 +75,10 @@ class PremiereBanniereController extends Controller
      */
     public function update(UpdatePremiereBanniereRequest $request, PremiereBanniere $premiereBanniere)
     {
-        //
+        $premiereBanniere->update($request->only('titre', 'texte'));
+        return response()->json([
+            'status'=>true
+        ],200);
     }
 
     /**
@@ -81,6 +89,9 @@ class PremiereBanniereController extends Controller
      */
     public function destroy(PremiereBanniere $premiereBanniere)
     {
-        //
+        $premiereBanniere->delete();
+        return response()->json([
+            'status' => true,
+        ],200);
     }
 }
