@@ -25,7 +25,7 @@ class UpdateTexteAccueilRequest extends FormRequest
     {
         return [
             'titre_accueil' =>'string|max:250',
-            'texte_accueil'=>'text',
+            'texte_accueil'=>'string',
             'titre_categories' =>'string|max:250'
 
         ];

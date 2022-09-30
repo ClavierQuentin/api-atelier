@@ -25,7 +25,7 @@ class StoreTexteAccueilRequest extends FormRequest
     {
         return [
             'titre_accueil' =>'required|string|max:250',
-            'texte_accueil'=>'required',
+            'texte_accueil'=>'required|string',
             'titre_categories' =>'required|string|max:250'
         ];
     }

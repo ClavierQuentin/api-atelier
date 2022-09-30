@@ -37,14 +37,10 @@ class TexteAccueilController extends Controller
      */
     public function store(StoreTexteAccueilRequest $request)
     {
-        $texte = Auth::user()->texteAccueils()->create([
-            'titre_accueil'=>$request->titre_accueil,
-            'texte_accueil'=>$request->texte_accueil,
-            'titre_categories'=>$request->titre_categories
-            ]);
+        $texte = Auth::user()->texteAccueils()->create($request->all());
         return response()->json([
-            'status'=>true,
-            'message'=>'Enregistrement réussi'
+            'status'=>'success',
+            'message'=>'New entry added successfully.'
         ],200);
     }
 
@@ -56,8 +52,8 @@ class TexteAccueilController extends Controller
      */
     public function show(TexteAccueil $texteAccueil)
     {
-        $texte = TexteAccueil::find($texteAccueil);
-        return response()->json($texte, 200);
+        // $texte = TexteAccueil::find($texteAccueil);
+        return response()->json($texteAccueil, 200);
     }
 
     /**
@@ -80,7 +76,7 @@ class TexteAccueilController extends Controller
      */
     public function update(UpdateTexteAccueilRequest $request, TexteAccueil $texteAccueil)
     {
-        //
+        $texteAccueil->update($request->all());
     }
 
     /**
@@ -91,6 +87,10 @@ class TexteAccueilController extends Controller
      */
     public function destroy(TexteAccueil $texteAccueil)
     {
-        //
+        $texteAccueil->delete();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data deleted successfully.',
+        ],200);
     }
 }
