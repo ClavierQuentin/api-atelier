@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PremiereBanniere;
-use App\Http\Requests\StorePremiereBanniereRequest;
-use App\Http\Requests\UpdatePremiereBanniereRequest;
+use App\Models\DeuxiemeBanniere;
+use App\Http\Requests\StoreDeuxiemeBanniereRequest;
+use App\Http\Requests\UpdateDeuxiemeBanniereRequest;
 use Illuminate\Support\Facades\Auth;
 
-class PremiereBanniereController extends Controller
+class DeuxiemeBanniereController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class PremiereBanniereController extends Controller
      */
     public function index()
     {
-        $data = PremiereBanniere::all();
+        $data = DeuxiemeBanniere::all();
         if(sizeof($data) > 0){
             return response()->json($data, 200);
         }
@@ -36,64 +36,63 @@ class PremiereBanniereController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StorePremiereBanniereRequest  $request
+     * @param  \App\Http\Requests\StoreDeuxiemeBanniereRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePremiereBanniereRequest $request)
+    public function store(StoreDeuxiemeBanniereRequest $request)
     {
-        $texte = Auth::user()->premiereBannieres()->create($request->all());
+        $texte = Auth::user()->deuxiemeBannieres()->create($request->all());
         return response()->json(array(
             'status' => true
-        ), 201);
+        ), 200);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\PremiereBanniere  $premiereBanniere
+     * @param  \App\Models\DeuxiemeBanniere  $deuxiemeBanniere
      * @return \Illuminate\Http\Response
      */
-    public function show(PremiereBanniere $premiereBanniere)
+    public function show(DeuxiemeBanniere $deuxiemeBanniere)
     {
-        return response()->json($premiereBanniere, 200);
-
+        return response()->json($deuxiemeBanniere, 200);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\PremiereBanniere  $premiereBanniere
+     * @param  \App\Models\DeuxiemeBanniere  $deuxiemeBanniere
      * @return \Illuminate\Http\Response
      */
-    public function edit(PremiereBanniere $premiereBanniere)
+    public function edit(DeuxiemeBanniere $deuxiemeBanniere)
     {
-        //
+
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdatePremiereBanniereRequest  $request
-     * @param  \App\Models\PremiereBanniere  $premiereBanniere
+     * @param  \App\Http\Requests\UpdateDeuxiemeBanniereRequest  $request
+     * @param  \App\Models\DeuxiemeBanniere  $deuxiemeBanniere
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePremiereBanniereRequest $request, PremiereBanniere $premiereBanniere)
+    public function update(UpdateDeuxiemeBanniereRequest $request, DeuxiemeBanniere $deuxiemeBanniere)
     {
-        $premiereBanniere->update($request->only('titre', 'texte'));
+        $deuxiemeBanniere->update($request->only('titre', 'texte'));
         return response()->json([
             'status'=>true
-        ],201);
+        ],200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\PremiereBanniere  $premiereBanniere
+     * @param  \App\Models\DeuxiemeBanniere  $deuxiemeBanniere
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PremiereBanniere $premiereBanniere)
+    public function destroy(DeuxiemeBanniere $deuxiemeBanniere)
     {
-        $premiereBanniere->delete();
+        $deuxiemeBanniere->delete();
         return response()->json([
             'status' => true,
         ],200);

@@ -52,4 +52,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(PremiereBanniere::class);
     }
+
+    public function deuxiemeBannieres()
+    {
+        return $this->hasMany(DeuxiemeBanniere::class);
+    }
 }

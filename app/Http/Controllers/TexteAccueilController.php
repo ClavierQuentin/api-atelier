@@ -16,7 +16,11 @@ class TexteAccueilController extends Controller
      */
     public function index()
     {
-        //
+        $data = TexteAccueil::all();
+        if(sizeof($data) > 0){
+            return response()->json($data, 200);
+        }
+        return response()->json(['status'=> false], 204);
     }
 
     /**
@@ -52,7 +56,6 @@ class TexteAccueilController extends Controller
      */
     public function show(TexteAccueil $texteAccueil)
     {
-        // $texte = TexteAccueil::find($texteAccueil);
         return response()->json($texteAccueil, 200);
     }
 
