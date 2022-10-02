@@ -24,7 +24,7 @@ class StoreDeuxiemeBanniereRequest extends FormRequest
     public function rules()
     {
         return [
-            'titre' => 'required|string|max:250',
+            'titre' =>  'required|string|max:250',
             'texte' => 'required|string'
         ];
     }

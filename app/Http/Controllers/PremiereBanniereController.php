@@ -24,16 +24,6 @@ class PremiereBanniereController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\StorePremiereBanniereRequest  $request
@@ -41,25 +31,17 @@ class PremiereBanniereController extends Controller
      */
     public function store(StorePremiereBanniereRequest $request)
     {
-        $texte = Auth::user()->premiereBannieres()->create($request->all());
-        return response()->json(array(
-            'status' => true
-        ), 201);
+        $texte = Auth::user()->premiereBannieres()->create($request->validated());
+        if(!empty($texte)){
+            return response()->json([
+                'status'=>'success',
+                'message'=>'New entry added successfully.'
+            ],201);
+        }
+        return response()->json(array('status'=>false), 500);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\PremiereBanniere  $premiereBanniere
-     * @return \Illuminate\Http\Response
-     */
-    public function show(PremiereBanniere $premiereBanniere)
-    {
-        return response()->json($premiereBanniere, 200);
-
-    }
-
-    /**
+        /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\PremiereBanniere  $premiereBanniere
@@ -67,8 +49,9 @@ class PremiereBanniereController extends Controller
      */
     public function edit(PremiereBanniere $premiereBanniere)
     {
-        //
+        return response()->json($premiereBanniere, 200);
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -79,10 +62,11 @@ class PremiereBanniereController extends Controller
      */
     public function update(UpdatePremiereBanniereRequest $request, PremiereBanniere $premiereBanniere)
     {
-        $premiereBanniere->update($request->only('titre', 'texte'));
-        return response()->json([
-            'status'=>true
-        ],201);
+        $update = $premiereBanniere->update($request->validated());
+        if(!$update){
+            return response()->json(array('status' => false),500);
+        }
+        return response()->json(array('status' => true),201);
     }
 
     /**
@@ -93,9 +77,10 @@ class PremiereBanniereController extends Controller
      */
     public function destroy(PremiereBanniere $premiereBanniere)
     {
-        $premiereBanniere->delete();
-        return response()->json([
-            'status' => true,
-        ],200);
+        $delete = $premiereBanniere->delete();
+        if(!$delete){
+            return response()->json(array('status' => false),500);
+        }
+        return response()->json(array('status' => true),200);
     }
 }

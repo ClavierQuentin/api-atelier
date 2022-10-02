@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DeuxiemeBanniereController;
 use App\Http\Controllers\PremiereBanniereController;
 use App\Http\Controllers\TexteAccueilController;
+use App\Http\Controllers\TroisiemeBanniereController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,26 +34,39 @@ Route::middleware('auth:sanctum','role:admin')->group(function(){
     Route::post('texte-accueil',[TexteAccueilController::class, 'store']);
     Route::post('texte-accueil/{texteAccueil}',[TexteAccueilController::class,'update']);
     Route::delete('texte-accueil/{texteAccueil}',[TexteAccueilController::class,'destroy']);
+    Route::get('texte-accueil/{texteAccueil}/edit',[TexteAccueilController::class,'edit']);
+
 
     Route::post('premiere-banniere',[PremiereBanniereController::class,'store']);
     Route::post('premiere-banniere/{premiereBanniere}',[PremiereBanniereController::class,'update']);
     Route::delete('premiere-banniere/{premiereBanniere}',[PremiereBanniereController::class,'destroy']);
+    Route::get('premiere-banniere/{premiereBanniere}/edit',[PremiereBanniereController::class,'edit']);
+
 
     Route::post('deuxieme-banniere',[DeuxiemeBanniereController::class,'store']);
-    Route::post('deuxieme-banniere/{DeuxiemeBanniere}',[DeuxiemeBanniereController::class,'update']);
-    Route::delete('deuxieme-banniere/{DeuxiemeBanniere}',[DeuxiemeBanniereController::class,'destroy']);
+    Route::post('deuxieme-banniere/{deuxiemeBanniere}',[DeuxiemeBanniereController::class,'update']);
+    Route::delete('deuxieme-banniere/{deuxiemeBanniere}',[DeuxiemeBanniereController::class,'destroy']);
+    Route::get('deuxieme-banniere/{deuxiemeBanniere}/edit',[DeuxiemeBanniereController::class,'edit']);
 
+
+    Route::post('troisieme-banniere',[TroisiemeBanniereController::class,'store']);
+    Route::post('troisieme-banniere/{troisiemeBanniere}',[TroisiemeBanniereController::class,'update']);
+    Route::delete('troisieme-banniere/{troisiemeBanniere}',[TroisiemeBanniereController::class,'destroy']);
+    Route::get('troisieme-banniere/{troisiemeBanniere}/edit',[TroisiemeBanniereController::class,'edit']);
 
 });
 
 //Routes show
 Route::get('texte-accueil/{texteAccueil}',[TexteAccueilController::class, 'show']);
 Route::get('premiere-banniere/{premiereBanniere}',[PremiereBanniereController::class, 'show']);
-Route::get('deuxieme-banniere/{DeuxiemeBanniere}',[DeuxiemeBanniereController::class, 'show']);
+Route::get('deuxieme-banniere/{deuxiemeBanniere}',[DeuxiemeBanniereController::class, 'show']);
+Route::get('troisieme-banniere/{troisiemeBanniere}',[TroisiemeBanniereController::class, 'show']);
+
 
 //Routes index
 Route::get('deuxieme-banniere',[DeuxiemeBanniereController::class, 'index']);
 Route::get('premiere-banniere',[PremiereBanniereController::class, 'index']);
 Route::get('texte-accueil',[TexteAccueilController::class, 'index']);
+Route::get('troisieme-banniere',[TroisiemeBanniereController::class, 'index']);
 
 

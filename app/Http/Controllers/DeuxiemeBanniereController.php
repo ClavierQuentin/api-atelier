@@ -24,16 +24,6 @@ class DeuxiemeBanniereController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\StoreDeuxiemeBanniereRequest  $request
@@ -41,10 +31,14 @@ class DeuxiemeBanniereController extends Controller
      */
     public function store(StoreDeuxiemeBanniereRequest $request)
     {
-        $texte = Auth::user()->deuxiemeBannieres()->create($request->all());
-        return response()->json(array(
-            'status' => true
-        ), 200);
+        $texte = Auth::user()->deuxiemeBannieres()->create($request->validated());
+        if(!empty($texte)){
+            return response()->json([
+                'status'=>'success',
+                'message'=>'New entry added successfully.'
+            ],201);
+        }
+        return response()->json(array('status'=>false), 500);
     }
 
     /**
@@ -66,7 +60,7 @@ class DeuxiemeBanniereController extends Controller
      */
     public function edit(DeuxiemeBanniere $deuxiemeBanniere)
     {
-
+        return response()->json($deuxiemeBanniere, 200);
     }
 
     /**
@@ -78,10 +72,11 @@ class DeuxiemeBanniereController extends Controller
      */
     public function update(UpdateDeuxiemeBanniereRequest $request, DeuxiemeBanniere $deuxiemeBanniere)
     {
-        $deuxiemeBanniere->update($request->only('titre', 'texte'));
-        return response()->json([
-            'status'=>true
-        ],200);
+        $update = $deuxiemeBanniere->update($request->validated());
+        if(!$update){
+            return response()->json(array('status' => false),500);
+        }
+        return response()->json(array('status' => true),201);
     }
 
     /**
@@ -92,9 +87,10 @@ class DeuxiemeBanniereController extends Controller
      */
     public function destroy(DeuxiemeBanniere $deuxiemeBanniere)
     {
-        $deuxiemeBanniere->delete();
-        return response()->json([
-            'status' => true,
-        ],200);
+        $delete = $deuxiemeBanniere->delete();
+        if(!$delete){
+            return response()->json(array('status' => false),500);
+        }
+        return response()->json(array('status' => true),200);
     }
 }

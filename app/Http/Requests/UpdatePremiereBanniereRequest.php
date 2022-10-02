@@ -24,8 +24,8 @@ class UpdatePremiereBanniereRequest extends FormRequest
     public function rules()
     {
         return [
-            'titre' => 'string',
-            'texte' => 'string'
+            'titre' => 'required|string|max:250',
+            'texte' => 'required|string'
         ];
     }
 }
