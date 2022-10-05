@@ -5,6 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Categorie;
 use App\Http\Requests\StoreCategorieRequest;
 use App\Http\Requests\UpdateCategorieRequest;
+use Carbon\Carbon;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Support\Carbon as SupportCarbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\File;
 
 class CategorieController extends Controller
 {
@@ -36,7 +43,38 @@ class CategorieController extends Controller
      */
     public function store(StoreCategorieRequest $request)
     {
-        //
+        $validator = Validator::make($request->all(),[
+            'image'=>[
+                'required',
+                File::image()
+            ]
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'status'=>false,
+                'message'=>'Une erreur est survenue',
+                'errors'=>$validator->errors()
+            ],401);
+        };
+
+        $validated = $validator->validated();
+
+        $path = $validated['image']->storeAs('images_categories', Carbon::now()->timestamp.'_'.$request->file('image')->getClientOriginalName(), ['disk'=>'public']);
+
+        $response = Auth::user()->categories()->create([
+            'nom_categorie'=>$request->validated('nom_categorie'),
+            'url_image_categorie'=>$path
+        ]);
+
+        //Trouver comment utiliser file_exists
+        
+        if(!empty($response)){
+            return response()->json([
+                'status'=>'success',
+                'message'=>'New entry added successfully.'
+            ],201);
+        }
+        return response()->json(array('status'=>false), 500);
     }
 
     /**

@@ -61,4 +61,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(TroisiemeBanniere::class);
     }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Categorie::class);
+    }
 }

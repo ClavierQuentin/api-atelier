@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\DeuxiemeBanniereController;
 use App\Http\Controllers\PremiereBanniereController;
 use App\Http\Controllers\TexteAccueilController;
 use App\Http\Controllers\TroisiemeBanniereController;
+use App\Models\Categorie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -53,6 +55,8 @@ Route::middleware('auth:sanctum','role:admin')->group(function(){
     Route::post('troisieme-banniere/{troisiemeBanniere}',[TroisiemeBanniereController::class,'update']);
     Route::delete('troisieme-banniere/{troisiemeBanniere}',[TroisiemeBanniereController::class,'destroy']);
     Route::get('troisieme-banniere/{troisiemeBanniere}/edit',[TroisiemeBanniereController::class,'edit']);
+
+    Route::post('categories',[CategorieController::class, 'store']);
 
 });
 
