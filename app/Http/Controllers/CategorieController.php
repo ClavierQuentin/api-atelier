@@ -63,7 +63,7 @@ class CategorieController extends Controller
 
         $validated = $validator->validated();
         // $uploadedFileUrl = cloudinary()->upload($request->file('file')->getRealPath())->getSecurePath();
-        $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
+        $path = cloudinary()->upload($request->file('image')->getRealPath())->getSecurePath();
         $path .= Carbon::now()->timestamp.'_';
         // $path = $validated['image']->storeAs('images_categories', Carbon::now()->timestamp.'_'.$request->file('image')->getClientOriginalName(), ['disk'=>'public']);
 
