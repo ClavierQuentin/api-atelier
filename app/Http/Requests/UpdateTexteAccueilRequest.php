@@ -24,9 +24,9 @@ class UpdateTexteAccueilRequest extends FormRequest
     public function rules()
     {
         return [
-            'titre_accueil' =>'required|string|max:250',
-            'texte_accueil'=>'required|string',
-            'titre_categories' =>'required|string|max:250'
+            'titre_accueil' =>'string|max:250',
+            'texte_accueil'=>'string',
+            'titre_categories' =>'string|max:250'
 
         ];
     }

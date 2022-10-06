@@ -64,7 +64,6 @@ class CategorieController extends Controller
         $validated = $validator->validated();
         // $uploadedFileUrl = cloudinary()->upload($request->file('file')->getRealPath())->getSecurePath();
         $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
-        $path .= Carbon::now()->timestamp.'_';
         // $path = $validated['image']->storeAs('images_categories', Carbon::now()->timestamp.'_'.$request->file('image')->getClientOriginalName(), ['disk'=>'public']);
 
         $response = Auth::user()->categories()->create([
@@ -91,7 +90,7 @@ class CategorieController extends Controller
      */
     public function show(Categorie $categorie)
     {
-        //
+        return response()->json($categorie, 200);
     }
 
     /**
@@ -102,7 +101,7 @@ class CategorieController extends Controller
      */
     public function edit(Categorie $categorie)
     {
-        //
+        return response()->json($categorie, 200);
     }
 
     /**
@@ -114,7 +113,34 @@ class CategorieController extends Controller
      */
     public function update(UpdateCategorieRequest $request, Categorie $categorie)
     {
-        //
+        $validator = Validator::make($request->all(),[
+            'image'=>[
+                File::image()
+            ]
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'status'=>false,
+                'message'=>'Une erreur est survenue',
+                'errors'=>$validator->errors()
+            ],401);
+        };
+
+        $validated = $validator->validated();
+
+        if(isset($validated['image'])){
+            $updatedUrl = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
+            // $updatedUrl = $validated['image']->storeAs('images_categories', Carbon::now()->timestamp.'_'.$request->file('image')->getClientOriginalName(), ['disk'=>'public']);
+        }
+        $update = $categorie->update([
+            'nom_categorie'=>$request->validated('nom_categorie'),
+            'url_image_categorie'=>$updatedUrl
+        ]);
+
+        if(!$update){
+            return response()->json(array('status' => false),500);
+        }
+        return response()->json(array('status' => true),201);
     }
 
     /**

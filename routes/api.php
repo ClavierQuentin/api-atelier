@@ -34,7 +34,7 @@ Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth:sanct
 //Route protégées Admin
 Route::middleware('auth:sanctum','role:admin')->group(function(){
     Route::post('texte-accueil',[TexteAccueilController::class, 'store']);
-    Route::post('texte-accueil/{texteAccueil}',[TexteAccueilController::class,'update']);
+    Route::put('texte-accueil/{texteAccueil}',[TexteAccueilController::class,'update']);
     Route::delete('texte-accueil/{texteAccueil}',[TexteAccueilController::class,'destroy']);
     Route::get('texte-accueil/{texteAccueil}/edit',[TexteAccueilController::class,'edit']);
 
@@ -57,6 +57,8 @@ Route::middleware('auth:sanctum','role:admin')->group(function(){
     Route::get('troisieme-banniere/{troisiemeBanniere}/edit',[TroisiemeBanniereController::class,'edit']);
 
     Route::post('categories',[CategorieController::class, 'store']);
+    Route::post('categories/{categorie}',[CategorieController::class, 'update']);
+
 
 });
 
@@ -65,6 +67,7 @@ Route::get('texte-accueil/{texteAccueil}',[TexteAccueilController::class, 'show'
 Route::get('premiere-banniere/{premiereBanniere}',[PremiereBanniereController::class, 'show']);
 Route::get('deuxieme-banniere/{deuxiemeBanniere}',[DeuxiemeBanniereController::class, 'show']);
 Route::get('troisieme-banniere/{troisiemeBanniere}',[TroisiemeBanniereController::class, 'show']);
+Route::get('categories/{categorie}',[CategorieController::class, 'show']);
 
 
 //Routes index
@@ -74,4 +77,3 @@ Route::get('texte-accueil',[TexteAccueilController::class, 'index']);
 Route::get('troisieme-banniere',[TroisiemeBanniereController::class, 'index']);
 Route::get('categories',[CategorieController::class, 'index']);
 
-Route::post('upload', [CategorieController::class, 'upload']);
