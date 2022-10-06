@@ -62,8 +62,10 @@ class CategorieController extends Controller
         };
 
         $validated = $validator->validated();
-
-        $path = $validated['image']->storeAs('images_categories', Carbon::now()->timestamp.'_'.$request->file('image')->getClientOriginalName(), ['disk'=>'public']);
+        // $uploadedFileUrl = cloudinary()->upload($request->file('file')->getRealPath())->getSecurePath();
+        $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
+        $path .= Carbon::now()->timestamp.'_';
+        // $path = $validated['image']->storeAs('images_categories', Carbon::now()->timestamp.'_'.$request->file('image')->getClientOriginalName(), ['disk'=>'public']);
 
         $response = Auth::user()->categories()->create([
             'nom_categorie'=>$request->validated('nom_categorie'),
@@ -128,9 +130,9 @@ class CategorieController extends Controller
 
     public function upload(StoreCategorieRequest $request)
     {
-        // $uploadedFileUrl = Cloudinary::upload($request->file('file')->getRealPath());        
+        // $uploadedFileUrl = Cloudinary::upload($request->file('file')->getRealPath());
         // $result = $request->file('file')->storeOnCloudinary();
-        $uploadedFileUrl = cloudinary()->upload($request->file('file')->getRealPath());
-
+        $uploadedFileUrl = cloudinary()->upload($request->file('file')->getRealPath())->getSecurePath();
+        return response()->json($uploadedFileUrl);
     }
 }
