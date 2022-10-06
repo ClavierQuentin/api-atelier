@@ -10,6 +10,7 @@ use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Support\Carbon as SupportCarbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\File;
 
@@ -22,7 +23,10 @@ class CategorieController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Categorie::all();
+        if(sizeof($categories) > 0){
+            return response()->json($categories, 200);
+        }
     }
 
     /**
@@ -67,7 +71,7 @@ class CategorieController extends Controller
         ]);
 
         //Trouver comment utiliser file_exists
-        
+
         if(!empty($response)){
             return response()->json([
                 'status'=>'success',
@@ -120,5 +124,13 @@ class CategorieController extends Controller
     public function destroy(Categorie $categorie)
     {
         //
+    }
+
+    public function upload(StoreCategorieRequest $request)
+    {
+        // $uploadedFileUrl = Cloudinary::upload($request->file('file')->getRealPath());        
+        // $result = $request->file('file')->storeOnCloudinary();
+        $uploadedFileUrl = cloudinary()->upload($request->file('file')->getRealPath());
+
     }
 }

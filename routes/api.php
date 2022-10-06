@@ -72,5 +72,6 @@ Route::get('deuxieme-banniere',[DeuxiemeBanniereController::class, 'index']);
 Route::get('premiere-banniere',[PremiereBanniereController::class, 'index']);
 Route::get('texte-accueil',[TexteAccueilController::class, 'index']);
 Route::get('troisieme-banniere',[TroisiemeBanniereController::class, 'index']);
+Route::get('categories',[CategorieController::class, 'index']);
 
-
+Route::post('upload', [CategorieController::class, 'upload']);
