@@ -58,7 +58,7 @@ Route::middleware('auth:sanctum','role:admin')->group(function(){
 
     Route::post('categories',[CategorieController::class, 'store']);
     Route::post('categories/{categorie}',[CategorieController::class, 'update']);
-    Route::delete('categories/{categorie}',[CategorieController::class, 'delete']);
+    Route::delete('categories/{categorie}',[CategorieController::class, 'destroy']);
     Route::get('categories/{categorie}/edit',[CategorieController::class, 'edit']);
 
 });
