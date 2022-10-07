@@ -56,7 +56,7 @@ Route::middleware('auth:sanctum','role:admin')->group(function(){
     Route::delete('troisieme-banniere/{troisiemeBanniere}',[TroisiemeBanniereController::class,'destroy']);
     Route::get('troisieme-banniere/{troisiemeBanniere}/edit',[TroisiemeBanniereController::class,'edit']);
 
-    Route::post('categories',[CategorieController::class, 'store']);
+    Route::post('categories/store',[CategorieController::class, 'store']);
     Route::post('categories/{categorie}',[CategorieController::class, 'update']);
     Route::delete('categories/{categorie}',[CategorieController::class, 'destroy']);
     Route::get('categories/{categorie}/edit',[CategorieController::class, 'edit']);
