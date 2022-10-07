@@ -125,12 +125,16 @@ class CategorieController extends Controller
             $result = Cloudinary::destroy($publicName);
 
             $updatedUrl = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
-        }
 
-        $update = $categorie->update([
-            'nom_categorie'=>$request->validated('nom_categorie'),
-            'url_image_categorie'=>$updatedUrl
-        ]);
+            $update = $categorie->update([
+                'nom_categorie'=>$request->validated('nom_categorie'),
+                'url_image_categorie'=>$updatedUrl
+            ]);
+        } else if(!isset($validated['image'])){
+            $update = $categorie->update([
+                'nom_categorie'=>$request->validated('nom_categorie'),
+            ]);
+        }
 
         if(!$update){
             return response()->json(array('status' => false),500);
