@@ -142,8 +142,9 @@ class CategorieController extends Controller
     {
         $urlImage = explode("/", $categorie->url_image_categorie);
         $publicId = $urlImage[count($urlImage)-1];
-        $result = Cloudinary::destroy($publicId);
-        return response()->json([$result, $publicId]);
+        $publicName = explode(".", $publicId)[0];
+        $result = Cloudinary::destroy($publicName);
+        return response()->json([$result, $publicName]);
 
         $delete = $categorie->delete();
         if(!$delete){
