@@ -29,15 +29,6 @@ class CategorieController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -71,9 +62,7 @@ class CategorieController extends Controller
             'url_image_categorie'=>$path
         ]);
 
-        //Trouver comment utiliser file_exists
-
-        if(!empty($response)){
+        if(!empty($response) && !empty($path)){
             return response()->json([
                 'status'=>'success',
                 'message'=>'New entry added successfully.'
@@ -151,14 +140,11 @@ class CategorieController extends Controller
      */
     public function destroy(Categorie $categorie)
     {
-        //
+        $delete = $categorie->delete();
+        if(!$delete){
+            return response()->json(array('status' => false),500);
+        }
+        return response()->json(array('status' => true),200);
     }
 
-    public function upload(StoreCategorieRequest $request)
-    {
-        // $uploadedFileUrl = Cloudinary::upload($request->file('file')->getRealPath());
-        // $result = $request->file('file')->storeOnCloudinary();
-        $uploadedFileUrl = cloudinary()->upload($request->file('file')->getRealPath())->getSecurePath();
-        return response()->json($uploadedFileUrl);
-    }
 }
