@@ -53,9 +53,7 @@ class CategorieController extends Controller
         };
 
         $validated = $validator->validated();
-        // $uploadedFileUrl = cloudinary()->upload($request->file('file')->getRealPath())->getSecurePath();
         $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
-        // $path = $validated['image']->storeAs('images_categories', Carbon::now()->timestamp.'_'.$request->file('image')->getClientOriginalName(), ['disk'=>'public']);
 
         $response = Auth::user()->categories()->create([
             'nom_categorie'=>$request->validated('nom_categorie'),
@@ -118,9 +116,17 @@ class CategorieController extends Controller
         $validated = $validator->validated();
 
         if(isset($validated['image'])){
+
+            //Suppression de l'ancienne image
+            $urlImage = explode("/", $categorie->url_image_categorie);
+            $publicId = $urlImage[count($urlImage)-1];
+            $publicName = explode(".", $publicId)[0];
+
+            $result = Cloudinary::destroy($publicName);
+
             $updatedUrl = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
-            // $updatedUrl = $validated['image']->storeAs('images_categories', Carbon::now()->timestamp.'_'.$request->file('image')->getClientOriginalName(), ['disk'=>'public']);
         }
+
         $update = $categorie->update([
             'nom_categorie'=>$request->validated('nom_categorie'),
             'url_image_categorie'=>$updatedUrl
@@ -140,12 +146,14 @@ class CategorieController extends Controller
      */
     public function destroy(Categorie $categorie)
     {
+        //Suppression de l'image sur le cloud
         $urlImage = explode("/", $categorie->url_image_categorie);
         $publicId = $urlImage[count($urlImage)-1];
         $publicName = explode(".", $publicId)[0];
-        $result = Cloudinary::destroy($publicName);
-        return response()->json([$result, $publicName]);
 
+        $result = Cloudinary::destroy($publicName);
+
+        //Suppression en DB
         $delete = $categorie->delete();
         if(!$delete){
             return response()->json(array('status' => false),500);
