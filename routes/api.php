@@ -40,25 +40,26 @@ Route::middleware('auth:sanctum','role:admin')->group(function(){
 
 
     Route::post('premiere-banniere',[PremiereBanniereController::class,'store']);
-    Route::post('premiere-banniere/{premiereBanniere}',[PremiereBanniereController::class,'update']);
+    Route::put('premiere-banniere/{premiereBanniere}',[PremiereBanniereController::class,'update']);
     Route::delete('premiere-banniere/{premiereBanniere}',[PremiereBanniereController::class,'destroy']);
     Route::get('premiere-banniere/{premiereBanniere}/edit',[PremiereBanniereController::class,'edit']);
 
 
     Route::post('deuxieme-banniere',[DeuxiemeBanniereController::class,'store']);
-    Route::post('deuxieme-banniere/{deuxiemeBanniere}',[DeuxiemeBanniereController::class,'update']);
+    Route::put('deuxieme-banniere/{deuxiemeBanniere}',[DeuxiemeBanniereController::class,'update']);
     Route::delete('deuxieme-banniere/{deuxiemeBanniere}',[DeuxiemeBanniereController::class,'destroy']);
     Route::get('deuxieme-banniere/{deuxiemeBanniere}/edit',[DeuxiemeBanniereController::class,'edit']);
 
 
     Route::post('troisieme-banniere',[TroisiemeBanniereController::class,'store']);
-    Route::post('troisieme-banniere/{troisiemeBanniere}',[TroisiemeBanniereController::class,'update']);
+    Route::put('troisieme-banniere/{troisiemeBanniere}',[TroisiemeBanniereController::class,'update']);
     Route::delete('troisieme-banniere/{troisiemeBanniere}',[TroisiemeBanniereController::class,'destroy']);
     Route::get('troisieme-banniere/{troisiemeBanniere}/edit',[TroisiemeBanniereController::class,'edit']);
 
     Route::post('categories',[CategorieController::class, 'store']);
     Route::post('categories/{categorie}',[CategorieController::class, 'update']);
-
+    Route::delete('categories/{categorie}',[CategorieController::class, 'delete']);
+    Route::get('categories/{categorie}/edit',[CategorieController::class, 'edit']);
 
 });
 
