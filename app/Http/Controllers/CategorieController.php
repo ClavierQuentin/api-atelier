@@ -140,6 +140,11 @@ class CategorieController extends Controller
      */
     public function destroy(Categorie $categorie)
     {
+        $urlImage = explode("/", $categorie->url_image_categorie);
+        $publicId = $urlImage[count($urlImage)-1];
+        $result = cloudinary()->deleteAssets($publicId);
+        return response()->json($result);
+
         $delete = $categorie->delete();
         if(!$delete){
             return response()->json(array('status' => false),500);
