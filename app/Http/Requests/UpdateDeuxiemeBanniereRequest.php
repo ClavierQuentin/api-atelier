@@ -25,7 +25,7 @@ class UpdateDeuxiemeBanniereRequest extends FormRequest
     {
         return [
             'titre' =>  'string|max:250',
-            'texte' => 'string'
+            'texte' => 'string',
         ];
     }
 }

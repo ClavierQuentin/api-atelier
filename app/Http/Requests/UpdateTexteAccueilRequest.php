@@ -27,7 +27,6 @@ class UpdateTexteAccueilRequest extends FormRequest
             'titre_accueil' =>'string|max:250',
             'texte_accueil'=>'string',
             'titre_categories' =>'string|max:250'
-
         ];
     }
 }

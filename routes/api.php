@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\DeuxiemeBanniereController;
 use App\Http\Controllers\PremiereBanniereController;
+use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\TexteAccueilController;
 use App\Http\Controllers\TroisiemeBanniereController;
 use App\Models\Categorie;
@@ -61,6 +62,8 @@ Route::middleware('auth:sanctum','role:admin')->group(function(){
     Route::delete('categories/{categorie}',[CategorieController::class, 'destroy']);
     Route::get('categories/{categorie}/edit',[CategorieController::class, 'edit']);
 
+    Route::post('produits/store/{categorie}',[ProduitController::class, 'store']);
+
 });
 
 //Routes show
@@ -69,7 +72,7 @@ Route::get('premiere-banniere/{premiereBanniere}',[PremiereBanniereController::c
 Route::get('deuxieme-banniere/{deuxiemeBanniere}',[DeuxiemeBanniereController::class, 'show']);
 Route::get('troisieme-banniere/{troisiemeBanniere}',[TroisiemeBanniereController::class, 'show']);
 Route::get('categories/{categorie}',[CategorieController::class, 'show']);
-
+Route::get('produits/{produit}',[ProduitController::class, 'show']);
 
 //Routes index
 Route::get('deuxieme-banniere',[DeuxiemeBanniereController::class, 'index']);
@@ -77,4 +80,7 @@ Route::get('premiere-banniere',[PremiereBanniereController::class, 'index']);
 Route::get('texte-accueil',[TexteAccueilController::class, 'index']);
 Route::get('troisieme-banniere',[TroisiemeBanniereController::class, 'index']);
 Route::get('categories',[CategorieController::class, 'index']);
+Route::get('produits',[ProduitController::class, 'index']);
 
+//Route index spécial produit
+Route::get('produits/{categorie}',[ProduitController::class, 'indexFromCategorie']);

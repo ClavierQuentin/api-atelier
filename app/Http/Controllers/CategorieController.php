@@ -60,7 +60,7 @@ class CategorieController extends Controller
             'url_image_categorie'=>$path
         ]);
 
-        if(!empty($response) && !empty($path)){
+        if(!empty($response)){
             return response()->json([
                 'status'=>'success',
                 'message'=>'New entry added successfully.'

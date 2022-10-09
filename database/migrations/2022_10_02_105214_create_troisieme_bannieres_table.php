@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('titre_2');
             $table->string('texte_1');
             $table->string('texte_2');
+            $table->string('url_image');
+            $table->string('url_image_2');
             $table->foreignIdFor(User::class);
             $table->timestamps();
         });

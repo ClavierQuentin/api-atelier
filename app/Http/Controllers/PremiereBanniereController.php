@@ -6,6 +6,9 @@ use App\Models\PremiereBanniere;
 use App\Http\Requests\StorePremiereBanniereRequest;
 use App\Http\Requests\UpdatePremiereBanniereRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\File;
+use Illuminate\Support\Facades\Validator;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class PremiereBanniereController extends Controller
 {
@@ -31,8 +34,30 @@ class PremiereBanniereController extends Controller
      */
     public function store(StorePremiereBanniereRequest $request)
     {
-        $texte = Auth::user()->premiereBannieres()->create($request->validated());
-        if(!empty($texte)){
+        $validator = Validator::make($request->all(),[
+            'image'=>[
+                'required',
+                File::image()
+            ]
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'status'=>false,
+                'message'=>'Une erreur est survenue',
+                'errors'=>$validator->errors()
+            ],401);
+        };
+
+        $validated = $validator->validated();
+        $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
+
+        $response = Auth::user()->premiereBannieres()->create([
+            'titre'=>$request->validated('titre'),
+            'texte'=>$request->validated('texte'),
+            'url_image'=>$path
+        ]);
+
+        if(!empty($response)){
             return response()->json([
                 'status'=>'success',
                 'message'=>'New entry added successfully.'
@@ -62,7 +87,44 @@ class PremiereBanniereController extends Controller
      */
     public function update(UpdatePremiereBanniereRequest $request, PremiereBanniere $premiereBanniere)
     {
-        $update = $premiereBanniere->update($request->validated());
+        $validator = Validator::make($request->all(),[
+            'image'=>[
+                File::image()
+            ]
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'status'=>false,
+                'message'=>'Une erreur est survenue',
+                'errors'=>$validator->errors()
+            ],401);
+        };
+
+        $validated = $validator->validated();
+
+        if(isset($validated['image'])){
+
+            //Suppression de l'ancienne image
+            $urlImage = explode("/", $premiereBanniere->url_image);
+            $publicId = $urlImage[count($urlImage)-1];
+            $publicName = explode(".", $publicId)[0];
+
+            $result = Cloudinary::destroy($publicName);
+
+            $updatedUrl = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
+
+            $update = $premiereBanniere->update([
+                'titre'=>$request->validated('titre'),
+                'texte'=>$request->validated('texte'),
+                'url_image'=>$updatedUrl
+            ]);
+        } else if(!isset($validated['image'])){
+            $update = $premiereBanniere->update([
+                'titre'=>$request->validated('titre'),
+                'texte'=>$request->validated('texte'),
+            ]);
+        }
+
         if(!$update){
             return response()->json(array('status' => false),500);
         }
@@ -77,10 +139,29 @@ class PremiereBanniereController extends Controller
      */
     public function destroy(PremiereBanniere $premiereBanniere)
     {
+        //Suppression de l'image sur le cloud
+        $urlImage = explode("/", $premiereBanniere->url_image);
+        $publicId = $urlImage[count($urlImage)-1];
+        $publicName = explode(".", $publicId)[0];
+
+        $result = Cloudinary::destroy($publicName);
+
         $delete = $premiereBanniere->delete();
         if(!$delete){
             return response()->json(array('status' => false),500);
         }
         return response()->json(array('status' => true),200);
     }
+
+        /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\PremiereBanniere  $premiereBanniere
+     * @return \Illuminate\Http\Response
+     */
+    public function show(PremiereBanniere $premiereBanniere)
+    {
+        return response()->json($premiereBanniere, 200);
+    }
+
 }

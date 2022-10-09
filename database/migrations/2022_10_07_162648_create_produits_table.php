@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\User;
+use App\Models\Categorie;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,13 +14,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('deuxieme_bannieres', function (Blueprint $table) {
+        Schema::create('produits', function (Blueprint $table) {
             $table->id();
-            $table->string('titre');
-            $table->text('texte');
-            $table->foreignIdFor(User::class);
-            $table->string('url_image');
             $table->timestamps();
+            $table->string('nom_produit');
+            $table->string('description_courte_produit');
+            $table->string('description_longue_produit');
+            $table->string('url_image_produit');
+            $table->decimal('prix_produit');
+            $table->foreignIdFor(Categorie::class);
         });
     }
 
@@ -31,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('deuxieme_bannieres');
+        Schema::dropIfExists('produits');
     }
 };

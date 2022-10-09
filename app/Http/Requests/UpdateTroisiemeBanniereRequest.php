@@ -24,11 +24,11 @@ class UpdateTroisiemeBanniereRequest extends FormRequest
     public function rules()
     {
         return [
-            'titre_principal' => 'required|string:250',
-            'titre_1'=>'required|string:250',
-            'titre_2'=>'required|string:250',
-            'texte_1'=>'required|string',
-            'texte_2'=>'required|string'
+            'titre_principal' => 'string:250',
+            'titre_1'=>'string:250',
+            'titre_2'=>'string:250',
+            'texte_1'=>'string',
+            'texte_2'=>'string',
         ];
     }
 }

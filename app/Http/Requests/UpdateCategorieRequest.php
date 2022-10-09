@@ -24,7 +24,7 @@ class UpdateCategorieRequest extends FormRequest
     public function rules()
     {
         return [
-            'nom_categorie' => 'string|max:250'
+            'nom_categorie' => 'string|max:250',
         ];
     }
 }

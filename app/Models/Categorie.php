@@ -18,4 +18,14 @@ class Categorie extends Model
     {
         return $this->belongsToMany(User::class);
     }
+
+    public function produits()
+    {
+        return $this->hasMany(Produit::class);
+    }
+
+    public function getProduits()
+    {
+        return $this->hasMany(Produit::class);
+    }
 }

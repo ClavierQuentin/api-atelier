@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreTroisiemeBanniereRequest extends FormRequest
+class StoreProduitRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,10 @@ class StoreTroisiemeBanniereRequest extends FormRequest
     public function rules()
     {
         return [
-            'titre_principal' => 'required|string|max:250',
-            'titre_1'=>'required|string|max:250',
-            'titre_2'=>'required|string|max:250',
-            'texte_1'=>'required|string',
-            'texte_2'=>'required|string',
+            'nom_produit'=>'string|required|max:250',
+            'description_courte_produit'=>'string|required',
+            'description_longue_produit'=>'string|required',
+            'prix_produit'=>'numeric|required|max:250'
         ];
     }
 }

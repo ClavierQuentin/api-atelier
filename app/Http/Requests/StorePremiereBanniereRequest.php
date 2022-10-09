@@ -25,7 +25,7 @@ class StorePremiereBanniereRequest extends FormRequest
     {
         return [
             'titre' => 'required|string|max:250',
-            'texte' => 'required|string'
+            'texte' => 'required|string',
         ];
     }
 }

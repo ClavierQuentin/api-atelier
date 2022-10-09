@@ -6,6 +6,9 @@ use App\Models\DeuxiemeBanniere;
 use App\Http\Requests\StoreDeuxiemeBanniereRequest;
 use App\Http\Requests\UpdateDeuxiemeBanniereRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\File;
+use Illuminate\Support\Facades\Validator;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class DeuxiemeBanniereController extends Controller
 {
@@ -31,8 +34,34 @@ class DeuxiemeBanniereController extends Controller
      */
     public function store(StoreDeuxiemeBanniereRequest $request)
     {
-        $texte = Auth::user()->deuxiemeBannieres()->create($request->validated());
-        if(!empty($texte)){
+        $data = array();
+        foreach($request->file('image') as $file){
+            $validator = Validator::make($file,[
+                'image'=>[
+                    'required',
+                    File::image()
+                ]
+            ]);
+            if($validator->fails()){
+                return response()->json([
+                    'status'=>false,
+                    'message'=>'Une erreur est survenue',
+                    'errors'=>$validator->errors()
+                ],401);
+            };
+
+            $validated = $validator->validated();
+            $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
+            $data[] = $path;
+        }
+
+        $response = Auth::user()->deuxiemeBannieres()->create([
+            'titre'=>$request->validated('titre'),
+            'texte'=>$request->validated('texte'),
+            'url_image'=>json_encode($data)
+        ]);
+
+        if(!empty($response)){
             return response()->json([
                 'status'=>'success',
                 'message'=>'New entry added successfully.'
@@ -72,6 +101,48 @@ class DeuxiemeBanniereController extends Controller
      */
     public function update(UpdateDeuxiemeBanniereRequest $request, DeuxiemeBanniere $deuxiemeBanniere)
     {
+        $data = array();
+        foreach($request->file('image') as $file){
+            $validator = Validator::make($file,[
+                'image'=>[
+                    File::image()
+                ]
+            ]);
+            if($validator->fails()){
+                return response()->json([
+                    'status'=>false,
+                    'message'=>'Une erreur est survenue',
+                    'errors'=>$validator->errors()
+                ],401);
+            };
+
+            $validated = $validator->validated();
+            $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
+            $data[] = $path;
+        }
+
+        if(sizeof($data) > 0) {
+            $urls = $deuxiemeBanniere->getArrayFromUrlsImages();
+            foreach($urls as $url) {
+                $urlImage = explode("/", $url);
+                $publicId = $urlImage[count($urlImage)-1];
+                $publicName = explode(".", $publicId)[0];
+
+                $result = Cloudinary::destroy($publicName);
+            }
+            $response = $deuxiemeBanniere->update([
+                'titre'=>$request->validated('titre'),
+                'texte'=>$request->validated('texte'),
+                'url_image'=>json_encode($data)
+            ]);
+
+            if(!$response){
+                return response()->json(array('status' => false),500);
+            }
+            return response()->json(array('status' => true),201);
+
+        }
+
         $update = $deuxiemeBanniere->update($request->validated());
         if(!$update){
             return response()->json(array('status' => false),500);
@@ -87,6 +158,15 @@ class DeuxiemeBanniereController extends Controller
      */
     public function destroy(DeuxiemeBanniere $deuxiemeBanniere)
     {
+        $urls = $deuxiemeBanniere->getArrayFromUrlsImages();
+        foreach($urls as $url) {
+            $urlImage = explode("/", $url);
+            $publicId = $urlImage[count($urlImage)-1];
+            $publicName = explode(".", $publicId)[0];
+
+            $result = Cloudinary::destroy($publicName);
+        }
+
         $delete = $deuxiemeBanniere->delete();
         if(!$delete){
             return response()->json(array('status' => false),500);
