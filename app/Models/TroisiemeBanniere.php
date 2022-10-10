@@ -13,7 +13,9 @@ class TroisiemeBanniere extends Model
         'texte_1',
         'texte_2',
         'titre_1',
-        'titre_2'
+        'titre_2',
+        'url_image',
+        'url_image_2'
     ];
 
     public function users()

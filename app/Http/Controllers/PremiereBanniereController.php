@@ -51,6 +51,7 @@ class PremiereBanniereController extends Controller
         $validated = $validator->validated();
         $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
 
+        dd($path);
         $response = Auth::user()->premiereBannieres()->create([
             'titre'=>$request->validated('titre'),
             'texte'=>$request->validated('texte'),

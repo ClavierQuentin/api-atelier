@@ -11,7 +11,8 @@ class PremiereBanniere extends Model
 
     protected $fillable = [
         'titre',
-        'texte'
+        'texte',
+        'url_image'
     ];
 
     public function users()
