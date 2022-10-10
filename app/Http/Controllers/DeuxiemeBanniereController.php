@@ -203,18 +203,35 @@ class DeuxiemeBanniereController extends Controller
 
         $data = $request->validated();
 
-        for($i = 0; $i < sizeof($oldData); $i++){
-            for($j = 0; $j < sizeof($data); $j++){
-                if($oldData[$i] == $data[$j]){
-                    $urlImage = explode("/", $oldData[$i]);
-                    $publicId = $urlImage[count($urlImage)-1];
-                    $publicName = explode(".", $publicId)[0];
+        if(sizeof($oldData) > sizeof($data)){
+            for($i = 0; $i < sizeof($oldData); $i++){
+                for($j = 0; $j < sizeof($data); $j++){
+                    if($oldData[$i] == $data[$j]){
+                        $urlImage = explode("/", $oldData[$i]);
+                        $publicId = $urlImage[count($urlImage)-1];
+                        $publicName = explode(".", $publicId)[0];
 
-                    $result = Cloudinary::destroy($publicName);
+                        $result = Cloudinary::destroy($publicName);
 
-                    $oldData[$i] = "";
+                        array_splice($oldData, $i, 1);
+                    }
                 }
             }
+        } else if(sizeof($oldData) > sizeof($data)) {
+            for($i = 0; $i < sizeof($data); $i++){
+                for($j = 0; $j < sizeof($oldData); $j++){
+                    if($data[$i] == $oldData[$j]){
+                        $urlImage = explode("/", $oldData[$j]);
+                        $publicId = $urlImage[count($urlImage)-1];
+                        $publicName = explode(".", $publicId)[0];
+
+                        $result = Cloudinary::destroy($publicName);
+
+                        array_splice($oldData, $j, 1);
+                    }
+                }
+            }
+
         }
 
         $deuxiemeBanniere->url_image = json_encode($oldData);
