@@ -54,6 +54,7 @@ class DeuxiemeBanniereController extends Controller
             $path = cloudinary()->upload($file->getRealPath())->getSecurePath();
             $data[] = $path;
         }
+        return response()->json($data);
 
         $response = Auth::user()->deuxiemeBannieres()->create([
             'titre'=>$request->validated('titre'),
