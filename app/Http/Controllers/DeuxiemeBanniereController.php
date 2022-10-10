@@ -62,7 +62,7 @@ class DeuxiemeBanniereController extends Controller
 
         $deuxiemeBanniere = new DeuxiemeBanniere($request->validated());
 
-        $deuxiemeBanniere->url_image = $data;
+        $deuxiemeBanniere->url_image = json_encode($data);
 
         $response = Auth::user()->deuxiemeBannieres()->save($deuxiemeBanniere);
 
@@ -133,7 +133,7 @@ class DeuxiemeBanniereController extends Controller
         }
 
         $update = $deuxiemeBanniere->update($request->validated());
-        
+
         if(!$update){
             return response()->json(array('status' => false),500);
         }
