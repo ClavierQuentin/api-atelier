@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Support\Facades\Validator;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Support\Facades\Request;
 
 class DeuxiemeBanniereController extends Controller
 {
@@ -140,7 +141,7 @@ class DeuxiemeBanniereController extends Controller
         return response()->json(array('status' => true),201);
     }
 
-    public function addImage(DeuxiemeBanniere $deuxiemeBanniere, StoreDeuxiemeBanniereRequest  $request)
+    public function addImage(DeuxiemeBanniere $deuxiemeBanniere, Request  $request)
     {
         $data = array();
 
