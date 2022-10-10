@@ -140,6 +140,31 @@ class DeuxiemeBanniereController extends Controller
         return response()->json(array('status' => true),201);
     }
 
+    public function addImage(DeuxiemeBanniere $deuxiemeBanniere, StoreDeuxiemeBanniereRequest  $request)
+    {
+        $data = array();
+
+        $this->validate($request ,[
+            'image'=>'required',
+            'image.*'=>'mimes:jpg,jepg,png,JPG,JPEG'
+        ]);
+
+
+        foreach($request->file('image') as $file){
+            $path = cloudinary()->upload($file->getRealPath())->getSecurePath();
+            $data[] = $path;
+        }
+
+        $oldData = json_decode($deuxiemeBanniere->url_image);
+
+        $newData = array_merge($oldData, $data);
+
+        $deuxiemeBanniere->url_image = $newData;
+        $deuxiemeBanniere->save();
+
+        return response()->json(['status'=>true], 200);
+    }
+
     /**
      * Remove the specified resource from storage.
      *

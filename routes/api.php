@@ -48,6 +48,7 @@ Route::middleware('auth:sanctum','role:admin')->group(function(){
 
     Route::post('deuxieme-banniere/store',[DeuxiemeBanniereController::class,'store']);
     Route::post('deuxieme-banniere/{deuxiemeBanniere}',[DeuxiemeBanniereController::class,'update']);
+    Route::post('deuxieme-banniere/{deuxiemeBanniere}/add-images',[DeuxiemeBanniereController::class,'addImage']);
     Route::delete('deuxieme-banniere/{deuxiemeBanniere}',[DeuxiemeBanniereController::class,'destroy']);
     Route::get('deuxieme-banniere/{deuxiemeBanniere}/edit',[DeuxiemeBanniereController::class,'edit']);
 
