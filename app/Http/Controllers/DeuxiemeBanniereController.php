@@ -164,7 +164,7 @@ class DeuxiemeBanniereController extends Controller
         $newData = array_merge($oldData, $data);
 
         $deuxiemeBanniere->url_image = json_encode($newData);
-        
+
         $response = $deuxiemeBanniere->save();
 
         if(!$response){
@@ -191,6 +191,36 @@ class DeuxiemeBanniereController extends Controller
         }
 
         $delete = $deuxiemeBanniere->delete();
+        if(!$delete){
+            return response()->json(array('status' => false),500);
+        }
+        return response()->json(array('status' => true),200);
+    }
+
+    public function deleteImage(DeuxiemeBanniere $deuxiemeBanniere, UpdateDeuxiemeBanniereRequest $request)
+    {
+        $oldData = json_decode($deuxiemeBanniere->url_image);
+
+        $data = $request->validated();
+
+        for($i = 0; $i < sizeof($oldData); $i++){
+            for($j = 0; $j < sizeof($data); $j++){
+                if($oldData[$i] == $data[$j]){
+                    $urlImage = explode("/", $oldData[$i]);
+                    $publicId = $urlImage[count($urlImage)-1];
+                    $publicName = explode(".", $publicId)[0];
+
+                    $result = Cloudinary::destroy($publicName);
+
+                    $oldData[$i] = "";
+                }
+            }
+        }
+
+        $deuxiemeBanniere->url_image = json_encode($oldData);
+
+        $delete = $deuxiemeBanniere->save();
+
         if(!$delete){
             return response()->json(array('status' => false),500);
         }

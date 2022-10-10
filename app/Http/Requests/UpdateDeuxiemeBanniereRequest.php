@@ -26,6 +26,7 @@ class UpdateDeuxiemeBanniereRequest extends FormRequest
         return [
             'titre' =>  'string|max:250',
             'texte' => 'string',
+            'url_image' => 'string'
         ];
     }
 }

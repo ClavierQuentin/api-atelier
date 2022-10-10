@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('titre');
             $table->text('texte');
             $table->foreignIdFor(User::class);
-            $table->string('url_image');
+            $table->text('url_image');
             $table->timestamps();
         });
     }
