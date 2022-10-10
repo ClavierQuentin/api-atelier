@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Support\Facades\Validator;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
-use Illuminate\Support\Facades\Request;
+use App\Http\Requests\Request;
 
 class DeuxiemeBanniereController extends Controller
 {
