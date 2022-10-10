@@ -36,23 +36,27 @@ class DeuxiemeBanniereController extends Controller
     {
         $data = array();
 
-        $validator = Validator::make($request->all(),[
-            'image'=>[
-                'required',
-                File::image()
-            ]
+        // $validator = Validator::make($request->all(),[
+        //     'image'=>[
+        //         'required',
+        //         File::image()
+        //     ]
+        // ]);
+        // if($validator->fails()){
+        //     return response()->json([
+        //         'status'=>false,
+        //         'message'=>'Une erreur est survenue',
+        //         'errors'=>$validator->errors()
+        //     ],401);
+        // };
+
+        $this->validate($request ,[
+            'image'=>'required',
+            'image.*'=>'mimes:jpg,jepg,png'
         ]);
-        if($validator->fails()){
-            return response()->json([
-                'status'=>false,
-                'message'=>'Une erreur est survenue',
-                'errors'=>$validator->errors()
-            ],401);
-        };
 
         foreach($request->file('image') as $file){
             $path = cloudinary()->upload($file->getRealPath())->getSecurePath();
-            return response()->json($file);
             $data[] = $path;
         }
 
