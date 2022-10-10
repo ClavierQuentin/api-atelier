@@ -27,7 +27,8 @@ class UpdateProduitRequest extends FormRequest
             'nom_produit'=>'string',
             'description_courte_produit'=>'string',
             'description_longue_produit'=>'string',
-            'prix_produit'=>'numeric'
+            'prix_produit'=>'numeric',
+            'isAcceuil'=>'boolean'
         ];
     }
 }

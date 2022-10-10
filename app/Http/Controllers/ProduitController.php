@@ -9,10 +9,10 @@ use App\Models\Categorie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use GuzzleHttp\Handler\Proxy;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\File;
-
-
+use PDO;
 
 class ProduitController extends Controller
 {
@@ -35,13 +35,11 @@ class ProduitController extends Controller
      * @param  \App\Models\Categorie $categorie
      * @return \Illuminate\Http\Response
      */
-    public function indexFromCategorie(Categorie $categorie)
+    public function productFromSameCategorie(Produit $produit)
     {
-        $produits = $categorie->getProduits->all();
+        $categorie = Categorie::find($produit->categorie_id);
 
-        // $produits = DB::table('produits')
-        // ->where('categorie_id','=',$categorie->id)
-        // ->get();
+        $produits = $categorie->getProduits;
 
         if(sizeof($produits) > 0){
             return response()->json($produits, 200);
@@ -57,37 +55,31 @@ class ProduitController extends Controller
      */
     public function store(StoreProduitRequest $request, Categorie $categorie)
     {
-        // $categorie = Categorie::find($categorie);
-        // return response()->json($categorie);
-
-        // $validator = Validator::make($request->all(),[
-        //     'image'=>[
-        //         'required',
-        //         File::image()
-        //     ]
-        // ]);
-        // if($validator->fails()){
-        //     return response()->json([
-        //         'status'=>false,
-        //         'message'=>'Une erreur est survenue',
-        //         'errors'=>$validator->errors()
-        //     ],401);
-        // };
-
-        // $validated = $validator->validated();
-        // $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
-
-        $produit = new Produit([
-            'nom_produit'=>$request->validated('nom_produit'),
-            'description_courte_produit'=>$request->validated('description_courte_produit'),
-            'description_longue_produit'=>$request->validated('description_longue_produit'),
-            "url_image_produit"=>$request->validated('url_image_produit'),
-            'prix_produit'=>$request->validated('prix_produit')
+        $validator = Validator::make($request->all(),[
+            'image'=>[
+                'required',
+                File::image()
+            ]
         ]);
+        if($validator->fails()){
+            return response()->json([
+                'status'=>false,
+                'message'=>'Une erreur est survenue',
+                'errors'=>$validator->errors()
+            ],401);
+        };
+
+        $validated = $validator->validated();
+
+        $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
+
+        $produit = new Produit($request->validated());
+
+        $produit->url_image_produit = $path;
 
         $response = $categorie->produits()->save($produit);
 
-        if(!empty($response) && !empty($path)){
+        if(!empty($response)){
             return response()->json([
                 'status'=>'success',
                 'message'=>'New entry added successfully.'
@@ -127,7 +119,45 @@ class ProduitController extends Controller
      */
     public function update(UpdateProduitRequest $request, Produit $produit)
     {
-        //
+        $validator = Validator::make($request->all(),[
+            'image'=>[
+                File::image()
+            ]
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'status'=>false,
+                'message'=>'Une erreur est survenue',
+                'errors'=>$validator->errors()
+            ],401);
+        };
+
+        $validated = $validator->validated();
+
+        if(isset($validated['image'])){
+
+            //Suppression de l'ancienne image
+            $urlImage = explode("/", $produit->url_image_produit);
+            $publicId = $urlImage[count($urlImage)-1];
+            $publicName = explode(".", $publicId)[0];
+
+            $result = Cloudinary::destroy($publicName);
+
+            $updatedUrl = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
+
+            $produit->url_image_produit = $updatedUrl;
+
+            $update = $produit->update($request->validated());
+
+        } else if(!isset($validated['image'])){
+            $update = $produit->update($request->validated());
+        }
+
+        if(!$update){
+            return response()->json(array('status' => false),500);
+        }
+        return response()->json(array('status' => true),201);
+
     }
 
     /**
@@ -138,6 +168,19 @@ class ProduitController extends Controller
      */
     public function destroy(Produit $produit)
     {
-        //
+        // //Suppression de l'image sur le cloud
+        // $urlImage = explode("/", $produit->url_image_produit);
+        // $publicId = $urlImage[count($urlImage)-1];
+        // $publicName = explode(".", $publicId)[0];
+
+        // $result = Cloudinary::destroy($publicName);
+
+        //Suppression en DB
+        $delete = $produit->delete();
+        if(!$delete){
+            return response()->json(array('status' => false),500);
+        }
+        return response()->json(array('status' => true),200);
+
     }
 }

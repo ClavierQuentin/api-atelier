@@ -49,13 +49,14 @@ class PremiereBanniereController extends Controller
         };
 
         $validated = $validator->validated();
+
         $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
 
-        $response = Auth::user()->premiereBannieres()->create([
-            'titre'=>$request->validated('titre'),
-            'texte'=>$request->validated('texte'),
-            'url_image'=>$path
-        ]);
+        $premiereBanniere = new PremiereBanniere($request->validated());
+
+        $premiereBanniere->url_image = $path;
+
+        $response = Auth::user()->premiereBannieres()->save($premiereBanniere);
 
         if(!empty($response)){
             return response()->json([
@@ -113,16 +114,12 @@ class PremiereBanniereController extends Controller
 
             $updatedUrl = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
 
-            $update = $premiereBanniere->update([
-                'titre'=>$request->validated('titre'),
-                'texte'=>$request->validated('texte'),
-                'url_image'=>$updatedUrl
-            ]);
+            $premiereBanniere->url_image = $updatedUrl;
+
+            $update = $premiereBanniere->update($request->validated());
+
         } else if(!isset($validated['image'])){
-            $update = $premiereBanniere->update([
-                'titre'=>$request->validated('titre'),
-                'texte'=>$request->validated('texte'),
-            ]);
+            $update = $premiereBanniere->update($request->validated());
         }
 
         if(!$update){

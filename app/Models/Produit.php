@@ -13,11 +13,14 @@ class Produit extends Model
         'description_courte_produit',
         'description_longue_produit',
         'url_image_produit',
-        'prix_produit'
+        'prix_produit',
+        'isAcceuil'
     ];
+
+    public $with = ['categorie'];
 
     public function categorie()
     {
-        $this->belongsTo(Categorie::class);
+        return $this->belongsTo(Categorie::class);
     }
 }

@@ -27,7 +27,8 @@ class StoreProduitRequest extends FormRequest
             'nom_produit'=>'string|required|max:250',
             'description_courte_produit'=>'string|required',
             'description_longue_produit'=>'string|required',
-            'prix_produit'=>'numeric|required|max:250'
+            'prix_produit'=>'numeric|required|max:250',
+            'isAcceuil'=>'boolean|required'
         ];
     }
 }

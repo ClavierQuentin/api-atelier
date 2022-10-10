@@ -53,12 +53,14 @@ class CategorieController extends Controller
         };
 
         $validated = $validator->validated();
+
         $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
 
-        $response = Auth::user()->categories()->create([
-            'nom_categorie'=>$request->validated('nom_categorie'),
-            'url_image_categorie'=>$path
-        ]);
+        $categorie = new Categorie($request->validated());
+
+        $categorie->url_image_categorie = $path;
+
+        $response = Auth::user()->categories()->save($categorie);
 
         if(!empty($response)){
             return response()->json([
@@ -126,14 +128,11 @@ class CategorieController extends Controller
 
             $updatedUrl = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
 
-            $update = $categorie->update([
-                'nom_categorie'=>$request->validated('nom_categorie'),
-                'url_image_categorie'=>$updatedUrl
-            ]);
+            $categorie->url_image_categorie = $updatedUrl;
+
+            $update = $categorie->update($request->validated());
         } else if(!isset($validated['image'])){
-            $update = $categorie->update([
-                'nom_categorie'=>$request->validated('nom_categorie'),
-            ]);
+            $update = $categorie->update($request->validated());
         }
 
         if(!$update){
@@ -165,4 +164,18 @@ class CategorieController extends Controller
         return response()->json(array('status' => true),200);
     }
 
+    /**
+     * Show all products from same category.
+     *
+     * @param  \App\Models\Categorie  $categorie
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllProducts(Categorie $categorie)
+    {
+        $produits = $categorie->getProduits;
+
+        if(sizeof($produits) > 0){
+            return response()->json($produits, 200);
+        }
+    }
 }

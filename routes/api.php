@@ -35,25 +35,25 @@ Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth:sanct
 //Route protégées Admin
 Route::middleware('auth:sanctum','role:admin')->group(function(){
     Route::post('texte-accueil/store',[TexteAccueilController::class, 'store']);
-    Route::put('texte-accueil/{texteAccueil}',[TexteAccueilController::class,'update']);
+    Route::post('texte-accueil/{texteAccueil}',[TexteAccueilController::class,'update']);
     Route::delete('texte-accueil/{texteAccueil}',[TexteAccueilController::class,'destroy']);
     Route::get('texte-accueil/{texteAccueil}/edit',[TexteAccueilController::class,'edit']);
 
 
     Route::post('premiere-banniere/store',[PremiereBanniereController::class,'store']);
-    Route::put('premiere-banniere/{premiereBanniere}',[PremiereBanniereController::class,'update']);
+    Route::post('premiere-banniere/{premiereBanniere}',[PremiereBanniereController::class,'update']);
     Route::delete('premiere-banniere/{premiereBanniere}',[PremiereBanniereController::class,'destroy']);
     Route::get('premiere-banniere/{premiereBanniere}/edit',[PremiereBanniereController::class,'edit']);
 
 
     Route::post('deuxieme-banniere/store',[DeuxiemeBanniereController::class,'store']);
-    Route::put('deuxieme-banniere/{deuxiemeBanniere}',[DeuxiemeBanniereController::class,'update']);
+    Route::post('deuxieme-banniere/{deuxiemeBanniere}',[DeuxiemeBanniereController::class,'update']);
     Route::delete('deuxieme-banniere/{deuxiemeBanniere}',[DeuxiemeBanniereController::class,'destroy']);
     Route::get('deuxieme-banniere/{deuxiemeBanniere}/edit',[DeuxiemeBanniereController::class,'edit']);
 
 
     Route::post('troisieme-banniere/store',[TroisiemeBanniereController::class,'store']);
-    Route::put('troisieme-banniere/{troisiemeBanniere}',[TroisiemeBanniereController::class,'update']);
+    Route::post('troisieme-banniere/{troisiemeBanniere}',[TroisiemeBanniereController::class,'update']);
     Route::delete('troisieme-banniere/{troisiemeBanniere}',[TroisiemeBanniereController::class,'destroy']);
     Route::get('troisieme-banniere/{troisiemeBanniere}/edit',[TroisiemeBanniereController::class,'edit']);
 
@@ -63,6 +63,9 @@ Route::middleware('auth:sanctum','role:admin')->group(function(){
     Route::get('categories/{categorie}/edit',[CategorieController::class, 'edit']);
 
     Route::post('produits/store/{categorie}',[ProduitController::class, 'store']);
+    Route::post('produits/{produit}',[ProduitController::class, 'update']);
+    Route::delete('produits/{produit}',[ProduitController::class, 'destroy']);
+    Route::get('produits/{produit}/edit',[ProduitController::class, 'edit']);
 
 });
 
@@ -83,4 +86,5 @@ Route::get('categories',[CategorieController::class, 'index']);
 Route::get('produits',[ProduitController::class, 'index']);
 
 //Route index spécial produit
-Route::get('produits/{categorie}',[ProduitController::class, 'indexFromCategorie']);
+Route::get('produits/{produit}/all',[ProduitController::class, 'productFromSameCategorie']);
+Route::get('categories/{categorie}/produits',[CategorieController::class, 'getAllProducts']);

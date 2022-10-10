@@ -52,7 +52,7 @@ class DeuxiemeBanniereController extends Controller
 
         $this->validate($request ,[
             'image'=>'required',
-            'image.*'=>'mimes:jpg,jepg,png'
+            'image.*'=>'mimes:jpg,jepg,png,JPG,JPEG'
         ]);
 
         foreach($request->file('image') as $file){
@@ -60,12 +60,11 @@ class DeuxiemeBanniereController extends Controller
             $data[] = $path;
         }
 
+        $deuxiemeBanniere = new DeuxiemeBanniere($request->validated());
 
-        $response = Auth::user()->deuxiemeBannieres()->create([
-            'titre'=>$request->validated('titre'),
-            'texte'=>$request->validated('texte'),
-            'url_image'=>json_encode($data)
-        ]);
+        $deuxiemeBanniere->url_image = $data;
+
+        $response = Auth::user()->deuxiemeBannieres()->save($deuxiemeBanniere);
 
         if(!empty($response)){
             return response()->json([
@@ -108,22 +107,15 @@ class DeuxiemeBanniereController extends Controller
     public function update(UpdateDeuxiemeBanniereRequest $request, DeuxiemeBanniere $deuxiemeBanniere)
     {
         $data = array();
-        foreach($request->file('image') as $file){
-            $validator = Validator::make($file,[
-                'image'=>[
-                    File::image()
-                ]
-            ]);
-            if($validator->fails()){
-                return response()->json([
-                    'status'=>false,
-                    'message'=>'Une erreur est survenue',
-                    'errors'=>$validator->errors()
-                ],401);
-            };
 
-            $validated = $validator->validated();
-            $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
+        $this->validate($request ,[
+            'image'=>'required',
+            'image.*'=>'mimes:jpg,jepg,png,JPG,JPEG'
+        ]);
+
+
+        foreach($request->file('image') as $file){
+            $path = cloudinary()->upload($file->getRealPath())->getSecurePath();
             $data[] = $path;
         }
 
@@ -136,20 +128,12 @@ class DeuxiemeBanniereController extends Controller
 
                 $result = Cloudinary::destroy($publicName);
             }
-            $response = $deuxiemeBanniere->update([
-                'titre'=>$request->validated('titre'),
-                'texte'=>$request->validated('texte'),
-                'url_image'=>json_encode($data)
-            ]);
 
-            if(!$response){
-                return response()->json(array('status' => false),500);
-            }
-            return response()->json(array('status' => true),201);
-
+            $deuxiemeBanniere->url_image = $data;
         }
 
         $update = $deuxiemeBanniere->update($request->validated());
+        
         if(!$update){
             return response()->json(array('status' => false),500);
         }

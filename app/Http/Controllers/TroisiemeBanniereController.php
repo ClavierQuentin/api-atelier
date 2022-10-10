@@ -57,18 +57,17 @@ class TroisiemeBanniereController extends Controller
         };
 
         $validated = $validator->validated();
+
         $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
+
         $path2 = cloudinary()->upload($validated['image2']->getRealPath())->getSecurePath();
 
-        $response = Auth::user()->troisiemeBannieres()->create([
-            'titre_principal'=>$request->validated('titre_principal'),
-            'titre_1'=>$request->validated('titre_1'),
-            'titre_2'=>$request->validated('titre_2'),
-            'texte_1'=>$request->validated('texte_1'),
-            'texte_2'=>$request->validated('texte_2'),
-            'url_image_2'=>$path2,
-            'url_image'=>$path
-        ]);
+        $troisiemeBanniere = new TroisiemeBanniere($request->validated());
+
+        $troisiemeBanniere->url_image = $path;
+        $troisiemeBanniere->url_image_2 = $path2;
+
+        $response = Auth::user()->troisiemeBannieres()->save($troisiemeBanniere);
 
         if(!empty($response)){
             return response()->json([
@@ -140,14 +139,9 @@ class TroisiemeBanniereController extends Controller
 
             $updatedUrl = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
 
-            $update = $troisiemeBanniere->update([
-                'titre_principal'=>$request->validated('titre_principal'),
-                'titre_1'=>$request->validated('titre_1'),
-                'titre_2'=>$request->validated('titre_2'),
-                'texte_1'=>$request->validated('texte_1'),
-                'texte_2'=>$request->validated('texte_2'),
-                'url_image'=>$updatedUrl
-            ]);
+            $troisiemeBanniere->url_image = $updatedUrl;
+
+            $update = $troisiemeBanniere->update($request->validated());
 
             if(!$update){
                 return response()->json(array('status' => false),500);
@@ -165,14 +159,9 @@ class TroisiemeBanniereController extends Controller
 
             $updatedUrl = cloudinary()->upload($validated['image2']->getRealPath())->getSecurePath();
 
-            $update = $troisiemeBanniere->update([
-                'titre_principal'=>$request->validated('titre_principal'),
-                'titre_1'=>$request->validated('titre_1'),
-                'titre_2'=>$request->validated('titre_2'),
-                'texte_1'=>$request->validated('texte_1'),
-                'texte_2'=>$request->validated('texte_2'),
-                'url_image_2'=>$updatedUrl
-            ]);
+            $troisiemeBanniere->url_image_2 = $updatedUrl;
+
+            $update = $troisiemeBanniere->update($request->validated());
 
             if(!$update){
                 return response()->json(array('status' => false),500);
@@ -197,15 +186,10 @@ class TroisiemeBanniereController extends Controller
 
             $updatedUrl2 = cloudinary()->upload($validated['image2']->getRealPath())->getSecurePath();
 
-            $update = $troisiemeBanniere->update([
-                'titre_principal'=>$request->validated('titre_principal'),
-                'titre_1'=>$request->validated('titre_1'),
-                'titre_2'=>$request->validated('titre_2'),
-                'texte_1'=>$request->validated('texte_1'),
-                'texte_2'=>$request->validated('texte_2'),
-                'url_image_2'=>$updatedUrl2,
-                'url_image'=>$updatedUrl
-            ]);
+            $troisiemeBanniere->url_image = $updatedUrl;
+            $troisiemeBanniere->url_image_2 = $updatedUrl2;
+            
+            $update = $troisiemeBanniere->update($request->validated());
 
             if(!$update){
                 return response()->json(array('status' => false),500);
@@ -214,13 +198,7 @@ class TroisiemeBanniereController extends Controller
         }
 
         //sinon simple update des textes
-        $update = $troisiemeBanniere->update([
-            'titre_principal'=>$request->validated('titre_principal'),
-            'titre_1'=>$request->validated('titre_1'),
-            'titre_2'=>$request->validated('titre_2'),
-            'texte_1'=>$request->validated('texte_1'),
-            'texte_2'=>$request->validated('texte_2'),
-        ]);
+        $update = $troisiemeBanniere->update($request->validated());
 
         if(!$update){
             return response()->json(array('status' => false),500);
