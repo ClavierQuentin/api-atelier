@@ -36,7 +36,7 @@ class DeuxiemeBanniereController extends Controller
     {
         $data = array();
 
-        $validator = Validator::make($request->file('image'),[
+        $validator = Validator::make($request->all(),[
             'image'=>[
                 'required',
                 File::image()
