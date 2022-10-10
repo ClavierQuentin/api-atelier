@@ -163,9 +163,13 @@ class DeuxiemeBanniereController extends Controller
 
         $newData = array_merge($oldData, $data);
 
-        $deuxiemeBanniere->url_image = $newData;
-        $deuxiemeBanniere->save();
+        $deuxiemeBanniere->url_image = json_encode($newData);
+        
+        $response = $deuxiemeBanniere->save();
 
+        if(!$response){
+            return response()->json(['status'=>false], 500);
+        }
         return response()->json(['status'=>true], 200);
     }
 
