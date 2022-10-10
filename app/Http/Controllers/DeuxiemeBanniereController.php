@@ -201,7 +201,12 @@ class DeuxiemeBanniereController extends Controller
     {
         $oldData = json_decode($deuxiemeBanniere->url_image);
 
-        $data = $request->validated();
+        $data = array();
+        
+        foreach($request->validated() as $item){
+            $data[] = $item;
+        }
+
 
         if(sizeof($oldData) > sizeof($data)){
             for($i = 0; $i < sizeof($oldData); $i++){
