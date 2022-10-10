@@ -35,23 +35,23 @@ class DeuxiemeBanniereController extends Controller
     public function store(StoreDeuxiemeBanniereRequest $request)
     {
         $data = array();
-        foreach($request->file('image') as $file){
-            $validator = Validator::make($file,[
-                'image'=>[
-                    'required',
-                    File::image()
-                ]
-            ]);
-            if($validator->fails()){
-                return response()->json([
-                    'status'=>false,
-                    'message'=>'Une erreur est survenue',
-                    'errors'=>$validator->errors()
-                ],401);
-            };
 
-            $validated = $validator->validated();
-            $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
+        $validator = Validator::make($request->file('image'),[
+            'image'=>[
+                'required',
+                File::image()
+            ]
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'status'=>false,
+                'message'=>'Une erreur est survenue',
+                'errors'=>$validator->errors()
+            ],401);
+        };
+
+        foreach($request->file('image') as $file){
+            $path = cloudinary()->upload($file->getRealPath())->getSecurePath();
             $data[] = $path;
         }
 
