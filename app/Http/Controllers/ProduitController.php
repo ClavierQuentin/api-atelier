@@ -21,12 +21,18 @@ class ProduitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function indexApi()
     {
         $produits = Produit::all();
         if(sizeof($produits) > 0){
             return response()->json($produits, 200);
         }
+    }
+
+    public function index()
+    {
+        $produits = Produit::all();
+        return view('produits.index', compact('produits'));
     }
 
     /**
@@ -46,6 +52,12 @@ class ProduitController extends Controller
         }
     }
 
+    public function create()
+    {
+        $categories = Categorie::all();
+        return view('produits.create', compact('categories'));
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -55,6 +67,7 @@ class ProduitController extends Controller
      */
     public function store(StoreProduitRequest $request, Categorie $categorie)
     {
+        //Regles de validation pour l'image d'illustration
         $validator = Validator::make($request->all(),[
             'image'=>[
                 'required',
@@ -68,24 +81,26 @@ class ProduitController extends Controller
                 'errors'=>$validator->errors()
             ],401);
         };
-
         $validated = $validator->validated();
 
+        //Upload de l'image sur le cloud
         $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
 
+        //On instancie un nouvel objet Produit avec la requete du formulaire
         $produit = new Produit($request->validated());
 
+        //Enregistrement du chemin d'acces de l'image
         $produit->url_image_produit = $path;
 
+        //Enregistrement en DB
         $response = $categorie->produits()->save($produit);
 
-        if(!empty($response)){
-            return response()->json([
-                'status'=>'success',
-                'message'=>'New entry added successfully.'
-            ],201);
+        //On contrôle le résultat de sortie
+        //On contrôle la sortie, si l'update a bien été faite
+        if(empty($response)){
+            return redirect('categorie/'.$produit->categorie_id.'/produits')->with('error', 'Une erreur est survenue pendant l\'enregistrement');
         }
-        return response()->json(array('status'=>false), 500);
+        return redirect('categorie/'.$produit->categorie_id.'/produits');
     }
 
     /**
@@ -107,7 +122,8 @@ class ProduitController extends Controller
      */
     public function edit(Produit $produit)
     {
-        return response()->json($produit, 200);
+         $categories = Categorie::all();
+        return view('produits.edit', compact('produit','categories'));
     }
 
     /**
@@ -119,6 +135,7 @@ class ProduitController extends Controller
      */
     public function update(UpdateProduitRequest $request, Produit $produit)
     {
+        //Regle de validation du fichier image
         $validator = Validator::make($request->all(),[
             'image'=>[
                 File::image()
@@ -134,6 +151,7 @@ class ProduitController extends Controller
 
         $validated = $validator->validated();
 
+        //Si une image a été fournie au formulaire
         if(isset($validated['image'])){
 
             //Suppression de l'ancienne image
@@ -143,20 +161,26 @@ class ProduitController extends Controller
 
             $result = Cloudinary::destroy($publicName);
 
+            //Upload de la nouvelle image
             $updatedUrl = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
 
+            //CHangement de l'url de l'image
             $produit->url_image_produit = $updatedUrl;
-
-            $update = $produit->update($request->validated());
-
-        } else if(!isset($validated['image'])){
-            $update = $produit->update($request->validated());
         }
 
+        //Cas où la checbox n'est pas cochée
+        if($request->isAccueil == NULL){
+            $produit->isAccueil = 0;
+        }
+
+        //Enregistrement des changements en DB
+        $update = $produit->update($request->validated());
+
+        //On contrôle la sortie, si l'update a bien été faite
         if(!$update){
-            return response()->json(array('status' => false),500);
+            return redirect('categorie/'.$produit->categorie_id.'/produits')->with('error', 'Une erreur est survenue pendant l\'enregistrement');
         }
-        return response()->json(array('status' => true),201);
+        return redirect('categorie/'.$produit->categorie_id.'/produits');
 
     }
 
@@ -183,4 +207,6 @@ class ProduitController extends Controller
         return response()->json(array('status' => true),200);
 
     }
+
+
 }

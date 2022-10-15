@@ -14,6 +14,7 @@ class TexteAccueil extends Model
         'titre_accueil',
         'texte_accueil',
         'titre_categories',
+        'online'
     ];
 
     public function users()

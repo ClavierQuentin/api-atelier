@@ -28,7 +28,19 @@ class UpdateProduitRequest extends FormRequest
             'description_courte_produit'=>'string',
             'description_longue_produit'=>'string',
             'prix_produit'=>'numeric',
-            'isAcceuil'=>'boolean'
+            'isAccueil'=>'boolean',
+            'categorie_id'=>'integer'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'nom_produit.string' => 'Doit être une chaîne de caractères',
+            'description_courte_produit.string' => 'Doit être une chaîne de caractères',
+            'description_longue_produit.string'=> 'Doit être une chaîne de caractères',
+            'prix_produit.numeric' => 'Doit être au format nombre',
+            'categorie_id.integer' => 'Doit être un nombre entier'
         ];
     }
 }

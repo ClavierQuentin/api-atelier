@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\TexteAccueil;
 use App\Http\Requests\StoreTexteAccueilRequest;
 use App\Http\Requests\UpdateTexteAccueilRequest;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 class TexteAccueilController extends Controller
 {
@@ -17,12 +20,29 @@ class TexteAccueilController extends Controller
     public function index()
     {
         $data = TexteAccueil::all();
+
+        if(isset($data)){
+            return view('texteAccueil.index',['data'=>$data]);
+        }
+        abort(500);
+    }
+
+    //Fonction pour l'accès via API
+    public function indexApi()
+    {
+        $data = TexteAccueil::all();
         if(sizeof($data) > 0){
             return response()->json($data, 200);
         }
         return response()->json(['status'=> false], 204);
+
     }
 
+    //Affichage du formulaire de création
+    public function create()
+    {
+        return view('texteAccueil.create');
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -32,14 +52,14 @@ class TexteAccueilController extends Controller
      */
     public function store(StoreTexteAccueilRequest $request)
     {
-        $texte = Auth::user()->texteAccueils()->create($request->validated());
-        if(!empty($texte)){
-            return response()->json([
-                'status'=>'success',
-                'message'=>'New entry added successfully.'
-            ],201);
+        $texte = new TexteAccueil($request->validated());
+        // $texte->online = 0;
+        $texte = Auth::user()->texteAccueils()->save($texte);
+
+        if($texte){
+            return redirect('texte-accueil');
         }
-        return response()->json(array('status'=>false), 500);
+        abort(500);
     }
 
     /**
@@ -48,9 +68,15 @@ class TexteAccueilController extends Controller
      * @param  \App\Models\TexteAccueil  $texteAccueil
      * @return \Illuminate\Http\Response
      */
-    public function show(TexteAccueil $texteAccueil)
+    public function show()
     {
-        return response()->json($texteAccueil, 200);
+        $texteAccueil = DB::table('texte_accueils')
+                        ->where('online', '=', '1')
+                        ->first();
+        if(isset($texteAccueil)){
+            return response()->json($texteAccueil, 200);
+        }
+        return response()->json(['status' => false], 204);
     }
 
     /**
@@ -61,7 +87,7 @@ class TexteAccueilController extends Controller
      */
     public function edit(TexteAccueil $texteAccueil)
     {
-        return response()->json($texteAccueil, 200);
+        return view('texteAccueil.edit',['texteAccueil' => $texteAccueil]);
     }
 
     /**
@@ -74,12 +100,34 @@ class TexteAccueilController extends Controller
     public function update(UpdateTexteAccueilRequest $request, TexteAccueil $texteAccueil)
     {
         $update = $texteAccueil->update($request->validated());
-        if(!$update){
-            return response()->json(array('status' => false),500);
+
+        if($update){
+            return redirect('texte-accueil');
         }
-        return response()->json(array('status' => true, 'message'=>$update),201);
+        abort(500);
     }
 
+    //Fonction pour mettre a jour le booleen en DB pour mettre en avant une data
+    public function updateOnline(UpdateTexteAccueilRequest $request, TexteAccueil $texteAccueil)
+    {
+        //On récupère toutes les données pour changer la valeur de Online à 0
+        $all = TexteAccueil::all();
+        if(isset($all)){
+            foreach ($all as $item){
+                $item->online = "0";
+                $item->save();
+            }//foreach
+        }//if
+
+        //On change la valeur du modèle en cours de sélection
+        $texteAccueil->online = 1;
+        $response = $texteAccueil->save();
+
+        if($response){
+            return redirect('texte-accueil');
+        }
+        abort(500);
+    }
     /**
      * Remove the specified resource from storage.
      *
@@ -89,9 +137,9 @@ class TexteAccueilController extends Controller
     public function destroy(TexteAccueil $texteAccueil)
     {
         $delete = $texteAccueil->delete();
-        if(!$delete){
-            return response()->json(array('status' => false),500);
+        if($delete){
+            return redirect('texte-accueil');
         }
-        return response()->json(array('status' => true),200);
+        abort(500);
     }
 }

@@ -28,4 +28,15 @@ class StoreDeuxiemeBanniereRequest extends FormRequest
             'texte' => 'required|string',
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'titre.required' => 'Ce champs est obligatoire',
+            'texte.required' => 'Ce champs est obligatoire',
+            'titre.string' => 'Ce champs doit être une chaîne de caractères !',
+            'texte.string' => 'Ce champs doit être une chaîne de caractères !'
+        ];
+    }
+
 }

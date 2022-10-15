@@ -22,8 +22,8 @@ return new class extends Migration
             $table->string('description_longue_produit');
             $table->string('url_image_produit');
             $table->decimal('prix_produit');
-            $table->foreignIdFor(Categorie::class);
-            $table->boolean('isAcceuil');
+            $table->foreignIdFor(Categorie::class)->onUpdate('cascade');
+            $table->boolean('isAccueil');
         });
     }
 

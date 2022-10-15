@@ -25,8 +25,16 @@ class UpdateDeuxiemeBanniereRequest extends FormRequest
     {
         return [
             'titre' =>  'string|max:250',
-            'texte' => 'string',
-            'url_image' => 'string'
+            'texte' => 'string'
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'titre.string' => 'Ce champs doit être une chaîne de caractères !',
+            'texte.string' => 'Ce champs doit être une chaîne de caractères !'
+        ];
+    }
+
 }

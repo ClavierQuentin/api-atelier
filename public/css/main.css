@@ -1,0 +1,27 @@
+.trash{
+    background: none;
+    border: none;
+    width: 35px;
+}
+
+.custom-form{
+    width: 50%;
+    margin: auto;
+}
+th, td
+{
+    text-align: center;
+}
+
+.custom-btn{
+    position: absolute;
+    right: 0;
+    margin-right: 2%;
+}
+
+.menu-link-edit
+{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 4px;
+}

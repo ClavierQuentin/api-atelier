@@ -12,6 +12,7 @@ use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use App\Http\Requests\Request;
 use Illuminate\Http\Client\Request as ClientRequest;
 use Illuminate\Http\Request as HttpRequest;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request as FacadesRequest;
 
 class DeuxiemeBanniereController extends Controller
@@ -23,12 +24,31 @@ class DeuxiemeBanniereController extends Controller
      */
     public function index()
     {
+        $deuxiemeBannieres = DeuxiemeBanniere::all();
+
+        if(isset($deuxiemeBannieres)){
+            return view('deuxiemeBannieres.index',['deuxiemeBannieres' => $deuxiemeBannieres]);
+        }
+        abort(500);
+
+    }
+
+    //Controller pour l'API coté Front
+    public function indexApi()
+    {
         $data = DeuxiemeBanniere::all();
-        if(sizeof($data) > 0){
+        if(isset($data)){
             return response()->json($data, 200);
         }
         return response()->json(['status'=> false], 204);
     }
+
+    //Affichage du formulaire de création
+    public function create()
+    {
+        return view('deuxiemeBannieres.create');
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -40,43 +60,32 @@ class DeuxiemeBanniereController extends Controller
     {
         $data = array();
 
-        // $validator = Validator::make($request->all(),[
-        //     'image'=>[
-        //         'required',
-        //         File::image()
-        //     ]
-        // ]);
-        // if($validator->fails()){
-        //     return response()->json([
-        //         'status'=>false,
-        //         'message'=>'Une erreur est survenue',
-        //         'errors'=>$validator->errors()
-        //     ],401);
-        // };
-
+        //Règles de validation du fichier
         $this->validate($request ,[
             'image'=>'required',
             'image.*'=>'mimes:jpg,jepg,png,JPG,JPEG'
         ]);
 
+        //On upload chaque image
         foreach($request->file('image') as $file){
             $path = cloudinary()->upload($file->getRealPath())->getSecurePath();
             $data[] = $path;
         }
 
+        //Création du nouvel objet
         $deuxiemeBanniere = new DeuxiemeBanniere($request->validated());
 
+        //On enregistre certain paramètres
         $deuxiemeBanniere->url_image = json_encode($data);
+        $deuxiemeBanniere->online = 0;
 
+        //Enregistrement en DB
         $response = Auth::user()->deuxiemeBannieres()->save($deuxiemeBanniere);
 
-        if(!empty($response)){
-            return response()->json([
-                'status'=>'success',
-                'message'=>'New entry added successfully.'
-            ],201);
+        if($response){
+            return redirect('deuxieme-banniere');
         }
-        return response()->json(array('status'=>false), 500);
+        return redirect('deuxieme-banniere')->with('error', 'Une erreur est survenue pendant l\'enregistrement');
     }
 
     /**
@@ -87,7 +96,15 @@ class DeuxiemeBanniereController extends Controller
      */
     public function show(DeuxiemeBanniere $deuxiemeBanniere)
     {
-        return response()->json($deuxiemeBanniere, 200);
+        $deuxiemeBanniere = DB::table('deuxieme_bannieres')
+                        ->where('online', '=', '1')
+                        ->first();
+
+        if(isset($deuxiemeBanniere)){
+            return response()->json($deuxiemeBanniere, 200);
+        }
+
+        return response()->json(['message'=>'Une erreur est survenue'], 204);
     }
 
     /**
@@ -98,7 +115,7 @@ class DeuxiemeBanniereController extends Controller
      */
     public function edit(DeuxiemeBanniere $deuxiemeBanniere)
     {
-        return response()->json($deuxiemeBanniere, 200);
+        return view('deuxiemeBannieres.edit',['deuxiemeBanniere'=>$deuxiemeBanniere]);
     }
 
     /**
@@ -112,66 +129,39 @@ class DeuxiemeBanniereController extends Controller
     {
         $data = array();
 
-        $this->validate($request ,[
-            'image'=>'required',
-            'image.*'=>'mimes:jpg,jepg,png,JPG,JPEG'
-        ]);
-
-
-        foreach($request->file('image') as $file){
-            $path = cloudinary()->upload($file->getRealPath())->getSecurePath();
-            $data[] = $path;
-        }
-
-        if(sizeof($data) > 0) {
-            $urls = $deuxiemeBanniere->getArrayFromUrlsImages();
-            foreach($urls as $url) {
-                $urlImage = explode("/", $url);
-                $publicId = $urlImage[count($urlImage)-1];
-                $publicName = explode(".", $publicId)[0];
-
-                $result = Cloudinary::destroy($publicName);
+        //Si une image a été envoyé au formulaire
+        if($request->file('image') != null){
+            //Regle de validation du fichier image
+            $this->validate($request ,[
+                'image'=>'required',
+                'image.*'=>'mimes:jpg,jepg,png,JPG,JPEG'
+            ]);
+            //Upload des nouvelles images
+            foreach($request->file('image') as $file){
+                $path = cloudinary()->upload($file->getRealPath())->getSecurePath();
+                $data[] = $path;
             }
-
-            $deuxiemeBanniere->url_image = $data;
         }
 
+        //Si checkbox deleteImage = true, on supprime les images existantes
+        if(isset($request['deleteAllImages']) && $request['deleteAllImages'] == true) {
+
+            $deuxiemeBanniere->deleteImages(); //Voir model
+
+            $deuxiemeBanniere->url_image = json_encode($data); //On enregistre les nouvelles urls si présentent, sinon un tableau vide
+        }
+
+
+        //Update
         $update = $deuxiemeBanniere->update($request->validated());
 
-        if(!$update){
-            return response()->json(array('status' => false),500);
+        //On contrôle la sortie, si l'update a bien été faite.
+        if($update){
+            return redirect('deuxieme-banniere');
         }
-        return response()->json(array('status' => true),201);
+        return redirect('deuxieme-banniere')->with('error', 'Une erreur est survenue pendant l\'enregistrement');
     }
 
-    public function addImage(DeuxiemeBanniere $deuxiemeBanniere, UpdateDeuxiemeBanniereRequest $request)
-    {
-        $data = array();
-
-        $this->validate($request ,[
-            'image'=>'required',
-            'image.*'=>'mimes:jpg,jepg,png,JPG,JPEG'
-        ]);
-
-
-        foreach($request->file('image') as $file){
-            $path = cloudinary()->upload($file->getRealPath())->getSecurePath();
-            $data[] = $path;
-        }
-
-        $oldData = json_decode($deuxiemeBanniere->url_image);
-
-        $newData = array_merge($oldData, $data);
-
-        $deuxiemeBanniere->url_image = json_encode($newData);
-
-        $response = $deuxiemeBanniere->save();
-
-        if(!$response){
-            return response()->json(['status'=>false], 500);
-        }
-        return response()->json(['status'=>true], 200);
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -181,71 +171,83 @@ class DeuxiemeBanniereController extends Controller
      */
     public function destroy(DeuxiemeBanniere $deuxiemeBanniere)
     {
-        $urls = $deuxiemeBanniere->getArrayFromUrlsImages();
-        foreach($urls as $url) {
-            $urlImage = explode("/", $url);
-            $publicId = $urlImage[count($urlImage)-1];
-            $publicName = explode(".", $publicId)[0];
+        //Suppression des images stockées au cloud
+        $deuxiemeBanniere->deleteImages(); //Voir model
 
-            $result = Cloudinary::destroy($publicName);
-        }
 
+        //On supprime l'objet selectionné
         $delete = $deuxiemeBanniere->delete();
         if(!$delete){
-            return response()->json(array('status' => false),500);
+            abort(500);
         }
-        return response()->json(array('status' => true),200);
+        return view('deuxiemeBanniere.index');
     }
 
-    public function deleteImage(DeuxiemeBanniere $deuxiemeBanniere, UpdateDeuxiemeBanniereRequest $request)
+    //Fonction pour supprimer 1 image précise
+    public function deleteImage(DeuxiemeBanniere $deuxiemeBanniere, $image)
     {
-        $oldData = json_decode($deuxiemeBanniere->url_image);
 
-        $data = array();
-        
-        foreach($request->validated() as $item){
-            $data[] = $item;
-        }
+        //On récupère toutes les urls et on les parcours
+        $array = $deuxiemeBanniere->getArrayFromUrlsImages();
 
+        for($i = 0; $i < sizeof($array); $i++){
 
-        if(sizeof($oldData) > sizeof($data)){
-            for($i = 0; $i < sizeof($oldData); $i++){
-                for($j = 0; $j < sizeof($data); $j++){
-                    if($oldData[$i] == $data[$j]){
-                        $urlImage = explode("/", $oldData[$i]);
-                        $publicId = $urlImage[count($urlImage)-1];
-                        $publicName = explode(".", $publicId)[0];
+            //Déclaration des variables
+            $publicId = "";
+            $name = "";
 
-                        $result = Cloudinary::destroy($publicName);
+            //On décompose l'url stockées en DB
+            $name = explode("/", $array[$i]);
 
-                        array_splice($oldData, $i, 1);
-                    }
-                }
-            }
-        } else if(sizeof($oldData) > sizeof($data)) {
-            for($i = 0; $i < sizeof($data); $i++){
-                for($j = 0; $j < sizeof($oldData); $j++){
-                    if($data[$i] == $oldData[$j]){
-                        $urlImage = explode("/", $oldData[$j]);
-                        $publicId = $urlImage[count($urlImage)-1];
-                        $publicName = explode(".", $publicId)[0];
+            //On récupère  le nom de l'image
+            $publicId = $name[count($name)-1];
 
-                        $result = Cloudinary::destroy($publicName);
+            //On récupère sans l'extension
+            $publicName = explode(".", $publicId)[0];
 
-                        array_splice($oldData, $j, 1);
-                    }
-                }
-            }
+            //Comparaison avec les valeurs en DB
+            if($publicId == $image){
 
-        }
+                //ON efface dans le tableau
+                array_splice($array, $i, 1);
 
-        $deuxiemeBanniere->url_image = json_encode($oldData);
+                //On efface sur cloudinary
+                $result = Cloudinary::destroy($publicName);
+
+            }//if
+
+        }//For
+
+        //On enregistre le nouveau tableau d'url
+        $deuxiemeBanniere->url_image = json_encode($array);
 
         $delete = $deuxiemeBanniere->save();
 
-        if(!$delete){
-            return response()->json(array('status' => false),500);
+        if($delete){
+            return view('deuxiemeBannieres.edit', compact('deuxiemeBanniere'));
         }
-        return response()->json(array('status' => true),200);
+        abort(403);
     }
+
+    //Fonction pour mettre a jour le booleen en DB pour mettre en avant une donnée
+    public function updateOnline(DeuxiemeBanniere $deuxiemeBanniere)
+    {
+        //On met tous les modèle à 0
+        $all = DeuxiemeBanniere::all();
+        foreach ($all as $item){
+            $item->online = "0";
+            $item->save();
+        }
+
+        //On passe le modèle en cours à 1
+        $deuxiemeBanniere->online = 1;
+        $response = $deuxiemeBanniere->save();
+
+        if($response){
+            return redirect('deuxieme-banniere');
+        }
+        abort(500);
+    }
+
+
 }

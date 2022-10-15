@@ -28,7 +28,19 @@ class UpdateTroisiemeBanniereRequest extends FormRequest
             'titre_1'=>'string:250',
             'titre_2'=>'string:250',
             'texte_1'=>'string',
-            'texte_2'=>'string',
+            'texte_2'=>'string'
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'titre_principal.string' => 'Ce champs doit être une chaîne de caractères',
+            'titre_1.string'=>'Ce champs doit être une chaîne de caractères',
+            'titre_2.string'=>'Ce champs doit être une chaîne de caractères',
+            'texte_1.string'=>'Ce champs doit être une chaîne de caractères',
+            'texte_2.string'=>'Ce champs doit être une chaîne de caractères'
+        ];
+    }
+
 }

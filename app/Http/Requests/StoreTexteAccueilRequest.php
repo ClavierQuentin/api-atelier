@@ -29,4 +29,15 @@ class StoreTexteAccueilRequest extends FormRequest
             'titre_categories' =>'required|string|max:250'
         ];
     }
+    public function messages()
+    {
+        return [
+            'titre_accueil.required'=>'Ce champ est obligatoire',
+            'titre_accueil.string'=>'Ce champ doit être une chaîne de caractères',
+            'texte_accueil.required'=>'Ce champ est obligatoire',
+            'texte_accueil.string'=>'Ce champ doit être une chaîne de caractères',
+            'titre_categories.required'=>'Ce champ est obligatoire',
+            'titre_categories.string'=>'Ce champ doit être une chaîne de caractères',
+        ];
+    }
 }

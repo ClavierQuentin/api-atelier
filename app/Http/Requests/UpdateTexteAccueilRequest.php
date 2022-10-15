@@ -26,7 +26,17 @@ class UpdateTexteAccueilRequest extends FormRequest
         return [
             'titre_accueil' =>'string|max:250',
             'texte_accueil'=>'string',
-            'titre_categories' =>'string|max:250'
+            'titre_categories' =>'string|max:250',
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'titre_accueil.string'=>'Ce champ doit être une chaîne de caractères',
+            'texte_accueil.string'=>'Ce champ doit être une chaîne de caractères',
+            'titre_categories.string'=>'Ce champ doit être une chaîne de caractères'
+        ];
+    }
+
 }

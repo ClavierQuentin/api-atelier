@@ -24,9 +24,39 @@ class CategorieController extends Controller
     public function index()
     {
         $categories = Categorie::all();
-        if(sizeof($categories) > 0){
+
+        if(isset($categories)){
+            return view('categories.index',compact('categories'));
+        }
+        abort(500);
+    }
+
+    //Fonction pour récupérer les produits associés à une catégorie
+    public function indexProducts(Categorie $categorie)
+    {
+        $produits = $categorie->getProduits;
+
+        if(isset($produits)){
+            return view('produits.index_categorie',compact('produits','categorie'));
+        }
+        abort(500);
+    }
+
+    //Fonction pour gérer la route de l'API pour le front
+    public function indexApi()
+    {
+        $categories = Categorie::all();
+        if(isset($categories)){
             return response()->json($categories, 200);
         }
+        return response()->json(['status'=>false], 500);
+
+    }
+
+    //Formulaire de création
+    public function create()
+    {
+        return view('categories.create');
     }
 
 
@@ -38,6 +68,7 @@ class CategorieController extends Controller
      */
     public function store(StoreCategorieRequest $request)
     {
+        //Regles de validation du fichier
         $validator = Validator::make($request->all(),[
             'image'=>[
                 'required',
@@ -54,21 +85,22 @@ class CategorieController extends Controller
 
         $validated = $validator->validated();
 
+        //Enregistrement de l'image au cloud et on stock l'url
         $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
 
+        //Création d'un nouvel objet
         $categorie = new Categorie($request->validated());
 
+        //On enregistre l'url
         $categorie->url_image_categorie = $path;
 
+        //On enregistre en base
         $response = Auth::user()->categories()->save($categorie);
 
-        if(!empty($response)){
-            return response()->json([
-                'status'=>'success',
-                'message'=>'New entry added successfully.'
-            ],201);
+        if(!$response){
+            return redirect('categorie')->with('error', 'Une erreur est survenue pendant l\'enregistrement');
         }
-        return response()->json(array('status'=>false), 500);
+        return redirect('categorie');
     }
 
     /**
@@ -90,7 +122,7 @@ class CategorieController extends Controller
      */
     public function edit(Categorie $categorie)
     {
-        return response()->json($categorie, 200);
+        return view('categories.edit', compact('categorie'));
     }
 
     /**
@@ -102,43 +134,38 @@ class CategorieController extends Controller
      */
     public function update(UpdateCategorieRequest $request, Categorie $categorie)
     {
+        //Regle de validation du fichier
         $validator = Validator::make($request->all(),[
             'image'=>[
                 File::image()
             ]
         ]);
         if($validator->fails()){
-            return response()->json([
-                'status'=>false,
-                'message'=>'Une erreur est survenue',
-                'errors'=>$validator->errors()
-            ],401);
+            return redirect('categorie/edit/'.$categorie->id)->with('error', $validator->errors());
         };
 
         $validated = $validator->validated();
 
+        //Dans le cas où une image a été fournie au formulaire
         if(isset($validated['image'])){
 
             //Suppression de l'ancienne image
-            $urlImage = explode("/", $categorie->url_image_categorie);
-            $publicId = $urlImage[count($urlImage)-1];
-            $publicName = explode(".", $publicId)[0];
+            $categorie->deleteImage();
 
-            $result = Cloudinary::destroy($publicName);
-
+            //Enregistrement de la nouvelle image et on stock l'url
             $updatedUrl = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
 
+            //On enregistre l'url
             $categorie->url_image_categorie = $updatedUrl;
-
-            $update = $categorie->update($request->validated());
-        } else if(!isset($validated['image'])){
-            $update = $categorie->update($request->validated());
         }
+
+        //On enregistre les modifs en base
+        $update = $categorie->update($request->validated());
 
         if(!$update){
-            return response()->json(array('status' => false),500);
+            return redirect('categorie')->with('error', 'Une erreur est survenue pendant l\'enregistrement');
         }
-        return response()->json(array('status' => true),201);
+        return redirect('categorie');
     }
 
     /**
@@ -150,18 +177,14 @@ class CategorieController extends Controller
     public function destroy(Categorie $categorie)
     {
         //Suppression de l'image sur le cloud
-        $urlImage = explode("/", $categorie->url_image_categorie);
-        $publicId = $urlImage[count($urlImage)-1];
-        $publicName = explode(".", $publicId)[0];
-
-        $result = Cloudinary::destroy($publicName);
+        $categorie->deleteImage();
 
         //Suppression en DB
         $delete = $categorie->delete();
         if(!$delete){
-            return response()->json(array('status' => false),500);
+            return redirect('categorie')->with('error', 'Une erreur est survenue pendant l\'enregistrement');
         }
-        return response()->json(array('status' => true),200);
+        return redirect('categorie');
     }
 
     /**
@@ -169,6 +192,8 @@ class CategorieController extends Controller
      *
      * @param  \App\Models\Categorie  $categorie
      * @return \Illuminate\Http\Response
+     *
+     * Pour affichage en front via API
      */
     public function getAllProducts(Categorie $categorie)
     {

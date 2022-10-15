@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('texte');
             $table->foreignIdFor(User::class);
             $table->string('url_image');
+            $table->boolean('online');
             $table->timestamps();
         });
     }

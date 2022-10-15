@@ -11,7 +11,7 @@ use Symfony\Component\VarDumper\VarDumper;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Support\Facades\Validator;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
-
+use Illuminate\Support\Facades\DB;
 
 class TroisiemeBanniereController extends Controller
 {
@@ -22,13 +22,31 @@ class TroisiemeBanniereController extends Controller
      */
     public function index()
     {
+        $troisiemeBannieres = TroisiemeBanniere::all();
+
+        if(isset($troisiemeBannieres)){
+            return view('troisiemeBannieres.index',['troisiemeBannieres' => $troisiemeBannieres]);
+        }
+        abort(500);
+    }
+
+    //Controller pour l'API coté Front
+    public function indexApi()
+    {
         $data = TroisiemeBanniere::all();
-        if(sizeof($data) > 0){
+
+        if(isset($data)){
             return response()->json($data, 200);
         }
         return response()->json(['status'=> false], 204);
+
     }
 
+    //Direction pour le formulaire de création
+    public function create()
+    {
+        return view('troisiemeBannieres.create');
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -38,6 +56,7 @@ class TroisiemeBanniereController extends Controller
      */
     public function store(StoreTroisiemeBanniereRequest $request)
     {
+        //Règles de validation du fichier
         $validator = Validator::make($request->all(),[
             'image'=>[
                 'required',
@@ -58,24 +77,26 @@ class TroisiemeBanniereController extends Controller
 
         $validated = $validator->validated();
 
+        //On upload chaque image
         $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
 
         $path2 = cloudinary()->upload($validated['image2']->getRealPath())->getSecurePath();
 
+        //Création du nouvel objet
         $troisiemeBanniere = new TroisiemeBanniere($request->validated());
 
+        //On enregistre certain paramètres
         $troisiemeBanniere->url_image = $path;
         $troisiemeBanniere->url_image_2 = $path2;
+        $troisiemeBanniere->online = 0;
 
+        //Enregistrement en DB
         $response = Auth::user()->troisiemeBannieres()->save($troisiemeBanniere);
 
-        if(!empty($response)){
-            return response()->json([
-                'status'=>'success',
-                'message'=>'New entry added successfully.'
-            ],201);
+        if($response){
+            return redirect('troisieme-banniere');
         }
-        return response()->json(array('status'=>false), 500);
+        return redirect('troisieme-banniere')->with('error', 'Une erreur est survenue pendant l\'enregistrement');
     }
 
     /**
@@ -84,10 +105,12 @@ class TroisiemeBanniereController extends Controller
      * @param  \App\Models\TroisiemeBanniere  $troisiemeBanniere
      * @return \Illuminate\Http\Response
      */
-    public function show(TroisiemeBanniere $troisiemeBanniere)
+    public function show()
     {
+        $troisiemeBanniere = DB::table('troisieme_bannieres')
+                        ->where('online', '=', '1')
+                        ->first();
         return response()->json($troisiemeBanniere, 200);
-
     }
 
     /**
@@ -98,7 +121,7 @@ class TroisiemeBanniereController extends Controller
      */
     public function edit(TroisiemeBanniere $troisiemeBanniere)
     {
-        return response()->json($troisiemeBanniere, 200);
+        return view('troisiemeBannieres.edit',['troisiemeBanniere'=>$troisiemeBanniere]);
     }
 
     /**
@@ -110,6 +133,7 @@ class TroisiemeBanniereController extends Controller
      */
     public function update(UpdateTroisiemeBanniereRequest $request, TroisiemeBanniere $troisiemeBanniere)
     {
+        //Regle de validation du fichier image
         $validator = Validator::make($request->all(),[
             'image'=>[
                 File::image()
@@ -118,6 +142,7 @@ class TroisiemeBanniereController extends Controller
                 File::image()
             ]
         ]);
+        //Sortie et erreur en cas de non validation
         if($validator->fails()){
             return response()->json([
                 'status'=>false,
@@ -126,85 +151,76 @@ class TroisiemeBanniereController extends Controller
             ],401);
         };
 
+        //Récupération des donnée validées
         $validated = $validator->validated();
 
+        //Si une image a été fournie au formulaire pour la 1ere image
         if(isset($validated['image']) && !isset($validated['image2'])){
 
             //Suppression de l'ancienne image
-            $urlImage = explode("/", $troisiemeBanniere->url_image);
-            $publicId = $urlImage[count($urlImage)-1];
-            $publicName = explode(".", $publicId)[0];
-
-            $result = Cloudinary::destroy($publicName);
-
+            $troisiemeBanniere->deleteImage1();
+            //Upload de la nouvelle image
             $updatedUrl = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
 
+            //Enregistrement de la nouvelle URL
             $troisiemeBanniere->url_image = $updatedUrl;
-
-            $update = $troisiemeBanniere->update($request->validated());
-
-            if(!$update){
-                return response()->json(array('status' => false),500);
-            }
-            return response()->json(array('status' => true),201);
 
         }
 
+        //Si une image a été fournie au formulaire pour la deuxieme image
         if(!isset($validated['image']) && isset($validated['image2'])){
-            $urlImage = explode("/", $troisiemeBanniere->url_image_2);
-            $publicId = $urlImage[count($urlImage)-1];
-            $publicName = explode(".", $publicId)[0];
 
-            $result = Cloudinary::destroy($publicName);
+            //Suppression de l'image actuelle
+            $troisiemeBanniere->deleteImage2();
 
+            //Enregistrement au cloud et récupération de l'url
             $updatedUrl = cloudinary()->upload($validated['image2']->getRealPath())->getSecurePath();
 
+            //On enregistre la nouvelle url
             $troisiemeBanniere->url_image_2 = $updatedUrl;
-
-            $update = $troisiemeBanniere->update($request->validated());
-
-            if(!$update){
-                return response()->json(array('status' => false),500);
-            }
-            return response()->json(array('status' => true),201);
         }
 
+        //Si les 2 images ont été envoyées au formulaire
         if(isset($validated['image']) && isset($validated['image2'])){
-            $urlImage = explode("/", $troisiemeBanniere->url_image);
-            $publicId = $urlImage[count($urlImage)-1];
-            $publicName = explode(".", $publicId)[0];
 
-            $urlImage2 = explode("/", $troisiemeBanniere->url_image_2);
-            $publicId2 = $urlImage2[count($urlImage2)-1];
-            $publicName2 = explode(".", $publicId2)[0];
+            //On supprime les images existantes
+            $troisiemeBanniere->deleteImage1();
+            $troisiemeBanniere->deleteImage2();
 
-
-            $result = Cloudinary::destroy($publicName);
-            $result2 = Cloudinary::destroy($publicName2);
-
+            //On enregistre les nouvelles images et on récupère les urls
             $updatedUrl = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
-
             $updatedUrl2 = cloudinary()->upload($validated['image2']->getRealPath())->getSecurePath();
 
+            //On enregistre les urls
             $troisiemeBanniere->url_image = $updatedUrl;
             $troisiemeBanniere->url_image_2 = $updatedUrl2;
-            
-            $update = $troisiemeBanniere->update($request->validated());
-
-            if(!$update){
-                return response()->json(array('status' => false),500);
-            }
-            return response()->json(array('status' => true),201);
         }
 
-        //sinon simple update des textes
+        //On enregistre en base
         $update = $troisiemeBanniere->update($request->validated());
 
-        if(!$update){
-            return response()->json(array('status' => false),500);
+        if($update){
+            return redirect('troisieme-banniere');
         }
-        return response()->json(array('status' => true),201);
+        return redirect('troisieme-banniere')->with('error', 'Une erreur est survenue pendant l\'enregistrement');
+}
+
+
+    //Fonction pour mettre a jour le booleen en DB pour mettre en avant une data
+    public function updateOnline( TroisiemeBanniere $troisiemeBanniere)
+    {
+        $all = TroisiemeBanniere::all();
+        foreach ($all as $item){
+            $item->online = "0";
+            $item->save();
+        }
+
+        $troisiemeBanniere->online = 1;
+        $troisiemeBanniere->save();
+
+        return redirect('troisieme-banniere');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -214,26 +230,15 @@ class TroisiemeBanniereController extends Controller
      */
     public function destroy(TroisiemeBanniere $troisiemeBanniere)
     {
-        //Suppression de l'image sur le cloud
-        $urlImage = explode("/", $troisiemeBanniere->url_image);
-        $publicId = $urlImage[count($urlImage)-1];
-        $publicName = explode(".", $publicId)[0];
-
-
-        $urlImage2 = explode("/", $troisiemeBanniere->url_image_2);
-        $publicId2 = $urlImage2[count($urlImage2)-1];
-        $publicName2 = explode(".", $publicId2)[0];
-
-        $result = Cloudinary::destroy($publicName);
-        $result2 = Cloudinary::destroy($publicName2);
-
-
+        //Suppression des images sur le cloud
+        $troisiemeBanniere->deleteImage1();
+        $troisiemeBanniere->deleteImage2();
 
         $delete = $troisiemeBanniere->delete();
         if(!$delete){
-            return response()->json(array('status' => false),500);
+            abort(500);
         }
-        return response()->json(array('status' => true),200);
+        return view('troisiemeBannieres.index');
 
     }
 }
