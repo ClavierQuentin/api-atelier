@@ -171,7 +171,9 @@ class DeuxiemeBanniereController extends Controller
     public function destroy(DeuxiemeBanniere $deuxiemeBanniere)
     {
         //Suppression des images stockées au cloud
-        $deuxiemeBanniere->deleteImages(); //Voir model
+        if($deuxiemeBanniere->url_image != NULL){
+            $deuxiemeBanniere->deleteImages(); //Voir model
+        }
 
 
         //On supprime l'objet selectionné
@@ -179,7 +181,7 @@ class DeuxiemeBanniereController extends Controller
         if(!$delete){
             abort(500);
         }
-        return view('deuxiemeBanniere.index');
+        return view('deuxiemeBannieres.index');
     }
 
     //Fonction pour supprimer 1 image précise

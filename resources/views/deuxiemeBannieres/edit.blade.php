@@ -34,24 +34,25 @@
                 </label>
 
                 {{-- Si des images sont enregistrées en base --}}
-                @if(!empty($deuxiemeBanniere->url_image))
+                @if(isset($deuxiemeBanniere->url_image) && sizeof($deuxiemeBanniere->getArrayFromUrlsImages()) > 0)
 
                     <div class="d-flex flex-wrap">
 
                         {{-- Parcours du tableau d'urls --}}
                         @foreach ($deuxiemeBanniere->getArrayFromUrlsImages() as $url)
 
+
                             <div class="border border-info p-1 m-2 " style="position: relative;">
 
                                 <img height="200px" src="{{ $url }}" alt="Image d'illustration" title="Image actuelle">
 
                                 {{-- Bouton de suppression d'une image --}}
-                                <form action="{{ route('delete.image',['image'=>$deuxiemeBanniere->getNameFromUrl($url),'deuxiemeBanniere'=>$deuxiemeBanniere]) }}" method='POST'>
-                                    @csrf
-                                    @method('put')
+                                {{-- <form action="{{ route('delete.image',['image'=>$deuxiemeBanniere->getNameFromUrl($url),'deuxiemeBanniere'=>$deuxiemeBanniere]) }}" method='POST'> --}}
+                                    {{-- @csrf
+                                    @method('put') --}}
 
-                                    <button class="trash"><img  src="{{ asset('assets/trash.svg') }}" alt="icone corbeille" title="Supprimer"></button>
-                                </form>
+                                    <a href="{{ url('deuxieme-banniere/delete-image/') }}/{{ $deuxiemeBanniere->id }}/{{ $deuxiemeBanniere->getNameFromUrl($url) }} " class="trash custom-btn"><img  src="{{ asset('assets/trash.svg') }}" alt="icone corbeille" title="Supprimer"></a>
+                                {{-- </form> --}}
 
                             </div>
 

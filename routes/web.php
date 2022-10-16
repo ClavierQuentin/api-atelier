@@ -85,7 +85,7 @@ Route::middleware('auth','role:admin')->group(function(){
 
     Route::put('deuxieme-banniere/update-online/{deuxiemeBanniere}',[DeuxiemeBanniereController::class, 'updateOnline'])->name('deuxiemeBanniere.online'); //Update pour pr�ciser les textes � mettre en ligne
 
-    Route::put('deuxieme-banniere/delete-image/{deuxiemeBanniere}/{image}',[DeuxiemeBanniereController::class, 'deleteImage'])->name('delete.image');
+    Route::get('deuxieme-banniere/delete-image/{deuxiemeBanniere}/{image}',[DeuxiemeBanniereController::class, 'deleteImage'])->name('delete.image'); //route pour supprimer une image en particulier
 
     Route::delete('deuxieme-banniere/delete/{deuxiemeBanniere}',[DeuxiemeBanniereController::class, 'destroy'])->name('deuxiemeBanniere.delete'); //Route de suppression
 
