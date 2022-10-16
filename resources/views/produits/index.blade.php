@@ -77,9 +77,8 @@
 
             @else
 
-                <div class="border border-danger text-center m-4">
-                    <p>Il n'y a aucun produit � afficher</p>
-                    <a href="{{ url('/categorie') }}" class="nav-item">Revenir en arrière</a>
+                <div class="border border-danger text-center m-4 p-1">
+                    <p>Il n'y a aucun produit à afficher</p>
                 </div>
 
             @endif

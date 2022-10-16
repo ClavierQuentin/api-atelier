@@ -6,12 +6,12 @@
 
         <ul class="navbar-nav me-auto">
             <li class="nav-item">
-                <a href="{{ route('texteAccueil.create') }}" class="nav-link border d-inline m-2">Créer des nouvelles entrées</a>
+                <a href="{{ route('texteAccueil.create') }}" class="nav-link border d-inline m-2 p-1">Créer des nouvelles entrées</a>
             </li>
         </ul>
 
         {{-- Controle du nombre de données en base --}}
-        @if(isset($date) && sizeof($data) > 0)
+        @if(isset($data) && sizeof($data) > 0)
 
             <table class="table m-1">
 

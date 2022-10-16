@@ -87,6 +87,12 @@
                 Il n'y a aucune donnée à afficher
             </div>
 
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="{{ route('premiereBanniere.create') }}" class="nav-link border d-inline m-2 p-1">Créer des nouvelles entrées</a>
+                </li>
+            </ul>
+
         @endif
 
 
@@ -183,6 +189,12 @@
                 Il n'y a aucune donnée à afficher
             </div>
 
+            <ul class="navbar-nav ">
+                <li class="nav-item">
+                    <a href="{{ route('deuxiemeBanniere.create') }}" class="nav-link border d-inline m-2 p-1">Créer des nouvelles entrées</a>
+                </li>
+            </ul>
+
         @endif
 
         <ul class="navbar-nav me-auto">
@@ -277,6 +289,12 @@
             <div class="border border-danger text-center m-4">
                 Il n'y a aucune donnée à afficher
             </div>
+
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="{{ route('troisiemeBanniere.create') }}" class="nav-link border d-inline m-2 p-1">Créer des nouvelles entrées</a>
+                </li>
+            </ul>
 
         @endif
 

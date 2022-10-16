@@ -70,9 +70,16 @@
 
         @else
 
-            <div class=" border border-danger text-center m-4">
+            <div class=" border border-danger text-center m-4 p-1">
                 Il n'y a aucune catégorie à afficher
             </div>
+
+            <ul class="navbar-nav ">
+                <li class="nav-item">
+                    <a href="{{ route('categorie.create') }}" class="nav-link border d-inline m-2 p-1">Créer des nouvelles entrées</a>
+                </li>
+            </ul>
+
 
         @endif
 
