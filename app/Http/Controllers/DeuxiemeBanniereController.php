@@ -126,7 +126,18 @@ class DeuxiemeBanniereController extends Controller
      */
     public function update(UpdateDeuxiemeBanniereRequest $request, DeuxiemeBanniere $deuxiemeBanniere)
     {
-        $data = array();
+        //On récupère les urls existantes en base
+        $data = $deuxiemeBanniere->getArrayFromUrlsImages();
+
+        //Si checkbox deleteImage = true, on supprime les images existantes
+        if(isset($request['deleteAllImages']) && $request['deleteAllImages'] == true) {
+
+            $deuxiemeBanniere->deleteImages(); //Voir model
+
+            //On vide le tableau d'urls
+            $data= [];
+        }
+
 
         //Si une image a été envoyée au formulaire
         if($request->file('image') != null){
@@ -142,11 +153,6 @@ class DeuxiemeBanniereController extends Controller
             }
         }
 
-        //Si checkbox deleteImage = true, on supprime les images existantes
-        if(isset($request['deleteAllImages']) && $request['deleteAllImages'] == true) {
-
-            $deuxiemeBanniere->deleteImages(); //Voir model
-        }
 
         $deuxiemeBanniere->url_image = json_encode($data); //On enregistre les nouvelles urls si présentent, sinon un tableau vide
 
