@@ -48,7 +48,7 @@
                                 </li>
 
                                 <li class="nav-item dropdown">
-                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Page "Prsentation"</a>
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Page "Présentation"</a>
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                         <a href="{{ url('/presentation') }}" class="dropdown-item">Editer</a>
                                         <a class="dropdown-item" href="https://atelier-ginette.netlify.app/#/pages/about" target="_blank">Voir sur le site</a>
@@ -56,7 +56,7 @@
                                 </li>
 
                                 <li class="nav-item dropdown">
-                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Catgories</a>
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Catégories</a>
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                         <a href="{{ url('/categorie') }}" class="dropdown-item">Voir toutes les catégories</a>
                                         <a class="dropdown-item" href="{{ url('/categorie/create') }}">Créer une nouvelle catégorie</a>
