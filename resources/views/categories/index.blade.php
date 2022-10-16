@@ -25,7 +25,7 @@
                         <li class="nav-item dropdown custom-btn">
 
                             <a id="navbarDropdown" class="" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                ...
+                                <img src="{{ asset('assets/menu.svg') }}" alt="icone menu" height="35px">
                             </a>
 
                             <div style="min-width: 0;" class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
