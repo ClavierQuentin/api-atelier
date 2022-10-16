@@ -41,7 +41,7 @@ class DeuxiemeBanniereController extends Controller
                         ->first();
 
         if(isset($deuxiemeBanniere)){
-            return response()->json($deuxiemeBanniere, 200);
+            return response()->json(['data'=>$deuxiemeBanniere,'urls'=>json_decode($deuxiemeBanniere->url_image)], 200);
         }
 
         return response()->json(['message'=>'Une erreur est survenue'], 404);
