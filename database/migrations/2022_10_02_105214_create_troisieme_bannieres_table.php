@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('url_image');
             $table->string('url_image_2');
             $table->foreignIdFor(User::class);
-            $table->boolean('online');
+            $table->boolean('online')->nullable();
             $table->timestamps();
         });
     }

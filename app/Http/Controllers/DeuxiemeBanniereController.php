@@ -33,7 +33,7 @@ class DeuxiemeBanniereController extends Controller
 
     }
 
-    //Controller pour l'API coté Front
+    //Controller pour l'API cotï¿½ Front
     public function indexApi()
     {
         $data = DeuxiemeBanniere::all();
@@ -43,7 +43,7 @@ class DeuxiemeBanniereController extends Controller
         return response()->json(['status'=> false], 204);
     }
 
-    //Affichage du formulaire de création
+    //Affichage du formulaire de crï¿½ation
     public function create()
     {
         return view('deuxiemeBannieres.create');
@@ -60,7 +60,7 @@ class DeuxiemeBanniereController extends Controller
     {
         $data = array();
 
-        //Règles de validation du fichier
+        //Rï¿½gles de validation du fichier
         $this->validate($request ,[
             'image'=>'required',
             'image.*'=>'mimes:jpg,jepg,png,JPG,JPEG'
@@ -72,10 +72,10 @@ class DeuxiemeBanniereController extends Controller
             $data[] = $path;
         }
 
-        //Création du nouvel objet
+        //Crï¿½ation du nouvel objet
         $deuxiemeBanniere = new DeuxiemeBanniere($request->validated());
 
-        //On enregistre certain paramètres
+        //On enregistre certain paramï¿½tres
         $deuxiemeBanniere->url_image = json_encode($data);
         $deuxiemeBanniere->online = 0;
 
@@ -129,7 +129,7 @@ class DeuxiemeBanniereController extends Controller
     {
         $data = array();
 
-        //Si une image a été envoyé au formulaire
+        //Si une image a Ã©tÃ© envoyÃ©e au formulaire
         if($request->file('image') != null){
             //Regle de validation du fichier image
             $this->validate($request ,[
@@ -148,14 +148,14 @@ class DeuxiemeBanniereController extends Controller
 
             $deuxiemeBanniere->deleteImages(); //Voir model
 
-            $deuxiemeBanniere->url_image = json_encode($data); //On enregistre les nouvelles urls si présentent, sinon un tableau vide
+            $deuxiemeBanniere->url_image = json_encode($data); //On enregistre les nouvelles urls si prï¿½sentent, sinon un tableau vide
         }
 
 
         //Update
         $update = $deuxiemeBanniere->update($request->validated());
 
-        //On contrôle la sortie, si l'update a bien été faite.
+        //On controle la sortie, si l'update a bien Ã©tÃ© faite.
         if($update){
             return redirect('deuxieme-banniere');
         }
@@ -171,11 +171,11 @@ class DeuxiemeBanniereController extends Controller
      */
     public function destroy(DeuxiemeBanniere $deuxiemeBanniere)
     {
-        //Suppression des images stockées au cloud
+        //Suppression des images stockÃ©es au cloud
         $deuxiemeBanniere->deleteImages(); //Voir model
 
 
-        //On supprime l'objet selectionné
+        //On supprime l'objet selectionnÃ©
         $delete = $deuxiemeBanniere->delete();
         if(!$delete){
             abort(500);
@@ -183,26 +183,26 @@ class DeuxiemeBanniereController extends Controller
         return view('deuxiemeBanniere.index');
     }
 
-    //Fonction pour supprimer 1 image précise
+    //Fonction pour supprimer 1 image prÃ©cise
     public function deleteImage(DeuxiemeBanniere $deuxiemeBanniere, $image)
     {
 
-        //On récupère toutes les urls et on les parcours
+        //On rÃ©cupÃ¨re toutes les urls et on les parcours
         $array = $deuxiemeBanniere->getArrayFromUrlsImages();
 
         for($i = 0; $i < sizeof($array); $i++){
 
-            //Déclaration des variables
+            //DÃ©claration des variables
             $publicId = "";
             $name = "";
 
-            //On décompose l'url stockées en DB
+            //On dÃ©compose l'url stockÃ©es en DB
             $name = explode("/", $array[$i]);
 
-            //On récupère  le nom de l'image
+            //On rÃ©cupÃ¨re  le nom de l'image
             $publicId = $name[count($name)-1];
 
-            //On récupère sans l'extension
+            //On rÃ©cupÃ¨re sans l'extension
             $publicName = explode(".", $publicId)[0];
 
             //Comparaison avec les valeurs en DB
@@ -229,17 +229,17 @@ class DeuxiemeBanniereController extends Controller
         abort(403);
     }
 
-    //Fonction pour mettre a jour le booleen en DB pour mettre en avant une donnée
+    //Fonction pour mettre a jour le booleen en DB pour mettre en avant une donnï¿½e
     public function updateOnline(DeuxiemeBanniere $deuxiemeBanniere)
     {
-        //On met tous les modèle à 0
+        //On met tous les modÃ¨le Ã  0
         $all = DeuxiemeBanniere::all();
         foreach ($all as $item){
             $item->online = "0";
             $item->save();
         }
 
-        //On passe le modèle en cours à 1
+        //On passe le modÃ¨le en cours Ã  1
         $deuxiemeBanniere->online = 1;
         $response = $deuxiemeBanniere->save();
 

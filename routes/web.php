@@ -136,5 +136,7 @@ Route::middleware('auth','role:admin')->group(function(){
 
     Route::get('produit',[ProduitController::class, 'index'])->name('produit.index'); //Route affichage tous produits
 
+    Route::delete('produit/delete/{produit}',[ProduitController::class, 'destroy'])->name('produit.delete'); //Route de suppression
+
 }); //Sortie du group middleware
 

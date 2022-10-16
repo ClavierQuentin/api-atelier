@@ -29,7 +29,7 @@ class PremiereBanniereController extends Controller
         abort(500);
     }
 
-    //Controller pour l'API coté Front
+    //Controller pour l'API cotÃ© Front
     public function indexApi()
     {
         $data = PremiereBanniere::all();
@@ -53,7 +53,7 @@ class PremiereBanniereController extends Controller
      */
     public function store(StorePremiereBanniereRequest $request)
     {
-        //Règles de validation
+        //RÃ¨gles de validation
         $validator = Validator::make($request->all(),[
             'image'=>[
                 'required',
@@ -66,10 +66,10 @@ class PremiereBanniereController extends Controller
 
         $validated = $validator->validated();
 
-        //ON enregistre l'image au cloud en récupérant l'url d'acces
+        //ON enregistre l'image au cloud en rÃ©cupÃ©rant l'url d'acces
         $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
 
-        //CRéation d'un nouvel objet
+        //CRÃ©ation d'un nouvel objet
         $premiereBanniere = new PremiereBanniere($request->validated());
 
         //on enregistre le chemin d'acces de l'image
@@ -118,10 +118,10 @@ class PremiereBanniereController extends Controller
             };
         };
 
-        //Récupération des donnée validées
+        //Rï¿½cupï¿½ration des donnï¿½e validï¿½es
         $validated = $validator->validated();
 
-        //Si une image a été fournie au formulaire
+        //Si une image a ï¿½tï¿½ fournie au formulaire
         if(isset($validated['image'])){
 
             //Suppression de l'ancienne image
@@ -137,7 +137,7 @@ class PremiereBanniereController extends Controller
         //Enregistrement en base
         $update = $premiereBanniere->update($request->validated());
 
-        //On contrôle la sortie, si l'update a bien été faite.
+        //On controle la sortie, si l'update a bien ï¿½tï¿½ faite.
         if($update){
             return redirect('premiere-banniere');
         }

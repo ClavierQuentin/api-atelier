@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('texte_accueil');
             $table->string('titre_categories');
             $table->foreignIdFor(User::class);
-            $table->boolean('online');
+            $table->boolean('online')->nullable();
             $table->timestamps();
         });
     }

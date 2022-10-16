@@ -32,7 +32,7 @@
 
             <div class="form-group mt-2">
 
-                <label for="titre_categories">Titre champs Catégories</label>
+                <label for="titre_categories">Titre champs CatÃ©gories</label>
                 <input type="text" name="titre_categories" id="titre_categories" class="form-control @error('titre_categories') is-invalid @enderror" value = "{{ $texteAccueil->titre_categories }}">
 
                 @error('titre_categories')

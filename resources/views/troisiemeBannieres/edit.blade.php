@@ -2,7 +2,7 @@
 
 @section('content')
 
-{{-- Formulaire d'Èdition --}}
+{{-- Formulaire d'√©dition --}}
     <div class="container">
 
         <form class="custom-form" action="{{ route('troisiemeBanniere.update',['troisiemeBanniere'=>$troisiemeBanniere]) }}" method="POST" enctype="multipart/form-data">
@@ -23,16 +23,12 @@
                 <label for="titre_1">
                     Premier titre
                 </label>
-                <textarea class="form-control " name="titre_1" id="titre_1" cols="10" rows="5">
-                    {{ $troisiemeBanniere->titre_1 }}
-                </textarea>
+                <input type="text" class="form-control " name="titre_1" id="titre_1" value="{{ $troisiemeBanniere->titre_1 }}">
 
                 <label for="texte_1">
                     Premier texte
                 </label>
-                <textarea class="form-control" name="texte_1" id="texte_1" cols="10" rows="5">
-                    {{ $troisiemeBanniere->texte_1 }}
-                </textarea>
+                <textarea class="form-control" name="texte_1" id="texte_1" cols="10" rows="5">{{ $troisiemeBanniere->texte_1 }}</textarea>
 
                 <label for="image">
                     Image
@@ -52,18 +48,14 @@
             <div class="form-group mt-2">
 
                 <label for="titre_2">
-                    Deuxieme titre
+                    Deuxi√®me titre
                 </label>
-                <textarea class="form-control " name="titre_2" id="titre_2" cols="10" rows="5">
-                    {{ $troisiemeBanniere->titre_2 }}
-                </textarea>
+                <input type="text" class="form-control " name="titre_2" id="titre_2" value="{{ $troisiemeBanniere->titre_2 }}">
 
                 <label for="texte_2">
-                    DeuxiËme texte
+                    Deuxi√®me texte
                 </label>
-                <textarea class="form-control" name="texte_2" id="texte_2" cols="10" rows="5">
-                    {{ $troisiemeBanniere->texte_2 }}
-                </textarea>
+                <textarea class="form-control" name="texte_2" id="texte_2" cols="10" rows="5">{{ $troisiemeBanniere->texte_2 }}</textarea>
 
                 <label for="image2">
                     Image

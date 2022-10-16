@@ -24,15 +24,19 @@ class ProduitController extends Controller
     public function indexApi()
     {
         $produits = Produit::all();
-        if(sizeof($produits) > 0){
+        if(isset($produits)){
             return response()->json($produits, 200);
         }
+        return response()->json(['status'=>false],404);
     }
 
     public function index()
     {
         $produits = Produit::all();
-        return view('produits.index', compact('produits'));
+        if(isset($produits)){
+            return view('produits.index', compact('produits'));
+        }
+        abort(404);
     }
 
     /**
@@ -47,15 +51,20 @@ class ProduitController extends Controller
 
         $produits = $categorie->getProduits;
 
-        if(sizeof($produits) > 0){
+        if(isset($produits)){
             return response()->json($produits, 200);
         }
+        return response()->json(['status' => false], 500);
     }
 
     public function create()
     {
+        //On rÃ©cupÃ¨re les catÃ©gories pour les affiches dans le select lors de la crÃ©ation d'un produit
         $categories = Categorie::all();
-        return view('produits.create', compact('categories'));
+        if(isset($categories)){
+            return view('produits.create', compact('categories'));
+        }
+        abort(500);
     }
 
     /**
@@ -65,9 +74,9 @@ class ProduitController extends Controller
      * @param  \App\Models\Categorie $categorie
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreProduitRequest $request, Categorie $categorie)
+    public function store(StoreProduitRequest $request)
     {
-        //Regles de validation pour l'image d'illustration
+        // Regles de validation pour l'image d'illustration
         $validator = Validator::make($request->all(),[
             'image'=>[
                 'required',
@@ -89,14 +98,16 @@ class ProduitController extends Controller
         //On instancie un nouvel objet Produit avec la requete du formulaire
         $produit = new Produit($request->validated());
 
+        //On rÃ©cupÃ¨re la catÃ©gorie sÃ©lectionnÃ©e au formulaire
+        $categorie = Categorie::find($produit->categorie_id);
+
         //Enregistrement du chemin d'acces de l'image
-        $produit->url_image_produit = $path;
+        $produit->url_image_produit = 'test';
 
         //Enregistrement en DB
         $response = $categorie->produits()->save($produit);
 
-        //On contrôle le résultat de sortie
-        //On contrôle la sortie, si l'update a bien été faite
+        //On controle la sortie, si l'update a bien Ã©tÃ© faite
         if(empty($response)){
             return redirect('categorie/'.$produit->categorie_id.'/produits')->with('error', 'Une erreur est survenue pendant l\'enregistrement');
         }
@@ -123,7 +134,10 @@ class ProduitController extends Controller
     public function edit(Produit $produit)
     {
          $categories = Categorie::all();
-        return view('produits.edit', compact('produit','categories'));
+         if(isset($categories)){
+            return view('produits.edit', compact('produit','categories'));
+        }
+        abort(500);
     }
 
     /**
@@ -151,15 +165,11 @@ class ProduitController extends Controller
 
         $validated = $validator->validated();
 
-        //Si une image a été fournie au formulaire
+        //Si une image a Ã©tÃ© fournie au formulaire
         if(isset($validated['image'])){
 
             //Suppression de l'ancienne image
-            $urlImage = explode("/", $produit->url_image_produit);
-            $publicId = $urlImage[count($urlImage)-1];
-            $publicName = explode(".", $publicId)[0];
-
-            $result = Cloudinary::destroy($publicName);
+            $produit->deleteImage();
 
             //Upload de la nouvelle image
             $updatedUrl = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
@@ -168,15 +178,20 @@ class ProduitController extends Controller
             $produit->url_image_produit = $updatedUrl;
         }
 
-        //Cas où la checbox n'est pas cochée
-        if($request->isAccueil == NULL){
-            $produit->isAccueil = 0;
+        //Cas oÃ¹ la checbox pour affichage Ã  l'accueil est cochÃ©e
+        if($request->validated('isAccueil') != NULL && $request->validated('isAccueil') == 1){
+            $produit->isAccueil = 1;
+        }
+
+        //ContrÃ´le de la prÃ©sence d'une url externe remplie au formulaire
+        if($request->validated('url_externe') != NULL){
+            $produit->url_externe = $request->validated('url_externe');
         }
 
         //Enregistrement des changements en DB
         $update = $produit->update($request->validated());
 
-        //On contrôle la sortie, si l'update a bien été faite
+        //On controle la sortie, si l'update a bien Ã©tÃ© faite
         if(!$update){
             return redirect('categorie/'.$produit->categorie_id.'/produits')->with('error', 'Une erreur est survenue pendant l\'enregistrement');
         }
@@ -193,20 +208,28 @@ class ProduitController extends Controller
     public function destroy(Produit $produit)
     {
         // //Suppression de l'image sur le cloud
-        // $urlImage = explode("/", $produit->url_image_produit);
-        // $publicId = $urlImage[count($urlImage)-1];
-        // $publicName = explode(".", $publicId)[0];
-
-        // $result = Cloudinary::destroy($publicName);
+        $produit->deleteImage();
 
         //Suppression en DB
         $delete = $produit->delete();
         if(!$delete){
-            return response()->json(array('status' => false),500);
+            abort(500);
         }
-        return response()->json(array('status' => true),200);
+        return view('produits.index');
 
     }
 
 
+    //Fonction pour rÃ©cupÃ©rer les produits Ã  afficher sur l'acceuil
+    public function indexAccueil()
+    {
+        $produits = DB::table('produits')
+                    ->where('isAccueil', '=', 1)
+                    ->get();
+        if(isset($produits))
+        {
+            return response()->json(['status' => true], 200);
+        }
+        return response()->json(['status' => false], 404);
+    }
 }

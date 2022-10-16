@@ -2,7 +2,7 @@
 
 @section('content')
 
-{{-- Formulaire de création --}}
+{{-- Formulaire de crÃ©ation --}}
     <div class="container">
 
         <form class="custom-form" action="{{ route('categorie.store') }}" method="POST" enctype="multipart/form-data">
@@ -12,7 +12,7 @@
             <div class="form-goup m-2">
 
                 <label for="nom_categorie">
-                    Nom de la catégorie
+                    Nom de la catÃ©gorie
                 </label>
                 <input type="text" name="nom_categorie" id="nom_categorie" class="form-control @error('nom_categorie') is-invalid @enderror" value="{{ old('nom_categorie') }}">
 

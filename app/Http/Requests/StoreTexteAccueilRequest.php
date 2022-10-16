@@ -33,11 +33,11 @@ class StoreTexteAccueilRequest extends FormRequest
     {
         return [
             'titre_accueil.required'=>'Ce champ est obligatoire',
-            'titre_accueil.string'=>'Ce champ doit être une chaîne de caractères',
+            'titre_accueil.string'=>'Ce champs doit Ãªtre une chaÃ®ne de caractÃ¨res !',
             'texte_accueil.required'=>'Ce champ est obligatoire',
-            'texte_accueil.string'=>'Ce champ doit être une chaîne de caractères',
+            'texte_accueil.string'=>'Ce champs doit Ãªtre une chaÃ®ne de caractÃ¨res !',
             'titre_categories.required'=>'Ce champ est obligatoire',
-            'titre_categories.string'=>'Ce champ doit être une chaîne de caractères',
+            'titre_categories.string'=>'Ce champs doit Ãªtre une chaÃ®ne de caractÃ¨res !',
         ];
     }
 }

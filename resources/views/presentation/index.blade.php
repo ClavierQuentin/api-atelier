@@ -2,12 +2,12 @@
 
 @section('content')
 
-    {{-- Contenu de la première banniere --}}
+    {{-- Contenu de la premiÃ©re banniere --}}
     <div class="container mb-5">
 
-        <h2 class="m-2 text-success">Première bannière</h2>
+        <h2 class="m-2 text-success">PremiÃ¨re banniÃ¨re</h2>
 
-        {{-- On controle le nombre d'entrées en base --}}
+        {{-- On controle le nombre d'entrÃ©es en base --}}
         @if(sizeof($premiereBannieres) > 0)
 
             <table class="table m-1">
@@ -19,10 +19,10 @@
                             Titre
                         </th>
                         <th>
-                            Date création
+                            Date crÃ©ation
                         </th>
                         <th>
-                            Date mise a jour
+                            Date mise Ã  jour
                         </th>
                         <th>
                             Editer
@@ -38,7 +38,7 @@
 
                 <tbody>
 
-                    {{-- Parcours de toutes les entrées de premiereBannieres --}}
+                    {{-- Parcours de toutes les entrÃ©es de premiereBannieres --}}
                     @foreach ($premiereBannieres as $item)
 
                         <tr>
@@ -54,7 +54,7 @@
 
                             <td>
                                 <a href="{{ route('premiereBanniere.edit',['premiereBanniere'=>$item->id]) }}"class="nav-link">
-                                    <img  src="{{ asset('assets/edit.svg') }}" alt="Icone édition" title="Mettre à jour">
+                                    <img  src="{{ asset('assets/edit.svg') }}" alt="Icone Ã©dition" title="Mettre Ã  jour">
                                 </a>
                             </td>
 
@@ -84,7 +84,7 @@
         @else
 
             <div class="border border-danger text-center m-4">
-                Il n'y a aucune donnée à afficher
+                Il n'y a aucune donnÃ©e Ã  afficher
             </div>
 
         @endif
@@ -97,14 +97,14 @@
         </ul>
 
     </div>
-    {{-- Fin premiere bannièere --}}
+    {{-- Fin premiere banniÃ¨ere --}}
 
     {{-- Contenu deuxieme banniere --}}
     <div class="container  mb-5">
 
-        <h2  class="m-2 text-success">Deuxième bannière</h2>
+        <h2  class="m-2 text-success">DeuxiÃ¨me banniÃ¨re</h2>
 
-        {{-- Controle du nombre de données en base --}}
+        {{-- Controle du nombre de donnÃ©es en base --}}
         @if(sizeof($deuxiemeBannieres) > 0)
             <table class="table m-1">
 
@@ -115,10 +115,10 @@
                             Titre
                         </th>
                         <th>
-                            Date création
+                            Date crÃ©ation
                         </th>
                         <th>
-                            Date mise a jour
+                            Date mise Ã  jour
                         </th>
                         <th>
                             Editer
@@ -134,7 +134,7 @@
 
                 <tbody>
 
-                    {{-- Parcours de toutes les entrées --}}
+                    {{-- Parcours de toutes les entrÃ©es --}}
                     @foreach ($deuxiemeBannieres as $item)
 
                         <tr>
@@ -150,7 +150,7 @@
 
                             <td>
                                 <a href="{{ route('deuxiemeBanniere.edit',['deuxiemeBanniere'=>$item->id]) }}"class="nav-link">
-                                    <img  src="{{ asset('assets/edit.svg') }}" alt="icone d'édition" title="Mettre à jour">
+                                    <img  src="{{ asset('assets/edit.svg') }}" alt="icone d'Ã©dition" title="Mettre Ã  jour">
                                 </a>
                             </td>
 
@@ -180,7 +180,7 @@
         @else
 
             <div class="border border-danger text-center m-4">
-                Il n'y a aucune donnée à afficher
+                Il n'y a aucune donnÃ©e Ã  afficher
             </div>
 
         @endif
@@ -197,9 +197,9 @@
     {{-- Contenu troisieme banniere --}}
     <div class="container">
 
-        <h2 class="m-2 text-success">Troisième bannière</h2>
+        <h2 class="m-2 text-success">TroisiÃ¨me banniÃ¨re</h2>
 
-        {{-- Controle du nombre d'entrée en base --}}
+        {{-- Controle du nombre d'entrÃ©e en base --}}
         @if(sizeof($troisiemeBannieres) > 0)
             <table class="table m-1">
 
@@ -210,10 +210,10 @@
                             Titre
                         </th>
                         <th>
-                            Date création
+                            Date crÃ©ation
                         </th>
                         <th>
-                            Date mise a jour
+                            Date mise Ã  jour
                         </th>
                         <th>
                             Editer
@@ -229,7 +229,7 @@
 
                 <tbody>
 
-                    {{-- Parcours de toutes entrées --}}
+                    {{-- Parcours de toutes entrÃ©es --}}
                     @foreach ($troisiemeBannieres as $item)
 
                         <tr>
@@ -245,7 +245,7 @@
 
                             <td>
                                 <a href="{{ route('troisiemeBanniere.edit',['troisiemeBanniere'=>$item->id]) }}"class="nav-link">
-                                    <img  src="{{ asset('assets/edit.svg') }}" alt="icone d'édition" title="Mettre à jour">
+                                    <img  src="{{ asset('assets/edit.svg') }}" alt="icone d'Ã©dition" title="Mettre Ã  jour">
                                 </a>
                             </td>
 
@@ -275,7 +275,7 @@
         @else
 
             <div class="border border-danger text-center m-4">
-                Il n'y a aucune donnée à afficher
+                Il n'y a aucune donnÃ©e Ã  afficher
             </div>
 
         @endif

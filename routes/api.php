@@ -26,13 +26,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//Enregistrement et login
-Route::post('/register', [AuthController::class,'register']);
-Route::post('/login', [AuthController::class, 'login']);
-//Logout
-Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+// //Enregistrement et login
+// Route::post('/register', [AuthController::class,'register']);
+// Route::post('/login', [AuthController::class, 'login']);
+// //Logout
+// Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
-//Route protégées Admin
+//Route protï¿½gï¿½es Admin
 // Route::middleware('auth:sanctum','role:admin')->group(function(){
 //     Route::post('texte-accueil/store',[TexteAccueilController::class, 'store']);
 //     Route::post('texte-accueil/{texteAccueil}',[TexteAccueilController::class,'update']);
@@ -87,6 +87,7 @@ Route::get('troisieme-banniere',[TroisiemeBanniereController::class, 'indexApi']
 Route::get('categories',[CategorieController::class, 'indexApi']);
 Route::get('produits',[ProduitController::class, 'indexApi']);
 
-//Routes index spécial produit
+//Routes index spï¿½cial produit
 Route::get('produits/{produit}/all',[ProduitController::class, 'productFromSameCategorie']);
 Route::get('categories/{categorie}/produits',[CategorieController::class, 'getAllProducts']);
+Route::get('produits/accueil',[ProduitController::class, 'indexAccueil']);

@@ -13,11 +13,11 @@
 
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a href="{{ route('troisiemeBanniere.create') }}" class="nav-link border d-inline m-2 p-1">Créer des nouvelles entrées</a>
+                <a href="{{ route('troisiemeBanniere.create') }}" class="nav-link border d-inline m-2 p-1">CrÃ©er des nouvelles entrÃ©es</a>
             </li>
         </ul>
 
-        {{-- Controle du nombre d'entrée en base --}}
+        {{-- Controle du nombre d'entrÃ©e en base --}}
         @if(sizeof($troisiemeBannieres) > 0)
 
             <table class="table m-1">
@@ -29,10 +29,10 @@
                             Titre
                         </th>
                         <th>
-                            Date création
+                            Date crÃ©ation
                         </th>
                         <th>
-                            Date mise a jour
+                            Date mise Ã  jour
                         </th>
                         <th>
                             Editer
@@ -48,7 +48,7 @@
 
                 <tbody>
 
-                    {{-- Parcours de toutes les entrées --}}
+                    {{-- Parcours de toutes les entrÃ©es --}}
                     @foreach ($troisiemeBannieres as $item)
 
                         <tr>
@@ -64,7 +64,7 @@
 
                             <td>
                                 <a href="{{ route('troisiemeBanniere.edit',['troisiemeBanniere'=>$item->id]) }}"class="nav-link">
-                                    <img  src="{{ asset('assets/edit.svg') }}" alt="icone d'édition" title="Mettre à jour">
+                                    <img  src="{{ asset('assets/edit.svg') }}" alt="icone d'Ã©dition" title="Mettre Ã  jour">
                                 </a>
                             </td>
 
@@ -94,7 +94,7 @@
         @else
 
             <div class="border border-danger text-center m-4">
-                Il n'y a aucune donnée à afficher
+                Il n'y a aucune donn"e Ã  afficher
             </div>
 
         @endif

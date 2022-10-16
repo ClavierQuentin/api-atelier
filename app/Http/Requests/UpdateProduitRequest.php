@@ -28,19 +28,19 @@ class UpdateProduitRequest extends FormRequest
             'description_courte_produit'=>'string',
             'description_longue_produit'=>'string',
             'prix_produit'=>'numeric',
-            'isAccueil'=>'boolean',
-            'categorie_id'=>'integer'
+            'categorie_id'=>'integer',
+
         ];
     }
 
     public function messages()
     {
         return [
-            'nom_produit.string' => 'Doit être une chaîne de caractères',
-            'description_courte_produit.string' => 'Doit être une chaîne de caractères',
-            'description_longue_produit.string'=> 'Doit être une chaîne de caractères',
-            'prix_produit.numeric' => 'Doit être au format nombre',
-            'categorie_id.integer' => 'Doit être un nombre entier'
+            'nom_produit.string' => 'Doit Ãªtre une chaÃ®ne de caractÃ¨res',
+            'description_courte_produit.string' => 'Doit Ãªtre une chaÃ®ne de caractÃ¨res',
+            'description_longue_produit.string'=> 'Doit Ãªtre une chaÃ®ne de caractÃ¨res',
+            'prix_produit.numeric' => 'Doit Ãªtre au format nombre',
+            'categorie_id.integer' => 'Doit Ãªtre un nombre entier',
         ];
     }
 }

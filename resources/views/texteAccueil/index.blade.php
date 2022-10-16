@@ -6,11 +6,11 @@
 
         <ul class="navbar-nav me-auto">
             <li class="nav-item">
-                <a href="{{ route('texteAccueil.create') }}" class="nav-link border d-inline m-2">CrÈer des nouvelles entrÈes</a>
+                <a href="{{ route('texteAccueil.create') }}" class="nav-link border d-inline m-2">Cr√©er des nouvelles entr√©es</a>
             </li>
         </ul>
 
-        {{-- Controle du nombre de donnÈes en base --}}
+        {{-- Controle du nombre de donn√©es en base --}}
         @if(sizeof($data) > 0)
 
             <table class="table m-1">
@@ -22,37 +22,51 @@
                             Titre
                         </th>
                         <th>
-                            Date crÈation
+                            Date cr√©ation
                         </th>
                         <th>
-                            Date mise a jour
+                            Date mise √† jour
                         </th>
-                        <th>Editer</th>
-                        <th>Supprimer</th>
-                        <th>Mettre en avant</th>
+                        <th>
+                            Editer
+                        </th>
+                        <th>
+                            Supprimer
+                        </th>
+                        <th>
+                            Mettre en avant
+                        </th>
                     </tr>
                 </thead>
 
-                <tbody class="tbody_sortable-handle">
+                <tbody>
 
+                    {{-- On parcours les entr√©e --}}
                     @foreach ($data as $item)
+
                         <tr>
-                            <td class="handle">{{ $item->id }}</td>
+                            <td>{{ $item->id }}</td>
+
                             <td><a href="{{ route('texteAccueil.edit',['texteAccueil'=>$item]) }}"class="nav-link">{{ $item->titre_accueil }}</a></td>
+
                             <td>{{ $item->created_at->format('d/m/Y') }}</td>
+
                             <td>{{ $item->updated_at->format('d/m/Y') }}</td>
+
                             <td>
                                 <a href="{{ route('texteAccueil.edit',['texteAccueil'=>$item]) }}"class="nav-link">
-                                    <img  src="{{ asset('assets/edit.svg') }}" alt="edit">
+                                    <img  src="{{ asset('assets/edit.svg') }}" alt="icone d'√©dition" title="Mettre √† jour">
                                 </a>
                             </td>
+
                             <td>
                                 <form action="{{ route('texteAccueil.delete',['texteAccueil'=>$item]) }}" method="POST">
                                     @csrf
                                     @method('delete')
-                                    <button class="trash"><img  src="{{ asset('assets/trash.svg') }}" alt="corbeille"></button>
+                                    <button class="trash"><img  src="{{ asset('assets/trash.svg') }}" alt="icone corbeille" title="Supprimer"></button>
                                 </form>
                             </td>
+
                             <td>
                                 <form action="{{ route('texteAccueil.online',['texteAccueil'=>$item]) }}" method="POST">
                                     @csrf
@@ -70,7 +84,7 @@
         @else
 
             <div class="border border-danger text-center m-4">
-                Il n'y a aucune donnÈe ‡ afficher
+                Il n'y a aucune donn√©e √† afficher
             </div>
 
         @endif

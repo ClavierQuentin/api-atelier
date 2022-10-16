@@ -32,7 +32,7 @@
                     Image
                 </label>
 
-                {{-- Si une image est enregistrée en base on l'affiche --}}
+                {{-- Si une image est enregistrÃ©e en base on l'affiche --}}
                 @if(isset($premiereBanniere->url_image))
                     <div>
                         <img class="mx-3 mb-3" height="200px" src="{{ $premiereBanniere->url_image }}" alt="Image d'illustration" title="Image actuelle">

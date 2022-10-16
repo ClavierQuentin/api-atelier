@@ -11,28 +11,28 @@
             </div>
         @endif
 
-        {{-- Si des catégories existent --}}
+        {{-- Si des catÃ©gories existent --}}
         @if(sizeof($categories) > 0)
 
-            {{-- On parcours toutes les entrées --}}
+            {{-- On parcours toutes les entrÃ©es --}}
             @foreach ($categories as $categorie)
 
                 <div class="card border-info m-3 p-1" style="width: 18rem;">
 
-                    {{-- Menu déroulant pour icones update et delete --}}
+                    {{-- Menu dÃ©roulant pour icones update et delete --}}
                     <ul class="navbar-nav">
 
                         <li class="nav-item dropdown custom-btn">
 
-                            <a id="navbarDropdown" class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            <a id="navbarDropdown" class="" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 ...
                             </a>
 
                             <div style="min-width: 0;" class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 
-                                {{-- Bouton d'édition --}}
+                                {{-- Bouton d'Ã©dition --}}
                                 <a href="{{ route('categorie.edit',['categorie'=>$categorie]) }}" class="menu-link-edit">
-                                    <img  src="{{ asset('assets/edit.svg') }}" alt="icone d'édition" title="Mettre à jour">
+                                    <img  src="{{ asset('assets/edit.svg') }}" alt="icone d'Ã©dition" title="Mettre Ã  jour">
                                 </a>
 
                                 {{-- Bouton de suppression --}}
@@ -60,7 +60,7 @@
 
                     <div class="card-footer">
 
-                        <a href="{{ route('categorie.produits',['categorie'=>$categorie]) }}" class="nav-link">Voir les produits affiliés</a>
+                        <a href="{{ route('categorie.produits',['categorie'=>$categorie]) }}" class="nav-link">Voir les produits affiliÃ©s</a>
 
                     </div>
 
@@ -71,7 +71,7 @@
         @else
 
             <div class=" border border-danger text-center m-4">
-                Il n'y a aucune catégorie à afficher
+                Il n'y a aucune catÃ©gorie Ã  afficher
             </div>
 
         @endif

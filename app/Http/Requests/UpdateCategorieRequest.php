@@ -27,4 +27,11 @@ class UpdateCategorieRequest extends FormRequest
             'nom_categorie' => 'string|max:250',
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'nom_categorie.string' => 'Ce champs doit être une chaîne de caractères !'
+        ]
+    }
 }

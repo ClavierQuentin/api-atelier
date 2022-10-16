@@ -32,8 +32,8 @@ class UpdatePremiereBanniereRequest extends FormRequest
     public function messages()
     {
         return [
-            'titre.string' => 'Ce champs doit être une chaîne de caractères !',
-            'texte.string' => 'Ce champs doit être une chaîne de caractères !'
+            'titre.string' => 'Ce champs doit Ãªtre une chaÃ®ne de caractÃ¨res !',
+            'texte.string' => 'Ce champs doit Ãªtre une chaÃ®ne de caractÃ¨res !'
         ];
     }
 }

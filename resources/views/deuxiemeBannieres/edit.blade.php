@@ -2,7 +2,7 @@
 
 @section('content')
 
-    {{-- Formulaire d'édition de l'entrée --}}
+    {{-- Formulaire d'Ã©dition de l'entrÃ©e --}}
     <div class="container">
 
         <form class="custom-form" action="{{ route('deuxiemeBanniere.update',['deuxiemeBanniere'=>$deuxiemeBanniere]) }}" method="POST" enctype="multipart/form-data">
@@ -23,9 +23,7 @@
                 <label for="texte">
                     Texte d'accueil
                 </label>
-                <textarea class="form-control" name="texte" id="texte" cols="20" rows="5">
-                    {{ $deuxiemeBanniere->texte }}
-                </textarea>
+                <textarea class="form-control" name="texte" id="texte" cols="20" rows="5">{{ $deuxiemeBanniere->texte }}</textarea>
 
             </div>
 
@@ -35,7 +33,7 @@
                     Images
                 </label>
 
-                {{-- Si des images sont enregistrées en base --}}
+                {{-- Si des images sont enregistrÃ©es en base --}}
                 @if(!empty($deuxiemeBanniere->url_image))
 
                     <div class="d-flex flex-wrap">

@@ -2,7 +2,7 @@
 
 @section('content')
 
-{{-- Formulaire de création --}}
+{{-- Formulaire de crÃ©ation --}}
     <div class="container">
 
         <form class="custom-form" action="{{ route('texteAccueil.store') }}" method="POST">
@@ -25,9 +25,7 @@
                 <label for="texte_accueil">
                     Texte d'accueil
                 </label>
-                <textarea class="form-control @error('texte_accueil') is-invalid @enderror" name="texte_accueil" id="texte_accueil" cols="30" rows="10">
-                    {{ old('texte_accueil') }}
-                </textarea>
+                <textarea class="form-control @error('texte_accueil') is-invalid @enderror" name="texte_accueil" id="texte_accueil" cols="30" rows="10">{{ old('texte_accueil') }}</textarea>
 
                 @error('texte_accueil')
                     <div class="alert alert-danger m-1">{{ $message }}</div>
@@ -38,7 +36,7 @@
             <div class="form-group mt-2">
 
                 <label for="titre_categories">
-                    Titre champs Catégories
+                    Titre champs CatÃ©gories
                 </label>
                 <input type="text" name="titre_categories" id="titre_categories" class="form-control @error('titre_categories') is-invalid @enderror" value="{{ old('titre_categories') }}">
 
