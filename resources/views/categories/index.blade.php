@@ -12,7 +12,7 @@
         @endif
 
         {{-- Si des catégories existent --}}
-        @if(sizeof($categories) > 0)
+        @if(isset($categories) && sizeof($categories) > 0)
 
             {{-- On parcours toutes les entrées --}}
             @foreach ($categories as $categorie)

@@ -11,7 +11,7 @@
         </ul>
 
         {{-- Controle du nombre de données en base --}}
-        @if(sizeof($data) > 0)
+        @if(isset($date) && sizeof($data) > 0)
 
             <table class="table m-1">
 

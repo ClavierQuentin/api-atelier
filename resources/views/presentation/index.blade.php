@@ -8,7 +8,7 @@
         <h2 class="m-2 text-success">Première bannière</h2>
 
         {{-- On controle le nombre d'entrées en base --}}
-        @if(sizeof($premiereBannieres) > 0)
+        @if(isset($premiereBannieres) && sizeof($premiereBannieres) > 0)
 
             <table class="table m-1">
 
@@ -105,7 +105,7 @@
         <h2  class="m-2 text-success">Deuxième bannière</h2>
 
         {{-- Controle du nombre de données en base --}}
-        @if(sizeof($deuxiemeBannieres) > 0)
+        @if(isset($deuxiemeBannieres) && sizeof($deuxiemeBannieres) > 0)
             <table class="table m-1">
 
                 <thead>
@@ -200,7 +200,7 @@
         <h2 class="m-2 text-success">Troisième bannière</h2>
 
         {{-- Controle du nombre d'entrée en base --}}
-        @if(sizeof($troisiemeBannieres) > 0)
+        @if(isset($troisiemeBannieres) && sizeof($troisiemeBannieres) > 0)
             <table class="table m-1">
 
                 <thead>

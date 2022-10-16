@@ -15,7 +15,7 @@
         <div class="d-flex flew-wrap">
 
             {{-- Controle du nombre d'entrées --}}
-            @if(sizeof($produits) > 0)
+            @if(isset($produits) && sizeof($produits) > 0)
 
             {{-- On parcours les entrées --}}
                 @foreach ($produits as $produit)

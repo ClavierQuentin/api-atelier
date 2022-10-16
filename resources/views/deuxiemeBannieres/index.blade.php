@@ -18,7 +18,7 @@
         </ul>
 
         {{-- Controle du nombre d'entrées en base --}}
-        @if(sizeof($deuxiemeBannieres) > 0)
+        @if(isset($deuxiemeBannieres) && sizeof($deuxiemeBannieres) > 0)
 
             <table class="table m-1">
 
