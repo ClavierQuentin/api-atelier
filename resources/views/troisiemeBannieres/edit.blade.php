@@ -11,10 +11,10 @@
 
             <div class="form-group mt-2">
 
-                <label for="titre">
+                <label for="titre_principal">
                     Titre principal
                 </label>
-                <input type="text" name="titre_principal" id="titre" class="form-control" value="{{ $troisiemeBanniere->titre_principal }}">
+                <input type="text" name="titre_principal" id="titre_principal" class="form-control" value="{{ $troisiemeBanniere->titre_principal }}">
 
             </div>
 

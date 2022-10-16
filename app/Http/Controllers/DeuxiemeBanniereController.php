@@ -77,7 +77,6 @@ class DeuxiemeBanniereController extends Controller
 
         //On enregistre certain param�tres
         $deuxiemeBanniere->url_image = json_encode($data);
-        $deuxiemeBanniere->online = 0;
 
         //Enregistrement en DB
         $response = Auth::user()->deuxiemeBannieres()->save($deuxiemeBanniere);

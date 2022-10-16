@@ -102,7 +102,7 @@ class ProduitController extends Controller
         $categorie = Categorie::find($produit->categorie_id);
 
         //Enregistrement du chemin d'acces de l'image
-        $produit->url_image_produit = 'test';
+        $produit->url_image_produit = $path;
 
         //Enregistrement en DB
         $response = $categorie->produits()->save($produit);

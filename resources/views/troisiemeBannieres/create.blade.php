@@ -10,12 +10,12 @@
 
             <div class="form-group mt-2">
 
-                <label for="titre">
+                <label for="titre_principal">
                     Titre principal
                 </label>
-                <input type="text" name="titre" id="titre" class="form-control @error('titre') is-invalid @enderror" value="{{ old('titre') }}">
+                <input type="text" name="titre_principal" id="titre_principal" class="form-control @error('titre_principal') is-invalid @enderror" value="{{ old('titre_principal') }}">
 
-                @error('titre')
+                @error('titre_principal')
                     <div class="alert alert-danger m-1">{{ $message }}</div>
                 @enderror
 
