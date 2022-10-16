@@ -32,6 +32,6 @@ class UpdateCategorieRequest extends FormRequest
     {
         return [
             'nom_categorie.string' => 'Ce champs doit être une chaîne de caractères !'
-        ]
+        ];
     }
 }

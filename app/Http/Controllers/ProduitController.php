@@ -278,7 +278,7 @@ class ProduitController extends Controller
     public function indexAccueil()
     {
         $produits = DB::table('produits')
-                    ->where('isAccueil', '=', 1)
+                    ->where('isAccueil', '=', '1')
                     ->get();
         if(isset($produits))
         {
