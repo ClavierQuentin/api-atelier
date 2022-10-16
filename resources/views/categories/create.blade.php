@@ -7,7 +7,6 @@
 
         <form class="custom-form" action="{{ route('categorie.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            @method('put')
 
             <div class="form-goup m-2">
 
