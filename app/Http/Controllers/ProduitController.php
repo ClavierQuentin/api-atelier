@@ -104,6 +104,37 @@ class ProduitController extends Controller
         //Enregistrement du chemin d'acces de l'image
         $produit->url_image_produit = $path;
 
+        //Cas où la checbox pour affichage à l'accueil est cochée
+        if($request['isAccueil']){
+            $validatorBool = Validator::make($request->all(),[
+                'isAccueil'=>'boolean'
+            ]);
+            if($validatorBool->fails()){
+                return response()->json([
+                    'status'=>false,
+                    'message'=>'Une erreur est survenue',
+                    'errors'=>$validatorBool->errors()
+                ],401);
+            };
+            $produit->isAccueil = 1;
+        }
+
+        //Contrôle de la présence d'une url externe remplie au formulaire
+        if($request['url_externe']){
+            $validatorUrl = Validator::make($request->all(),[
+                'url_externe'=>'string'
+            ]);
+            if($validatorUrl->fails()){
+                return response()->json([
+                    'status'=>false,
+                    'message'=>'Une erreur est survenue',
+                    'errors'=>$validatorUrl->errors()
+                ],401);
+            };
+            $validatedUrl = $validatorUrl->validated();
+            $produit->url_externe = $validatedUrl('url_externe');
+        }
+
         //Enregistrement en DB
         $response = $categorie->produits()->save($produit);
 
@@ -179,13 +210,36 @@ class ProduitController extends Controller
         }
 
         //Cas où la checbox pour affichage à l'accueil est cochée
-        if($request->validated('isAccueil') != NULL && $request->validated('isAccueil') == 1){
+        if($request['isAccueil']){
+            $validatorBool = Validator::make($request->all(),[
+                'isAccueil'=>'boolean'
+            ]);
+            if($validatorBool->fails()){
+                return response()->json([
+                    'status'=>false,
+                    'message'=>'Une erreur est survenue',
+                    'errors'=>$validatorBool->errors()
+                ],401);
+            };
             $produit->isAccueil = 1;
         }
 
+
+
         //Contrôle de la présence d'une url externe remplie au formulaire
-        if($request->validated('url_externe') != NULL){
-            $produit->url_externe = $request->validated('url_externe');
+        if($request['url_externe']){
+            $validatorUrl = Validator::make($request->all(),[
+                'url_externe'=>'string'
+            ]);
+            if($validatorUrl->fails()){
+                return response()->json([
+                    'status'=>false,
+                    'message'=>'Une erreur est survenue',
+                    'errors'=>$validatorUrl->errors()
+                ],401);
+            };
+            $validatedUrl = $validatorUrl->validated();
+            $produit->url_externe = $validatedUrl('url_externe');
         }
 
         //Enregistrement des changements en DB

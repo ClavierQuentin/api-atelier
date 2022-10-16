@@ -29,7 +29,6 @@ class UpdateProduitRequest extends FormRequest
             'description_longue_produit'=>'string',
             'prix_produit'=>'numeric',
             'categorie_id'=>'integer',
-
         ];
     }
 

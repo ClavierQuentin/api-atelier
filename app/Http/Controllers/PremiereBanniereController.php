@@ -67,8 +67,8 @@ class PremiereBanniereController extends Controller
         $validated = $validator->validated();
 
         //ON enregistre l'image au cloud en récupérant l'url d'acces
-        $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
-
+        // $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
+        $path = $validated['image']->storeOneCloudinary('Premiere-Banniere')->getRealPath()->getSecurePath();
         //CRéation d'un nouvel objet
         $premiereBanniere = new PremiereBanniere($request->validated());
 
