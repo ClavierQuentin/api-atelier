@@ -27,18 +27,19 @@ class TexteAccueilController extends Controller
         abort(500);
     }
 
-    //Fonction pour l'accès via API
+    //Fonction pour l'accï¿½s via API
     public function indexApi()
     {
-        $data = TexteAccueil::all();
-        if(sizeof($data) > 0){
-            return response()->json($data, 200);
+        $texteAccueil = DB::table('texte_accueils')
+                        ->where('online', '=', 1)
+                        ->first();
+        if(isset($texteAccueil)){
+            return response()->json($texteAccueil, 200);
         }
-        return response()->json(['status'=> false], 204);
-
+        return response()->json(['status' => false], 204);
     }
 
-    //Affichage du formulaire de création
+    //Affichage du formulaire de crï¿½ation
     public function create()
     {
         return view('texteAccueil.create');
@@ -68,16 +69,16 @@ class TexteAccueilController extends Controller
      * @param  \App\Models\TexteAccueil  $texteAccueil
      * @return \Illuminate\Http\Response
      */
-    public function show()
-    {
-        $texteAccueil = DB::table('texte_accueils')
-                        ->where('online', '=', '1')
-                        ->first();
-        if(isset($texteAccueil)){
-            return response()->json($texteAccueil, 200);
-        }
-        return response()->json(['status' => false], 204);
-    }
+    // public function show()
+    // {
+    //     $texteAccueil = DB::table('texte_accueils')
+    //                     ->where('online', '=', '1')
+    //                     ->first();
+    //     if(isset($texteAccueil)){
+    //         return response()->json($texteAccueil, 200);
+    //     }
+    //     return response()->json(['status' => false], 204);
+    // }
 
     /**
      * Show the form for editing the specified resource.
@@ -110,7 +111,7 @@ class TexteAccueilController extends Controller
     //Fonction pour mettre a jour le booleen en DB pour mettre en avant une data
     public function updateOnline(UpdateTexteAccueilRequest $request, TexteAccueil $texteAccueil)
     {
-        //On récupère toutes les données pour changer la valeur de Online à 0
+        //On rï¿½cupï¿½re toutes les donnï¿½es pour changer la valeur de Online ï¿½ 0
         $all = TexteAccueil::all();
         if(isset($all)){
             foreach ($all as $item){
@@ -119,7 +120,7 @@ class TexteAccueilController extends Controller
             }//foreach
         }//if
 
-        //On change la valeur du modèle en cours de sélection
+        //On change la valeur du modï¿½le en cours de sï¿½lection
         $texteAccueil->online = 1;
         $response = $texteAccueil->save();
 

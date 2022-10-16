@@ -36,11 +36,15 @@ class DeuxiemeBanniereController extends Controller
     //Controller pour l'API cot� Front
     public function indexApi()
     {
-        $data = DeuxiemeBanniere::all();
-        if(isset($data)){
-            return response()->json($data, 200);
+        $deuxiemeBanniere = DB::table('deuxieme_bannieres')
+                        ->where('online', '=', '1')
+                        ->first();
+
+        if(isset($deuxiemeBanniere)){
+            return response()->json($deuxiemeBanniere, 200);
         }
-        return response()->json(['status'=> false], 204);
+
+        return response()->json(['message'=>'Une erreur est survenue'], 404);
     }
 
     //Affichage du formulaire de cr�ation
@@ -93,18 +97,18 @@ class DeuxiemeBanniereController extends Controller
      * @param  \App\Models\DeuxiemeBanniere  $deuxiemeBanniere
      * @return \Illuminate\Http\Response
      */
-    public function show(DeuxiemeBanniere $deuxiemeBanniere)
-    {
-        $deuxiemeBanniere = DB::table('deuxieme_bannieres')
-                        ->where('online', '=', '1')
-                        ->first();
+    // public function show(DeuxiemeBanniere $deuxiemeBanniere)
+    // {
+    //     $deuxiemeBanniere = DB::table('deuxieme_bannieres')
+    //                     ->where('online', '=', '1')
+    //                     ->first();
 
-        if(isset($deuxiemeBanniere)){
-            return response()->json($deuxiemeBanniere, 200);
-        }
+    //     if(isset($deuxiemeBanniere)){
+    //         return response()->json($deuxiemeBanniere, 200);
+    //     }
 
-        return response()->json(['message'=>'Une erreur est survenue'], 204);
-    }
+    //     return response()->json(['message'=>'Une erreur est survenue'], 404);
+    // }
 
     /**
      * Show the form for editing the specified resource.

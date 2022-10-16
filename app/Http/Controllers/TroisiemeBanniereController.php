@@ -33,12 +33,13 @@ class TroisiemeBanniereController extends Controller
     //Controller pour l'API cot� Front
     public function indexApi()
     {
-        $data = TroisiemeBanniere::all();
-
-        if(isset($data)){
-            return response()->json($data, 200);
+        $troisiemeBanniere = DB::table('troisieme_bannieres')
+                        ->where('online', '=', '1')
+                        ->first();
+        if(isset($troisiemeBanniere)){
+            return response()->json($troisiemeBanniere, 200);
         }
-        return response()->json(['status'=> false], 204);
+        return response()->json(['status'=> false],404);
 
     }
 
@@ -104,13 +105,13 @@ class TroisiemeBanniereController extends Controller
      * @param  \App\Models\TroisiemeBanniere  $troisiemeBanniere
      * @return \Illuminate\Http\Response
      */
-    public function show()
-    {
-        $troisiemeBanniere = DB::table('troisieme_bannieres')
-                        ->where('online', '=', '1')
-                        ->first();
-        return response()->json($troisiemeBanniere, 200);
-    }
+    // public function show()
+    // {
+    //     $troisiemeBanniere = DB::table('troisieme_bannieres')
+    //                     ->where('online', '=', '1')
+    //                     ->first();
+    //     return response()->json($troisiemeBanniere, 200);
+    // }
 
     /**
      * Show the form for editing the specified resource.

@@ -32,11 +32,14 @@ class PremiereBanniereController extends Controller
     //Controller pour l'API coté Front
     public function indexApi()
     {
-        $data = PremiereBanniere::all();
-        if(isset($data)){
-            return response()->json($data, 200);
+        $premiereBanniere = DB::table('premiere_bannieres')
+                        ->where('online', '=', '1')
+                        ->first();
+
+        if(isset($premiereBanniere)){
+            return response()->json($premiereBanniere, 200);
         }
-        return response()->json(['status'=> false], 204);
+        return response()->json(['status'=> false], 404);
     }
 
     //affichage du formulaire
@@ -68,7 +71,7 @@ class PremiereBanniereController extends Controller
 
         //ON enregistre l'image au cloud en récupérant l'url d'acces
         $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
-        
+
         //CRéation d'un nouvel objet
         $premiereBanniere = new PremiereBanniere($request->validated());
 
@@ -194,10 +197,14 @@ class PremiereBanniereController extends Controller
      */
     public function show(PremiereBanniere $premiereBanniere)
     {
-        $premiereBanniere = DB::table('premiere_bannieres')
-                        ->where('online', '=', '1')
-                        ->first();
-        return response()->json($premiereBanniere, 200);
+        // $premiereBanniere = DB::table('premiere_bannieres')
+        //                 ->where('online', '=', '1')
+        //                 ->first();
+
+        // if(isset($premiereBanniere)){
+        //     return response()->json($premiereBanniere, 200);
+        // }
+        // return response()->json(['status'=> false], 404);
     }
 
 }

@@ -278,11 +278,12 @@ class ProduitController extends Controller
     public function indexAccueil()
     {
         $produits = DB::table('produits')
-                    ->where('isAccueil', '=', '1')
+                    ->where('isAccueil', '=', 1)
                     ->get();
+
         if(isset($produits))
         {
-            return response()->json(['status' => true], 200);
+            return response()->json($produits, 200);
         }
         return response()->json(['status' => false], 404);
     }

@@ -72,14 +72,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // });
 
 //Routes show
-Route::get('texte-accueil/show',[TexteAccueilController::class, 'show']);
-Route::get('premiere-banniere/{premiereBanniere}',[PremiereBanniereController::class, 'show']);
-Route::get('deuxieme-banniere/{deuxiemeBanniere}',[DeuxiemeBanniereController::class, 'show']);
-Route::get('troisieme-banniere/{troisiemeBanniere}',[TroisiemeBanniereController::class, 'show']);
 Route::get('categories/{categorie}',[CategorieController::class, 'show']);
 Route::get('produits/{produit}',[ProduitController::class, 'show']);
 
-//Routes index
+//Routes index pour affichage au Front
 Route::get('deuxieme-banniere',[DeuxiemeBanniereController::class, 'indexApi']);
 Route::get('premiere-banniere',[PremiereBanniereController::class, 'indexApi']);
 Route::get('texte-accueil',[TexteAccueilController::class, 'indexApi']);
@@ -90,4 +86,4 @@ Route::get('produits',[ProduitController::class, 'indexApi']);
 //Routes index sp�cial produit
 Route::get('produits/{produit}/all',[ProduitController::class, 'productFromSameCategorie']);
 Route::get('categories/{categorie}/produits',[CategorieController::class, 'getAllProducts']);
-Route::get('produits/accueil',[ProduitController::class, 'indexAccueil']);
+Route::get('produits-accueil',[ProduitController::class, 'indexAccueil']);

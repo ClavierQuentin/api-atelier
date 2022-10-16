@@ -31,7 +31,7 @@ class CategorieController extends Controller
         abort(500);
     }
 
-    //Fonction pour récupérer les produits associés à une catégorie
+    //Fonction pour rï¿½cupï¿½rer les produits associï¿½s ï¿½ une catï¿½gorie
     public function indexProducts(Categorie $categorie)
     {
         $produits = $categorie->getProduits;
@@ -42,7 +42,7 @@ class CategorieController extends Controller
         abort(500);
     }
 
-    //Fonction pour gérer la route de l'API pour le front
+    //Fonction pour gï¿½rer la route de l'API pour le front
     public function indexApi()
     {
         $categories = Categorie::all();
@@ -53,7 +53,7 @@ class CategorieController extends Controller
 
     }
 
-    //Formulaire de création
+    //Formulaire de crï¿½ation
     public function create()
     {
         return view('categories.create');
@@ -88,7 +88,7 @@ class CategorieController extends Controller
         //Enregistrement de l'image au cloud et on stock l'url
         $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
 
-        //Création d'un nouvel objet
+        //Crï¿½ation d'un nouvel objet
         $categorie = new Categorie($request->validated());
 
         //On enregistre l'url
@@ -146,7 +146,7 @@ class CategorieController extends Controller
 
         $validated = $validator->validated();
 
-        //Dans le cas où une image a été fournie au formulaire
+        //Dans le cas oï¿½ une image a ï¿½tï¿½ fournie au formulaire
         if(isset($validated['image'])){
 
             //Suppression de l'ancienne image
@@ -199,8 +199,9 @@ class CategorieController extends Controller
     {
         $produits = $categorie->getProduits;
 
-        if(sizeof($produits) > 0){
+        if(isset($produits)){
             return response()->json($produits, 200);
         }
+        return response()->json(['status'=>false], 404);
     }
 }
