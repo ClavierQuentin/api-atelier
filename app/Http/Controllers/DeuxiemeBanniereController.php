@@ -146,10 +146,9 @@ class DeuxiemeBanniereController extends Controller
         if(isset($request['deleteAllImages']) && $request['deleteAllImages'] == true) {
 
             $deuxiemeBanniere->deleteImages(); //Voir model
-
-            $deuxiemeBanniere->url_image = json_encode($data); //On enregistre les nouvelles urls si pr�sentent, sinon un tableau vide
         }
 
+        $deuxiemeBanniere->url_image = json_encode($data); //On enregistre les nouvelles urls si présentent, sinon un tableau vide
 
         //Update
         $update = $deuxiemeBanniere->update($request->validated());
