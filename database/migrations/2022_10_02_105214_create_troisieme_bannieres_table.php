@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('titre_principal');
             $table->string('titre_1');
             $table->string('titre_2');
-            $table->string('texte_1');
-            $table->string('texte_2');
+            $table->text('texte_1');
+            $table->text('texte_2');
             $table->string('url_image');
             $table->string('url_image_2');
             $table->foreignIdFor(User::class);
