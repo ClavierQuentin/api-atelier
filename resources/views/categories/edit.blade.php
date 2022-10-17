@@ -36,10 +36,10 @@
             <div class="form-group m-3">
 
                 <div class="form-check">
-                    <input type="checkbox" name="isAccueil" id="isAccueil" class="form-check-input" @if($produit->isAccueil == 1) checked = 'true'  @endif value = "1">
+                    <input type="checkbox" name="isAccueil" id="isAccueil" class="form-check-input" @if($categorie->isAccueil == 1) checked = 'true'  @endif value = "1">
                     <label for="isAccueil" class="form-check-label">Mettre en avant sur l'accueil</label>
                 </div>
-                
+
             </div>
 
 
