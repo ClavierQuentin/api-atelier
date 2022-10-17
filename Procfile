@@ -1,1 +1,1 @@
-web: vendor/bin/heroku-php-apache2 .user.ini public/
+web: vendor/bin/heroku-php-apache2 -F .user.ini public/
