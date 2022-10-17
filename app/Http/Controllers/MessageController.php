@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Message;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class MessageController extends Controller
@@ -51,6 +52,7 @@ class MessageController extends Controller
 
         $message = new Message($validated);
 
+        Mail::to('clavier.quentin@gmail.com')->send(new \App\Mail\MessageMail($message));
         $response = $message->save();
 
         if($response){
