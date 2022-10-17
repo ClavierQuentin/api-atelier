@@ -86,11 +86,7 @@ class CategorieController extends Controller
         $validated = $validator->validated();
 
         //Enregistrement de l'image au cloud et on stock l'url
-        $path = cloudinary()->upload($validated['image']->getRealPath(),[
-            'transformation' => [
-                'width' => 500
-            ]
-        ])->getSecurePath();
+        $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
 
         //Cr�ation d'un nouvel objet
         $categorie = new Categorie($request->validated());
