@@ -11,13 +11,16 @@ class RecaptchaController extends Controller
         $recaptchaToken = $token;
         $secretKey = env('SECRET_KEY');
 
-        $response = Http::post('https://www.google.com/recaptcha/api/siteverify?secret='.$secretKey.'&response='.$recaptchaToken);
+        $response = Http::post('https://www.google.com/recaptcha/api/siteverify',[
+            'secret'=>$secretKey,
+            'response'=>$recaptchaToken
+            ]);
 
         if($response->ok()){
-            return response()->json($response,200);
+            return response()->json($response->body,200);
         }
         if($response->failed()){
-            return response()->json(['status' => 'false'], 200);
+            return response()->json(['status' => 'false'], 500);
         }
     }
 }
