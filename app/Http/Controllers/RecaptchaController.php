@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 class RecaptchaController extends Controller
 {
-    public function googleResponse(Request $request)
+    public function googleResponse($token)
     {
-        dd($request);
-        $recaptchaToken = $request;
+        $recaptchaToken = $token;
         $secretKey = env('SECRET_KEY');
 
         $response = Http::post("https://www.google.com/recaptcha/api/siteverify?secret='$secretKey'&response='$recaptchaToken");

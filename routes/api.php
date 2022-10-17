@@ -93,4 +93,4 @@ Route::get('produits-accueil',[ProduitController::class, 'indexAccueil']);
 Route::get('categories-accueil',[CategorieController::class, 'categorieIsAccueil']);
 
 //Route repatcha
-Route::post('recaptcha',[RecaptchaController::class, 'googleResponse']);
+Route::post('recaptcha/{token}',[RecaptchaController::class, 'googleResponse']);
