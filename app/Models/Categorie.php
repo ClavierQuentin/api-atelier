@@ -13,6 +13,7 @@ class Categorie extends Model
     protected $fillable = [
         'nom_categorie',
         'url_image_categorie',
+        'isAccueil'
     ];
 
     // public $with = ['produits'];

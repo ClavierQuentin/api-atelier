@@ -86,4 +86,7 @@ Route::get('produits',[ProduitController::class, 'indexApi']);
 //Routes index sp�cial produit
 Route::get('produits/{produit}/all',[ProduitController::class, 'productFromSameCategorie']);
 Route::get('categories/{categorie}/produits',[CategorieController::class, 'getAllProducts']);
-Route::get('produits-accueil',[ProduitController::class, 'indexAccueil']); //Route pour la banniere accueil
+
+//Routes pour page accueil
+Route::get('produits-accueil',[ProduitController::class, 'indexAccueil']);
+Route::get('categories-accueil',[CategorieController::class, 'categorieIsAccueil']);

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('nom_categorie');
             $table->string('url_image_categorie');
+            $table->boolean('isAccueil')->nullable();
             $table->timestamps();
         });
     }

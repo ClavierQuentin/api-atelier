@@ -10,6 +10,7 @@ use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Support\Carbon as SupportCarbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\File;
@@ -46,6 +47,21 @@ class CategorieController extends Controller
     public function indexApi()
     {
         $categories = Categorie::all();
+        if(isset($categories)){
+            return response()->json($categories, 200);
+        }
+        return response()->json(['status'=>false], 500);
+
+    }
+
+    //Retourne les catégories a afficher en page d'accueil
+    public function categorieIsAccueil()
+    {
+        $categories = DB::table('categories')
+                    ->where('isAccueil','=', 1)
+                    ->limit("4")
+                    ->get();
+
         if(isset($categories)){
             return response()->json($categories, 200);
         }
@@ -90,6 +106,21 @@ class CategorieController extends Controller
 
         //Cr�ation d'un nouvel objet
         $categorie = new Categorie($request->validated());
+
+        //Cas où la checbox pour affichage à l'accueil est cochée
+        if($request['isAccueil']){
+            $validatorBool = Validator::make($request->all(),[
+                'isAccueil'=>'boolean'
+            ]);
+            if($validatorBool->fails()){
+                return response()->json([
+                    'status'=>false,
+                    'message'=>'Une erreur est survenue',
+                    'errors'=>$validatorBool->errors()
+                ],401);
+            };
+            $categorie->isAccueil = 1;
+        }
 
         //On enregistre l'url
         $categorie->url_image_categorie = $path;
@@ -157,6 +188,21 @@ class CategorieController extends Controller
 
             //On enregistre l'url
             $categorie->url_image_categorie = $updatedUrl;
+        }
+
+        //Cas où la checbox pour affichage à l'accueil est cochée
+        if($request['isAccueil']){
+            $validatorBool = Validator::make($request->all(),[
+                'isAccueil'=>'boolean'
+            ]);
+            if($validatorBool->fails()){
+                return response()->json([
+                    'status'=>false,
+                    'message'=>'Une erreur est survenue',
+                    'errors'=>$validatorBool->errors()
+                ],401);
+            };
+            $categorie->isAccueil = 1;
         }
 
         //On enregistre les modifs en base
