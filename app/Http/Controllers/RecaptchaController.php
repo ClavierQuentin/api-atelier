@@ -17,7 +17,7 @@ class RecaptchaController extends Controller
             ]);
 
         if($response->ok()){
-            return response()->json($response->body,200);
+            return response()->json($response->body(),200);
         }
         if($response->failed()){
             return response()->json(['status' => 'false'], 500);
