@@ -10,7 +10,7 @@
 
 <body>
 
-    <h1>Nouveau message de  {{ $details['nom'] }} {{ $details['prenom'] }} '{{ $details['email'] }}'</h1>
+    <h1>Nouveau message de {{ $details['prenom'] }} {{ $details['nom'] }}  '{{ $details['email'] }}'</h1>
 
    <h2>Sujet : {{ $details['sujet'] }}</h2>
 

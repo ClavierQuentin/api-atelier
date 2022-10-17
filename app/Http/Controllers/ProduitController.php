@@ -104,6 +104,9 @@ class ProduitController extends Controller
         //Enregistrement du chemin d'acces de l'image
         $produit->url_image_produit = $path;
 
+        //On enregistre une valeur par défaut
+        $produit->url_externe = "#";
+
         //Cas où la checbox pour affichage à l'accueil est cochée
         if($request['isAccueil']){
             $validatorBool = Validator::make($request->all(),[
