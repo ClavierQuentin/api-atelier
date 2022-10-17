@@ -15,7 +15,7 @@ class Categorie extends Model
         'url_image_categorie',
     ];
 
-    public $with = ['produits'];
+    // public $with = ['produits'];
 
     public function users()
     {

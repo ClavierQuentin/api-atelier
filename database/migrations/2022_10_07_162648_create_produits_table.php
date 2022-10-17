@@ -18,8 +18,8 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('nom_produit');
-            $table->string('description_courte_produit');
-            $table->string('description_longue_produit');
+            $table->text('description_courte_produit');
+            $table->text('description_longue_produit');
             $table->string('url_image_produit');
             $table->decimal('prix_produit');
             $table->foreignIdFor(Categorie::class);

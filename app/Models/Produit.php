@@ -20,7 +20,7 @@ class Produit extends Model
         'url_externe'
     ];
 
-    // public $with = ['categorie'];
+    public $with = ['categorie'];
 
     public function categorie()
     {
