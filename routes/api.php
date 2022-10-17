@@ -5,6 +5,7 @@ use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\DeuxiemeBanniereController;
 use App\Http\Controllers\PremiereBanniereController;
 use App\Http\Controllers\ProduitController;
+use App\Http\Controllers\RecaptchaController;
 use App\Http\Controllers\TexteAccueilController;
 use App\Http\Controllers\TroisiemeBanniereController;
 use App\Models\Categorie;
@@ -90,3 +91,6 @@ Route::get('categories/{categorie}/produits',[CategorieController::class, 'getAl
 //Routes pour page accueil
 Route::get('produits-accueil',[ProduitController::class, 'indexAccueil']);
 Route::get('categories-accueil',[CategorieController::class, 'categorieIsAccueil']);
+
+//Route repatcha
+Route::post('recaptcha',[RecaptchaController::class, 'googleResponse']);
