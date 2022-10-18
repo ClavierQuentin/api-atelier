@@ -49,9 +49,9 @@
 
                             <td><a href="{{ route('texteAccueil.edit',['texteAccueil'=>$item]) }}"class="nav-link">{{ $item->titre_accueil }}</a></td>
 
-                            <td>{{ $item->created_at->format('d/m/Y') }}</td>
+                            <td>{{ $item->created_at->format('d/m/Y h:i:s') }}</td>
 
-                            <td>{{ $item->updated_at->format('d/m/Y') }}</td>
+                            <td>{{ $item->updated_at->format('d/m/Y h:i:s') }}</td>
 
                             <td>
                                 <a href="{{ route('texteAccueil.edit',['texteAccueil'=>$item]) }}"class="nav-link">
