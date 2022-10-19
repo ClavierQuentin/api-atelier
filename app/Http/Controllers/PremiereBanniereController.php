@@ -22,11 +22,11 @@ class PremiereBanniereController extends Controller
     {
         $premiereBannieres = PremiereBanniere::all();
 
-        if(isset($premiereBannieres)){
+        if(isset($premiereBannieres) && sizeof($premiereBannieres) > 0){
             return view('premiereBannieres.index',['premiereBannieres' => $premiereBannieres]);
         }
 
-        abort(500);
+        abort(404);
     }
 
     //Controller pour l'API coté Front
@@ -166,7 +166,7 @@ class PremiereBanniereController extends Controller
         if($response){
             return redirect('presentation');
         }
-        abort(500);
+        abort(404);
     }
 
 

@@ -26,10 +26,10 @@ class DeuxiemeBanniereController extends Controller
     {
         $deuxiemeBannieres = DeuxiemeBanniere::all();
 
-        if(isset($deuxiemeBannieres)){
+        if(isset($deuxiemeBannieres) && sizeof($deuxiemeBannieres) > 0){
             return view('deuxiemeBannieres.index',['deuxiemeBannieres' => $deuxiemeBannieres]);
         }
-        abort(500);
+        abort(404);
 
     }
 
@@ -44,7 +44,7 @@ class DeuxiemeBanniereController extends Controller
             return response()->json(['data'=>$deuxiemeBanniere,'urls'=>json_decode($deuxiemeBanniere->url_image)], 200);
         }
 
-        return response()->json(['message'=>'Une erreur est survenue'], 404);
+        return response()->json(['status'=>false], 404);
     }
 
     //Affichage du formulaire de cr�ation
@@ -91,24 +91,6 @@ class DeuxiemeBanniereController extends Controller
         return redirect('deuxieme-banniere')->with('error', 'Une erreur est survenue pendant l\'enregistrement');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\DeuxiemeBanniere  $deuxiemeBanniere
-     * @return \Illuminate\Http\Response
-     */
-    // public function show(DeuxiemeBanniere $deuxiemeBanniere)
-    // {
-    //     $deuxiemeBanniere = DB::table('deuxieme_bannieres')
-    //                     ->where('online', '=', '1')
-    //                     ->first();
-
-    //     if(isset($deuxiemeBanniere)){
-    //         return response()->json($deuxiemeBanniere, 200);
-    //     }
-
-    //     return response()->json(['message'=>'Une erreur est survenue'], 404);
-    // }
 
     /**
      * Show the form for editing the specified resource.
@@ -188,7 +170,7 @@ class DeuxiemeBanniereController extends Controller
         //On supprime l'objet selectionné
         $delete = $deuxiemeBanniere->delete();
         if(!$delete){
-            abort(500);
+            abort(404);
         }
         return view('deuxiemeBannieres.index');
     }
@@ -236,7 +218,7 @@ class DeuxiemeBanniereController extends Controller
         if($delete){
             return view('deuxiemeBannieres.edit', compact('deuxiemeBanniere'));
         }
-        abort(403);
+        abort(404);
     }
 
     //Fonction pour mettre a jour le booleen en DB pour mettre en avant une donn�e
@@ -256,7 +238,7 @@ class DeuxiemeBanniereController extends Controller
         if($response){
             return redirect('presentation');
         }
-        abort(500);
+        abort(404);
     }
 
 

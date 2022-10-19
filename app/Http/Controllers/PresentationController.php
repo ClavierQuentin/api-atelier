@@ -21,6 +21,9 @@ class PresentationController extends Controller
                             ->orderBy('id','desc')
                             ->limit('3')
                             ->get();
-        return view('presentation.index',['premiereBannieres'=>$premiereBannieres, 'deuxiemeBannieres'=>$deuxiemeBannieres, 'troisiemeBannieres'=>$troisiemeBannieres]);
+
+        if(isset($troisiemeBannieres) && isset($deuxiemeBannieres) && isset($premiereBannieres) && sizeof($premiereBannieres) > 0 && sizeof($troisiemeBannieres) > 0 && sizeof($deuxiemeBannieres) > 0){
+            return view('presentation.index',['premiereBannieres'=>$premiereBannieres, 'deuxiemeBannieres'=>$deuxiemeBannieres, 'troisiemeBannieres'=>$troisiemeBannieres]);
+        }
     }
 }

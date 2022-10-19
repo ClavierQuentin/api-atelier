@@ -24,10 +24,10 @@ class TroisiemeBanniereController extends Controller
     {
         $troisiemeBannieres = TroisiemeBanniere::all();
 
-        if(isset($troisiemeBannieres)){
+        if(isset($troisiemeBannieres) && sizeof($troisiemeBannieres) > 0){
             return view('troisiemeBannieres.index',['troisiemeBannieres' => $troisiemeBannieres]);
         }
-        abort(500);
+        abort(404);
     }
 
     //Controller pour l'API cot� Front
@@ -73,7 +73,7 @@ class TroisiemeBanniereController extends Controller
                 'status'=>false,
                 'message'=>'Une erreur est survenue',
                 'errors'=>$validator->errors()
-            ],401);
+            ],404);
         };
 
         $validated = $validator->validated();
@@ -99,19 +99,6 @@ class TroisiemeBanniereController extends Controller
         return redirect('troisieme-banniere')->with('error', 'Une erreur est survenue pendant l\'enregistrement');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\TroisiemeBanniere  $troisiemeBanniere
-     * @return \Illuminate\Http\Response
-     */
-    // public function show()
-    // {
-    //     $troisiemeBanniere = DB::table('troisieme_bannieres')
-    //                     ->where('online', '=', '1')
-    //                     ->first();
-    //     return response()->json($troisiemeBanniere, 200);
-    // }
 
     /**
      * Show the form for editing the specified resource.
@@ -148,7 +135,7 @@ class TroisiemeBanniereController extends Controller
                 'status'=>false,
                 'message'=>'Une erreur est survenue',
                 'errors'=>$validator->errors()
-            ],401);
+            ],404);
         };
 
         //R�cup�ration des donn�e valid�es
@@ -210,6 +197,7 @@ class TroisiemeBanniereController extends Controller
     public function updateOnline( TroisiemeBanniere $troisiemeBanniere)
     {
         $all = TroisiemeBanniere::all();
+        if(isset($all) && sizeof($all) > 0)
         foreach ($all as $item){
             $item->online = "0";
             $item->save();
@@ -236,7 +224,7 @@ class TroisiemeBanniereController extends Controller
 
         $delete = $troisiemeBanniere->delete();
         if(!$delete){
-            abort(500);
+            abort(404);
         }
         return view('troisiemeBannieres.index');
 

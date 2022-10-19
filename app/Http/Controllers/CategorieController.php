@@ -26,10 +26,10 @@ class CategorieController extends Controller
     {
         $categories = Categorie::all();
 
-        if(isset($categories)){
+        if(isset($categories)  && sizeof($categories) > 0){
             return view('categories.index',compact('categories'));
         }
-        abort(500);
+        abort(404);
     }
 
     //Fonction pour r�cup�rer les produits associ�s � une cat�gorie
@@ -37,20 +37,20 @@ class CategorieController extends Controller
     {
         $produits = $categorie->getProduits;
 
-        if(isset($produits)){
+        if(isset($produits) && sizeof($produits) > 0){
             return view('produits.index_categorie',compact('produits','categorie'));
         }
-        abort(500);
+        abort(404);
     }
 
     //Fonction pour g�rer la route de l'API pour le front
     public function indexApi()
     {
         $categories = Categorie::all();
-        if(isset($categories)){
+        if(isset($categories) && sizeof($categories) > 0){
             return response()->json($categories, 200);
         }
-        return response()->json(['status'=>false], 500);
+        return response()->json(['status'=>false], 404);
 
     }
 
@@ -62,10 +62,10 @@ class CategorieController extends Controller
                     ->limit("4")
                     ->get();
 
-        if(isset($categories)){
+        if(isset($categories) && sizeof($categories) > 0){
             return response()->json($categories, 200);
         }
-        return response()->json(['status'=>false], 500);
+        return response()->json(['status'=>false], 404);
 
     }
 
@@ -96,7 +96,7 @@ class CategorieController extends Controller
                 'status'=>false,
                 'message'=>'Une erreur est survenue',
                 'errors'=>$validator->errors()
-            ],401);
+            ],404);
         };
 
         $validated = $validator->validated();
@@ -117,7 +117,7 @@ class CategorieController extends Controller
                     'status'=>false,
                     'message'=>'Une erreur est survenue',
                     'errors'=>$validatorBool->errors()
-                ],401);
+                ],404);
             };
             $categorie->isAccueil = 1;
         }
@@ -200,7 +200,7 @@ class CategorieController extends Controller
                     'status'=>false,
                     'message'=>'Une erreur est survenue',
                     'errors'=>$validatorBool->errors()
-                ],401);
+                ],404);
             };
             $categorie->isAccueil = 1;
         }
@@ -245,7 +245,7 @@ class CategorieController extends Controller
     {
         $produits = $categorie->getProduits;
 
-        if(isset($produits)){
+        if(isset($produits) && sizeof($produits) > 0){
             return response()->json($produits, 200);
         }
         return response()->json(['status'=>false], 404);

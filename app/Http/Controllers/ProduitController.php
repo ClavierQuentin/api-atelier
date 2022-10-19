@@ -24,7 +24,7 @@ class ProduitController extends Controller
     public function indexApi()
     {
         $produits = Produit::all();
-        if(isset($produits)){
+        if(isset($produits) && sizeof($produits) > 0){
             return response()->json($produits, 200);
         }
         return response()->json(['status'=>false],404);
@@ -33,7 +33,7 @@ class ProduitController extends Controller
     public function index()
     {
         $produits = Produit::all();
-        if(isset($produits)){
+        if(isset($produits) && sizeof($produits) > 0){
             return view('produits.index', compact('produits'));
         }
         abort(404);
@@ -51,20 +51,20 @@ class ProduitController extends Controller
 
         $produits = $categorie->getProduits;
 
-        if(isset($produits)){
+        if(isset($produits) && sizeof($produits) > 0){
             return response()->json($produits, 200);
         }
-        return response()->json(['status' => false], 500);
+        return response()->json(['status' => false], 404);
     }
 
     public function create()
     {
         //On récupère les catégories pour les affiches dans le select lors de la création d'un produit
         $categories = Categorie::all();
-        if(isset($categories)){
+        if(isset($categories) && sizeof($categories) > 0){
             return view('produits.create', compact('categories'));
         }
-        abort(500);
+        abort(404);
     }
 
     /**
@@ -117,7 +117,7 @@ class ProduitController extends Controller
                     'status'=>false,
                     'message'=>'Une erreur est survenue',
                     'errors'=>$validatorBool->errors()
-                ],401);
+                ],404);
             };
             $produit->isAccueil = 1;
         }
@@ -132,7 +132,7 @@ class ProduitController extends Controller
                     'status'=>false,
                     'message'=>'Une erreur est survenue',
                     'errors'=>$validatorUrl->errors()
-                ],401);
+                ],404);
             };
             $validatedUrl = $validatorUrl->validated();
             $produit->url_externe = $validatedUrl('url_externe');
@@ -168,10 +168,10 @@ class ProduitController extends Controller
     public function edit(Produit $produit)
     {
          $categories = Categorie::all();
-         if(isset($categories)){
+         if(isset($categories) && sizeof($categories) > 0){
             return view('produits.edit', compact('produit','categories'));
         }
-        abort(500);
+        abort(404);
     }
 
     /**
@@ -194,7 +194,7 @@ class ProduitController extends Controller
                 'status'=>false,
                 'message'=>'Une erreur est survenue',
                 'errors'=>$validator->errors()
-            ],401);
+            ],404);
         };
 
         $validated = $validator->validated();
@@ -222,7 +222,7 @@ class ProduitController extends Controller
                     'status'=>false,
                     'message'=>'Une erreur est survenue',
                     'errors'=>$validatorBool->errors()
-                ],401);
+                ],404);
             };
             $produit->isAccueil = 1;
         }
@@ -239,7 +239,7 @@ class ProduitController extends Controller
                     'status'=>false,
                     'message'=>'Une erreur est survenue',
                     'errors'=>$validatorUrl->errors()
-                ],401);
+                ],404);
             };
             $validatedUrl = $validatorUrl->validated();
             $produit->url_externe = $validatedUrl('url_externe');
@@ -270,7 +270,7 @@ class ProduitController extends Controller
         //Suppression en DB
         $delete = $produit->delete();
         if(!$delete){
-            abort(500);
+            abort(404);
         }
         return view('produits.index');
 
@@ -284,7 +284,7 @@ class ProduitController extends Controller
                     ->where('isAccueil', '=', 1)
                     ->get();
 
-        if(isset($produits))
+        if(isset($produits) && sizeof($produits) > 0)
         {
             return response()->json($produits, 200);
         }

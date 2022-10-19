@@ -21,10 +21,10 @@ class TexteAccueilController extends Controller
     {
         $data = TexteAccueil::all();
 
-        if(isset($data)){
+        if(isset($data) && sizeof($data) > 0){
             return view('texteAccueil.index',['data'=>$data]);
         }
-        abort(500);
+        abort(404);
     }
 
     //Fonction pour l'acc�s via API
@@ -36,7 +36,7 @@ class TexteAccueilController extends Controller
         if(isset($texteAccueil)){
             return response()->json($texteAccueil, 200);
         }
-        return response()->json(['status' => false], 204);
+        return response()->json(['status' => false], 404);
     }
 
     //Affichage du formulaire de cr�ation
@@ -60,25 +60,9 @@ class TexteAccueilController extends Controller
         if($texte){
             return redirect('texte-accueil');
         }
-        abort(500);
+        abort(404);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\TexteAccueil  $texteAccueil
-     * @return \Illuminate\Http\Response
-     */
-    // public function show()
-    // {
-    //     $texteAccueil = DB::table('texte_accueils')
-    //                     ->where('online', '=', '1')
-    //                     ->first();
-    //     if(isset($texteAccueil)){
-    //         return response()->json($texteAccueil, 200);
-    //     }
-    //     return response()->json(['status' => false], 204);
-    // }
 
     /**
      * Show the form for editing the specified resource.
@@ -105,7 +89,7 @@ class TexteAccueilController extends Controller
         if($update){
             return redirect('texte-accueil');
         }
-        abort(500);
+        abort(404);
     }
 
     //Fonction pour mettre a jour le booleen en DB pour mettre en avant une data
@@ -113,7 +97,7 @@ class TexteAccueilController extends Controller
     {
         //On r�cup�re toutes les donn�es pour changer la valeur de Online � 0
         $all = TexteAccueil::all();
-        if(isset($all)){
+        if(isset($all) && sizeof($all) > 0){
             foreach ($all as $item){
                 $item->online = "0";
                 $item->save();
@@ -127,7 +111,7 @@ class TexteAccueilController extends Controller
         if($response){
             return redirect('texte-accueil');
         }
-        abort(500);
+        abort(404);
     }
     /**
      * Remove the specified resource from storage.
@@ -141,6 +125,6 @@ class TexteAccueilController extends Controller
         if($delete){
             return redirect('texte-accueil');
         }
-        abort(500);
+        abort(404);
     }
 }

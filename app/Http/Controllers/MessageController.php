@@ -39,6 +39,7 @@ class MessageController extends Controller
      */
     public function store(Request $request)
     {
+        //Récupération du Token google côté client pour le faire vérifier
         $recaptchaToken = $request['token'];
         $secretKey = env('SECRET_KEY');
 
@@ -48,8 +49,10 @@ class MessageController extends Controller
             return response()->json(['status' => 'false'], 500);
         }
 
-        if($response->ok()){
+        //Si captcha OK et honeypot vide, on procèe à la suite
+        if($response->ok() && $request['pot'] == NULL){
 
+            //Regles de validation
             $validator = Validator::make($request->all(),[
                 'prenom' => 'required|string',
                 'nom' => 'required|string',
@@ -63,15 +66,19 @@ class MessageController extends Controller
             }
             $validated = $validator->validated();
 
+            //Nouvelobjet
             $message = new Message($validated);
 
+            //Envoir du mail
             Mail::to('clavier.quentin@gmail.com')->send(new \App\Mail\MessageMail($message));
+
+            //Sauvegarde en base de données
             $response = $message->save();
 
             if($response){
                 return response()->json(['status' => true], 200);
             }
-            return response()->json(['status' => 'faux'], 404);
+            return response()->json(['status' => false], 404);
         }
 
 
