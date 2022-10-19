@@ -8,16 +8,16 @@ class RecaptchaController extends Controller
 {
     public function googleResponse($token)
     {
-        $recaptchaToken = $token;
-        $secretKey = env('SECRET_KEY');
+            $recaptchaToken = $token;
+            $secretKey = env('SECRET_KEY');
 
-        $response = Http::post('https://www.google.com/recaptcha/api/siteverify?secret='.$secretKey.'&response='.$recaptchaToken);
+            $response = Http::post('https://www.google.com/recaptcha/api/siteverify?secret='.$secretKey.'&response='.$recaptchaToken);
 
-        if($response->ok()){
-            return response($response->body(),200);
-        }
-        if($response->failed()){
-            return response()->json(['status' => 'false'], 500);
-        }
+            if($response->ok()){
+                return response($response->body(),200);
+            }
+            if($response->failed()){
+                return response()->json(['status' => 'false'], 500);
+            }
     }
 }

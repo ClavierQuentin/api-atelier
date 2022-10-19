@@ -254,7 +254,7 @@ class DeuxiemeBanniereController extends Controller
         $response = $deuxiemeBanniere->save();
 
         if($response){
-            return redirect('deuxieme-banniere');
+            return redirect('presentation');
         }
         abort(500);
     }

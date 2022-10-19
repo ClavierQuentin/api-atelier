@@ -46,7 +46,7 @@ class MessageController extends Controller
         ]);
 
         if($validator->fails()){
-            return response()->json(['status' => false], 404);
+            return response()->json(['status' => false, 'errors'=> $validator->errors()], 404);
         }
         $validated = $validator->validated();
 

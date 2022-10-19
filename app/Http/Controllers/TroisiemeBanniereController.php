@@ -218,7 +218,7 @@ class TroisiemeBanniereController extends Controller
         $troisiemeBanniere->online = 1;
         $troisiemeBanniere->save();
 
-        return redirect('troisieme-banniere');
+        return redirect('presentation');
     }
 
 

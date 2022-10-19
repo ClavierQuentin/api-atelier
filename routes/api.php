@@ -24,77 +24,44 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-// //Enregistrement et login
-// Route::post('/register', [AuthController::class,'register']);
-// Route::post('/login', [AuthController::class, 'login']);
-// //Logout
-// Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
-
-//Route prot�g�es Admin
-// Route::middleware('auth:sanctum','role:admin')->group(function(){
-//     Route::post('texte-accueil/store',[TexteAccueilController::class, 'store']);
-//     Route::post('texte-accueil/{texteAccueil}',[TexteAccueilController::class,'update']);
-//     Route::delete('texte-accueil/{texteAccueil}',[TexteAccueilController::class,'destroy']);
-//     Route::get('texte-accueil/{texteAccueil}/edit',[TexteAccueilController::class,'edit']);
 
 
-//     Route::post('premiere-banniere/store',[PremiereBanniereController::class,'store']);
-//     Route::post('premiere-banniere/{premiereBanniere}',[PremiereBanniereController::class,'update']);
-//     Route::delete('premiere-banniere/{premiereBanniere}',[PremiereBanniereController::class,'destroy']);
-//     Route::get('premiere-banniere/{premiereBanniere}/edit',[PremiereBanniereController::class,'edit']);
+/*-------------------------------Routes pour la page d'accueil----------------------*/
+
+Route::get('texte-accueil',[TexteAccueilController::class, 'indexApi']); //Affiche les textes
+Route::get('produits-accueil',[ProduitController::class, 'indexAccueil']); //Affiche les produits à mettre en avant pour la bannière
+Route::get('categories-accueil',[CategorieController::class, 'categorieIsAccueil']); //Affiche les catégories à mettre en avant
+
+/*----------------------------------------------------------------------------------*/
 
 
-//     Route::post('deuxieme-banniere/store',[DeuxiemeBanniereController::class,'store']);
-//     Route::post('deuxieme-banniere/{deuxiemeBanniere}',[DeuxiemeBanniereController::class,'update']);
-//     Route::post('deuxieme-banniere/{deuxiemeBanniere}/add-images',[DeuxiemeBanniereController::class,'addImage']);
-//     Route::delete('deuxieme-banniere/{deuxiemeBanniere}',[DeuxiemeBanniereController::class,'destroy']);
-//     Route::get('deuxieme-banniere/{deuxiemeBanniere}/edit',[DeuxiemeBanniereController::class,'edit']);
-//     Route::post('deuxieme-banniere/{deuxiemeBanniere}/delete-image', [DeuxiemeBanniereController::class, 'deleteImage']);
+/*-------------------------------Routes pour la page About----------------------*/
+
+Route::get('premiere-banniere',[PremiereBanniereController::class, 'indexApi']); //Affiche les textes et images
+Route::get('deuxieme-banniere',[DeuxiemeBanniereController::class, 'indexApi']); //Affiche les textes et images
+Route::get('troisieme-banniere',[TroisiemeBanniereController::class, 'indexApi']); //Affiche les textes et images
+
+/*----------------------------------------------------------------------------------*/
 
 
-//     Route::post('troisieme-banniere/store',[TroisiemeBanniereController::class,'store']);
-//     Route::post('troisieme-banniere/{troisiemeBanniere}',[TroisiemeBanniereController::class,'update']);
-//     Route::delete('troisieme-banniere/{troisiemeBanniere}',[TroisiemeBanniereController::class,'destroy']);
-//     Route::get('troisieme-banniere/{troisiemeBanniere}/edit',[TroisiemeBanniereController::class,'edit']);
+/*-------------------------------Routes pour les catégories----------------------*/
 
-//     Route::post('categories/store',[CategorieController::class, 'store']);
-//     Route::post('categories/{categorie}',[CategorieController::class, 'update']);
-//     Route::delete('categories/{categorie}',[CategorieController::class, 'destroy']);
-//     Route::get('categories/{categorie}/edit',[CategorieController::class, 'edit']);
+Route::get('categories',[CategorieController::class, 'indexApi']); //Affiche toutes les catégories
 
-//     Route::post('produits/store/{categorie}',[ProduitController::class, 'store']);
-//     Route::post('produits/{produit}',[ProduitController::class, 'update']);
-//     Route::delete('produits/{produit}',[ProduitController::class, 'destroy']);
-//     Route::get('produits/{produit}/edit',[ProduitController::class, 'edit']);
+/*----------------------------------------------------------------------------------*/
 
-// });
 
-//Routes show
-Route::get('categories/{categorie}',[CategorieController::class, 'show']);
-Route::get('produits/{produit}',[ProduitController::class, 'show']);
+/*-------------------------------Routes pour les produits----------------------*/
 
-//Routes index pour affichage au Front
-Route::get('deuxieme-banniere',[DeuxiemeBanniereController::class, 'indexApi']);
-Route::get('premiere-banniere',[PremiereBanniereController::class, 'indexApi']);
-Route::get('texte-accueil',[TexteAccueilController::class, 'indexApi']);
-Route::get('troisieme-banniere',[TroisiemeBanniereController::class, 'indexApi']);
-Route::get('categories',[CategorieController::class, 'indexApi']);
-Route::get('produits',[ProduitController::class, 'indexApi']);
+Route::get('categories/{categorie}/produits',[CategorieController::class, 'getAllProducts']); //Affiche tous les produits appartenant à une catégorie
+Route::get('produits/{produit}',[ProduitController::class, 'show']); //Affiche les détails d'un produit
+// Route::get('produits/{produit}/all',[ProduitController::class, 'productFromSameCategorie']);
 
-//Routes index sp�cial produit
-Route::get('produits/{produit}/all',[ProduitController::class, 'productFromSameCategorie']);
-Route::get('categories/{categorie}/produits',[CategorieController::class, 'getAllProducts']);
+/*----------------------------------------------------------------------------------*/
 
-//Routes pour page accueil
-Route::get('produits-accueil',[ProduitController::class, 'indexAccueil']);
-Route::get('categories-accueil',[CategorieController::class, 'categorieIsAccueil']);
 
-//Route repatcha
-Route::post('recaptcha/{token}',[RecaptchaController::class, 'googleResponse']);
+/*----------------------------------Autres routes-------------------------------*/
 
-//Route pour reception de message
-Route::post('message',[MessageController::class,'store']);
+Route::post('recaptcha/{token}',[RecaptchaController::class, 'googleResponse']); //Route repatcha pour contrôle au formulaire de contact
+
+Route::post('message',[MessageController::class,'store']); //Route pour reception de message et gestion d'envoie de l'email

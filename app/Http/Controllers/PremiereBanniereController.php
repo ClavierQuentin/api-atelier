@@ -164,7 +164,7 @@ class PremiereBanniereController extends Controller
         $response = $premiereBanniere->save();
 
         if($response){
-            return redirect('premiere-banniere');
+            return redirect('presentation');
         }
         abort(500);
     }
