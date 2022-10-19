@@ -6,6 +6,8 @@ use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Http;
+
 
 class MessageController extends Controller
 {
@@ -37,28 +39,42 @@ class MessageController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            'prenom' => 'required|string',
-            'nom' => 'required|string',
-            'sujet' => 'required|string',
-            'email' => 'required|string',
-            'message' => 'required|string'
-        ]);
+        $recaptchaToken = $request['token'];
+        $secretKey = env('SECRET_KEY');
 
-        if($validator->fails()){
-            return response()->json(['status' => false, 'errors'=> $validator->errors()], 404);
+        $response = Http::post('https://www.google.com/recaptcha/api/siteverify?secret='.$secretKey.'&response='.$recaptchaToken);
+
+        if($response->failed()){
+            return response()->json(['status' => 'false'], 500);
         }
-        $validated = $validator->validated();
 
-        $message = new Message($validated);
+        if($response->ok()){
 
-        Mail::to('clavier.quentin@gmail.com')->send(new \App\Mail\MessageMail($message));
-        $response = $message->save();
+            $validator = Validator::make($request->all(),[
+                'prenom' => 'required|string',
+                'nom' => 'required|string',
+                'sujet' => 'required|string',
+                'email' => 'required|string',
+                'message' => 'required|string'
+            ]);
 
-        if($response){
-            return response()->json(['status' => true], 200);
+            if($validator->fails()){
+                return response()->json(['status' => false, 'errors'=> $validator->errors()], 404);
+            }
+            $validated = $validator->validated();
+
+            $message = new Message($validated);
+
+            Mail::to('clavier.quentin@gmail.com')->send(new \App\Mail\MessageMail($message));
+            $response = $message->save();
+
+            if($response){
+                return response()->json(['status' => true], 200);
+            }
+            return response()->json(['status' => 'faux'], 404);
         }
-        return response()->json(['status' => 'faux'], 404);
+
+
     }
 
     /**
