@@ -98,7 +98,7 @@
                 <label for="url_externe">
                     URL menant au site marchand s'il existe
                 </label>
-                <input type="url" pattern="https://.*" name="url_externe" id="url_externe" value="@if(isset($produit->url_externe)) {{ $produit->url_externe }} @endif" class="form-control @error('url_externe') is-invalid @enderror">
+                <input type="url" pattern="https://.*" name="url_externe" id="url_externe" class="form-control @error('url_externe') is-invalid @enderror">
 
                 @error('url_externe')
                     <div class="alert alert-danger m-1">{{ $message }}</div>
