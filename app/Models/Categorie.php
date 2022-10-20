@@ -28,10 +28,6 @@ class Categorie extends Model
         return $this->hasMany(Produit::class);
     }
 
-    public function getProduits()
-    {
-        return $this->hasMany(Produit::class);
-    }
 
     //Fonction pour supprimer les images dans le cloud
     public function deleteImage()

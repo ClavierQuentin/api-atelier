@@ -55,7 +55,7 @@ Route::get('categories',[CategorieController::class, 'indexApi']); //Affiche tou
 
 Route::get('categories/{categorie}/produits',[CategorieController::class, 'getAllProducts']); //Affiche tous les produits appartenant à une catégorie
 Route::get('produits/{produit}',[ProduitController::class, 'show']); //Affiche les détails d'un produit
-// Route::get('produits/{produit}/all',[ProduitController::class, 'productFromSameCategorie']);
+Route::get('produits/{produit}/all',[ProduitController::class, 'sameProduct']); //Affiche les autres produits d'une catégorie
 
 /*----------------------------------------------------------------------------------*/
 

@@ -32,10 +32,10 @@ class CategorieController extends Controller
         abort(404);
     }
 
-    //Fonction pour r�cup�rer les produits associ�s � une cat�gorie
+    //Fonction pour récupérer tous les produits associés à une catégorie
     public function indexProducts(Categorie $categorie)
     {
-        $produits = $categorie->getProduits;
+        $produits = $categorie->produits;
 
         if(isset($produits) && sizeof($produits) > 0){
             return view('produits.index_categorie',compact('produits','categorie'));
@@ -43,10 +43,11 @@ class CategorieController extends Controller
         abort(404);
     }
 
-    //Fonction pour g�rer la route de l'API pour le front
+    //Fonction pour gérer la route de l'API pour le front
     public function indexApi()
     {
         $categories = Categorie::all();
+
         if(isset($categories) && sizeof($categories) > 0){
             return response()->json($categories, 200);
         }
@@ -57,9 +58,11 @@ class CategorieController extends Controller
     //Retourne les catégories a afficher en page d'accueil
     public function categorieIsAccueil()
     {
+        //On récupère ici les catégories mise en avant, au nombre de 4 max, dans l'ordre décroissant de date de MAJ
         $categories = DB::table('categories')
                     ->where('isAccueil','=', 1)
                     ->limit("4")
+                    ->orderByDesc('updated_at')
                     ->get();
 
         if(isset($categories) && sizeof($categories) > 0){
@@ -69,7 +72,7 @@ class CategorieController extends Controller
 
     }
 
-    //Formulaire de cr�ation
+    //Formulaire de création
     public function create()
     {
         return view('categories.create');
@@ -104,7 +107,7 @@ class CategorieController extends Controller
         //Enregistrement de l'image au cloud et on stock l'url
         $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
 
-        //Cr�ation d'un nouvel objet
+        //Création d'un nouvel objet
         $categorie = new Categorie($request->validated());
 
         //Cas où la checbox pour affichage à l'accueil est cochée
@@ -177,7 +180,7 @@ class CategorieController extends Controller
 
         $validated = $validator->validated();
 
-        //Dans le cas o� une image a �t� fournie au formulaire
+        //Dans le cas où une image a été fournie au formulaire
         if(isset($validated['image'])){
 
             //Suppression de l'ancienne image
@@ -243,7 +246,7 @@ class CategorieController extends Controller
      */
     public function getAllProducts(Categorie $categorie)
     {
-        $produits = $categorie->getProduits;
+        $produits = $categorie->produits;
 
         if(isset($produits) && sizeof($produits) > 0){
             return response()->json($produits, 200);

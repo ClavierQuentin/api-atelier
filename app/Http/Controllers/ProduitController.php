@@ -24,6 +24,7 @@ class ProduitController extends Controller
     public function indexApi()
     {
         $produits = Produit::all();
+
         if(isset($produits) && sizeof($produits) > 0){
             return response()->json($produits, 200);
         }
@@ -39,23 +40,6 @@ class ProduitController extends Controller
         abort(404);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @param  \App\Models\Categorie $categorie
-     * @return \Illuminate\Http\Response
-     */
-    public function productFromSameCategorie(Produit $produit)
-    {
-        $categorie = Categorie::find($produit->categorie_id);
-
-        $produits = $categorie->getProduits;
-
-        if(isset($produits) && sizeof($produits) > 0){
-            return response()->json($produits, 200);
-        }
-        return response()->json(['status' => false], 404);
-    }
 
     public function create()
     {
@@ -167,6 +151,7 @@ class ProduitController extends Controller
      */
     public function edit(Produit $produit)
     {
+        //On récupère les catégories pour les affiches dans le select lors de la création d'un produit
          $categories = Categorie::all();
          if(isset($categories) && sizeof($categories) > 0){
             return view('produits.edit', compact('produit','categories'));
@@ -289,5 +274,20 @@ class ProduitController extends Controller
             return response()->json($produits, 200);
         }
         return response()->json(['status' => false], 404);
+    }
+
+    //Fonction pour afficher les autres produits de la catégorie d'un produit en séléction
+    public function sameProduct(Produit $produit)
+    {
+        //On recherche les produits de la catégorie du produit, sans le produit actuel
+        $produits = Categorie::find($produit->categorie_id)->produits
+                    ->where('id', '!=', $produit->id)
+                    ->all();
+
+        if(isset($produits) && sizeof($produits) > 0){
+            return response()->json($produits,200);
+        }
+
+        return response()->json(['status'=>false], 404);
     }
 }
