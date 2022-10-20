@@ -12,7 +12,7 @@
             </div>
         @endif
 
-        <div class="d-flex flew-wrap">
+        <div class="d-flex flex-wrap">
 
             {{-- Controle du nombre d'entrées --}}
             @if(isset($produits) && sizeof($produits) > 0)
@@ -20,7 +20,7 @@
             {{-- On parcours les entrées --}}
                 @foreach ($produits as $produit)
 
-                    <div class="card border-info m-3 p-1" style="width: 18rem;">
+                    <div class="card border-info m-3 p-1" style="width: 400px !important;">
 
                         {{-- Menu déroulant pour icones update et delete --}}
                         <ul class="navbar-nav">
