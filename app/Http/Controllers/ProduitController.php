@@ -280,12 +280,17 @@ class ProduitController extends Controller
     public function sameProduct(Produit $produit)
     {
         //On recherche les produits de la catégorie du produit, sans le produit actuel
-        $produits = Categorie::find($produit->categorie_id)->produits
+        // $produits = Categorie::find($produit->categorie_id)->produits
+        //             ->where('id', '!=', $produit->id)
+        //             ->all();
+
+        $produits = DB::table('produits')
                     ->where('id', '!=', $produit->id)
-                    ->all();
+                    ->where('categorie_id', '=', $produit->categorie_id)
+                    ->get();
 
         if(isset($produits) && sizeof($produits) > 0){
-            return response()->json(array($produits),200);
+            return response()->json($produits,200);
         }
 
         return response()->json(['status'=>false], 404);
