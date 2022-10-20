@@ -279,14 +279,12 @@ class ProduitController extends Controller
     //Fonction pour afficher les autres produits de la catégorie d'un produit en séléction
     public function sameProduct(Produit $produit)
     {
-        //On recherche les produits de la catégorie du produit, sans le produit actuel
-        // $produits = Categorie::find($produit->categorie_id)->produits
-        //             ->where('id', '!=', $produit->id)
-        //             ->all();
-
+        //On requête les produits de la même catégorie en ommettant le produit actuel, limité à 3 produits, dans l'ordre decroissant de date de création
         $produits = DB::table('produits')
                     ->where('id', '!=', $produit->id)
                     ->where('categorie_id', '=', $produit->categorie_id)
+                    ->limit(3)
+                    ->orderByDesc('created_at')
                     ->get();
 
         if(isset($produits) && sizeof($produits) > 0){
