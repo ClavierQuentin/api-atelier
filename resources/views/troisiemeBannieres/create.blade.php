@@ -32,10 +32,10 @@
                     <div class="alert alert-danger m-1">{{ $message }}</div>
                 @enderror
 
-                <label for="texte_1">
+                <label for="editeur">
                     Premier texte
                 </label>
-                <textarea class="form-control @error('texte_1') is-invalid @enderror" name="texte_1" id="texte_1" cols="10" rows="5">{{ old('texte_1') }}</textarea>
+                <textarea class="form-control @error('texte_1') is-invalid @enderror" name="texte_1" id="editeur" cols="10" rows="5">{{ old('texte_1') }}</textarea>
 
                 @error('texte_1')
                     <div class="alert alert-danger m-1">{{ $message }}</div>
@@ -59,10 +59,10 @@
                     <div class="alert alert-danger m-1">{{ $message }}</div>
                 @enderror
 
-                <label for="texte_2">
+                <label for="editeur">
                     Deuxième texte
                 </label>
-                <textarea class="form-control @error('texte_2') is-invalid @enderror" name="texte_2" id="texte_2" cols="10" rows="5">{{ old('texte_2') }}</textarea>
+                <textarea class="form-control @error('texte_2') is-invalid @enderror" name="texte_2" id="editeur" cols="10" rows="5">{{ old('texte_2') }}</textarea>
 
                 @error('texte_2')
                     <div class="alert alert-danger m-1">{{ $message }}</div>

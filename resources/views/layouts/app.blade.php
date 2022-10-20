@@ -17,6 +17,9 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+
+    @include('components.head.tinymce-config')
+
 </head>
 <body>
     <div id="app">

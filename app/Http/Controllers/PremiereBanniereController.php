@@ -20,13 +20,10 @@ class PremiereBanniereController extends Controller
      */
     public function index()
     {
-        $premiereBannieres = PremiereBanniere::all();
+        $premiereBannieres = PremiereBanniere::paginate(10);
 
-        if(isset($premiereBannieres) && sizeof($premiereBannieres) > 0){
-            return view('premiereBannieres.index',['premiereBannieres' => $premiereBannieres]);
-        }
+        return view('premiereBannieres.index',['premiereBannieres' => $premiereBannieres]);
 
-        abort(404);
     }
 
     //Controller pour l'API coté Front

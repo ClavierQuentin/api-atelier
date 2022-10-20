@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @section('content')
 
     <div class="container">
@@ -35,14 +34,16 @@
 
             <div class="form-group m-3">
 
-                <label for="description_longue_produit">
+                <label for="editeur">
                     Description longue
                 </label>
-                <textarea class="form-control @error('description_longue_produit') is-invalid @enderror" name="description_longue_produit" id="description_longue_produit" cols="10" rows="10">{{ old('description_longue_produit') }}</textarea>
+                
+                <textarea id="editeur" class="form-control @error('description_longue_produit') is-invalid @enderror" name="description_longue_produit"  cols="10" rows="10">{{ old('description_longue_produit') }}</textarea>
 
                 @error('description_longue_produit')
                     <div class="alert alert-danger m-1">{{ $message }}</div>
                 @enderror
+
             </div>
 
             <div class="form-group m-3">

@@ -26,10 +26,7 @@ class CategorieController extends Controller
     {
         $categories = Categorie::all();
 
-        if(isset($categories)  && sizeof($categories) > 0){
-            return view('categories.index',compact('categories'));
-        }
-        abort(404);
+        return view('categories.index',compact('categories'));
     }
 
     //Fonction pour récupérer tous les produits associés à une catégorie

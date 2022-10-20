@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\DeuxiemeBanniereController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PremiereBanniereController;
 use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\RecaptchaController;
@@ -65,3 +66,5 @@ Route::get('produits/{produit}/all',[ProduitController::class, 'sameProduct']); 
 Route::post('recaptcha/{token}',[RecaptchaController::class, 'googleResponse']); //Route repatcha pour contrôle au formulaire de contact
 
 Route::post('message',[MessageController::class,'store']); //Route pour reception de message et gestion d'envoie de l'email
+
+Route::get('send',[NewsletterController::class,'sendEmails']);

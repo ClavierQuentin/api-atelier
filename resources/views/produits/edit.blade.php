@@ -26,7 +26,7 @@
                 <label for="description_courte_produit">
                     Courte description
                 </label>
-                <textarea class="form-control @error('description_courte_produit') is-invalid @enderror" name="description_courte_produit" id="description_courte_produit" cols="10" rows="5">{{ $produit->description_courte_produit }}</textarea>
+                <textarea class="form-control @error('description_courte_produit') is-invalid @enderror" name="description_courte_produit" id="editeur" cols="10" rows="5">{{ $produit->description_courte_produit }}</textarea>
 
                 @error('description_courte_produit')
                     <div class="alert alert-danger m-1">{{ $message }}</div>
@@ -36,10 +36,11 @@
 
             <div class="form-group m-3">
 
-                <label for="description_longue_produit">
+                <label for="editeur">
                     Description longue
                 </label>
-                <textarea class="form-control @error('description_longue_produit') is-invalid @enderror" name="description_longue_produit" id="description_longue_produit" cols="10" rows="10">{{ $produit->description_longue_produit }}</textarea>
+
+                <textarea class="form-control @error('description_longue_produit') is-invalid @enderror" name="description_longue_produit" id="editeur" cols="10" rows="10">{{ $produit->description_longue_produit }}</textarea>
 
                 @error('description_longue_produit')
                     <div class="alert alert-danger m-1">{{ $message }}</div>

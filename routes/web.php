@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\DeuxiemeBanniereController;
+use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PremiereBanniereController;
 use App\Http\Controllers\PresentationController;
 use App\Http\Controllers\ProduitController;
@@ -32,7 +33,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 //Groupement de routes sécurisées
 Route::middleware('auth','role:admin')->group(function(){
-    
+
     //-----------------------------Routes pour les textes de la page d'accueil-------------------------------------//
 
     Route::get('texte-accueil',[TexteAccueilController::class, 'index'])->name('texteAccueil.index'); //Route affichage dashboard
@@ -139,6 +140,11 @@ Route::middleware('auth','role:admin')->group(function(){
     Route::get('produit',[ProduitController::class, 'index'])->name('produit.index'); //Route affichage tous produits
 
     Route::delete('produit/delete/{produit}',[ProduitController::class, 'destroy'])->name('produit.delete'); //Route de suppression
+
+
+
+    Route::get('newsletter/create',[NewsletterController::class, 'create'])->name('newsletter.create');
+    Route::post('newsletter/save',[NewsletterController::class, 'sendEmails'])->name('newsletter.store');
 
 }); //Sortie du group middleware
 

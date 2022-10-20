@@ -22,10 +22,10 @@
 
             <div class="form-group mt-2">
 
-                <label for="texte">
+                <label for="editeur">
                     Texte
                 </label>
-                <textarea class="form-control @error('texte') is-invalid @enderror" name="texte" id="texte" cols="30" rows="10">{{ old('texte') }}</textarea>
+                <textarea class="form-control @error('texte') is-invalid @enderror" name="texte" id="editeur" cols="30" rows="10">{{ old('texte') }}</textarea>
 
                 @error('texte')
                     <div class="alert alert-danger m-1">{{ $message }}</div>

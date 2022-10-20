@@ -19,10 +19,10 @@
 
             <div class="form-group mt-2">
 
-                <label for="texte">
+                <label for="editeur">
                     Texte d'accueil
                 </label>
-                <textarea class="form-control" name="texte" id="texte" cols="20" rows="5">{{ $premiereBanniere->texte }}</textarea>
+                <textarea class="form-control" name="texte" id="editeur" cols="20" rows="5">{{ $premiereBanniere->texte }}</textarea>
 
             </div>
 

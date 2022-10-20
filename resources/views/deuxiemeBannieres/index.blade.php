@@ -92,6 +92,8 @@
 
             </table>
 
+            {!! $deuxiemeBannieres->links() !!}
+
         @else
 
             <div class="border border-danger text-center m-4">

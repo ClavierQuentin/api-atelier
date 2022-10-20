@@ -24,12 +24,9 @@ class DeuxiemeBanniereController extends Controller
      */
     public function index()
     {
-        $deuxiemeBannieres = DeuxiemeBanniere::all();
+        $deuxiemeBannieres = DeuxiemeBanniere::paginate(10);
 
-        if(isset($deuxiemeBannieres) && sizeof($deuxiemeBannieres) > 0){
-            return view('deuxiemeBannieres.index',['deuxiemeBannieres' => $deuxiemeBannieres]);
-        }
-        abort(404);
+        return view('deuxiemeBannieres.index',['deuxiemeBannieres' => $deuxiemeBannieres]);
 
     }
 

@@ -34,10 +34,7 @@ class ProduitController extends Controller
     public function index()
     {
         $produits = Produit::all();
-        if(isset($produits) && sizeof($produits) > 0){
-            return view('produits.index', compact('produits'));
-        }
-        abort(404);
+        return view('produits.index', compact('produits'));
     }
 
 
@@ -45,8 +42,9 @@ class ProduitController extends Controller
     {
         //On récupère les catégories pour les affiches dans le select lors de la création d'un produit
         $categories = Categorie::all();
+        $_name = "description_longue_produit";
         if(isset($categories) && sizeof($categories) > 0){
-            return view('produits.create', compact('categories'));
+            return view('produits.create', compact('categories','_name'));
         }
         abort(404);
     }
@@ -109,7 +107,7 @@ class ProduitController extends Controller
         //Contrôle de la présence d'une url externe remplie au formulaire
         if($request['url_externe']){
             $validatorUrl = Validator::make($request->all(),[
-                'url_externe'=>'string'
+                'url_externe'=>'string|url'
             ]);
             if($validatorUrl->fails()){
                 return response()->json([
@@ -152,9 +150,10 @@ class ProduitController extends Controller
     public function edit(Produit $produit)
     {
         //On récupère les catégories pour les affiches dans le select lors de la création d'un produit
+        $_name = "description_longue_produit";
          $categories = Categorie::all();
          if(isset($categories) && sizeof($categories) > 0){
-            return view('produits.edit', compact('produit','categories'));
+            return view('produits.edit', compact('produit','categories','_name'));
         }
         abort(404);
     }
@@ -217,7 +216,7 @@ class ProduitController extends Controller
         //Contrôle de la présence d'une url externe remplie au formulaire
         if($request['url_externe']){
             $validatorUrl = Validator::make($request->all(),[
-                'url_externe'=>'string'
+                'url_externe'=>'string|url'
             ]);
             if($validatorUrl->fails()){
                 return response()->json([

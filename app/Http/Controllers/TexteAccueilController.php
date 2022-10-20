@@ -19,12 +19,9 @@ class TexteAccueilController extends Controller
      */
     public function index()
     {
-        $data = TexteAccueil::all();
+        $data = TexteAccueil::paginate(10);
 
-        if(isset($data) && sizeof($data) > 0){
-            return view('texteAccueil.index',['data'=>$data]);
-        }
-        abort(404);
+        return view('texteAccueil.index',['data'=>$data]);
     }
 
     //Fonction pour l'acc�s via API

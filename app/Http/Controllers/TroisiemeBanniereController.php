@@ -22,12 +22,9 @@ class TroisiemeBanniereController extends Controller
      */
     public function index()
     {
-        $troisiemeBannieres = TroisiemeBanniere::all();
+        $troisiemeBannieres = TroisiemeBanniere::paginate(10);
 
-        if(isset($troisiemeBannieres) && sizeof($troisiemeBannieres) > 0){
-            return view('troisiemeBannieres.index',['troisiemeBannieres' => $troisiemeBannieres]);
-        }
-        abort(404);
+        return view('troisiemeBannieres.index',['troisiemeBannieres' => $troisiemeBannieres]);
     }
 
     //Controller pour l'API cot� Front

@@ -22,8 +22,6 @@ class PresentationController extends Controller
                             ->limit('3')
                             ->get();
 
-        if(isset($troisiemeBannieres) && isset($deuxiemeBannieres) && isset($premiereBannieres) && sizeof($premiereBannieres) > 0 && sizeof($troisiemeBannieres) > 0 && sizeof($deuxiemeBannieres) > 0){
-            return view('presentation.index',['premiereBannieres'=>$premiereBannieres, 'deuxiemeBannieres'=>$deuxiemeBannieres, 'troisiemeBannieres'=>$troisiemeBannieres]);
-        }
+        return view('presentation.index',['premiereBannieres'=>$premiereBannieres, 'deuxiemeBannieres'=>$deuxiemeBannieres, 'troisiemeBannieres'=>$troisiemeBannieres]);
     }
 }

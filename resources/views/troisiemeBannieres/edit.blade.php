@@ -25,10 +25,10 @@
                 </label>
                 <input type="text" class="form-control " name="titre_1" id="titre_1" value="{{ $troisiemeBanniere->titre_1 }}">
 
-                <label for="texte_1">
+                <label for="editeur">
                     Premier texte
                 </label>
-                <textarea class="form-control" name="texte_1" id="texte_1" cols="10" rows="5">{{ $troisiemeBanniere->texte_1 }}</textarea>
+                <textarea class="form-control" name="texte_1" id="editeur" cols="10" rows="5">{{ $troisiemeBanniere->texte_1 }}</textarea>
 
                 <label for="image">
                     Image
@@ -52,10 +52,10 @@
                 </label>
                 <input type="text" class="form-control " name="titre_2" id="titre_2" value="{{ $troisiemeBanniere->titre_2 }}">
 
-                <label for="texte_2">
+                <label for="editeur">
                     Deuxième texte
                 </label>
-                <textarea class="form-control" name="texte_2" id="texte_2" cols="10" rows="5">{{ $troisiemeBanniere->texte_2 }}</textarea>
+                <textarea class="form-control" name="texte_2" id="editeur" cols="10" rows="5">{{ $troisiemeBanniere->texte_2 }}</textarea>
 
                 <label for="image2">
                     Image
