@@ -285,7 +285,7 @@ class ProduitController extends Controller
                     ->all();
 
         if(isset($produits) && sizeof($produits) > 0){
-            return response()->json($produits,200);
+            return response()->json(array($produits),200);
         }
 
         return response()->json(['status'=>false], 404);
