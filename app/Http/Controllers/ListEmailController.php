@@ -47,7 +47,7 @@ class ListEmailController extends Controller
         $response = Http::post('https://www.google.com/recaptcha/api/siteverify?secret='.$secretKey.'&response='.$recaptchaToken);
 
         if($response->failed()){
-            return response()->json(['status' => 'false'], 500);
+            return response()->json(['status' => 'false', 'errors'=>$response], 500);
         }
 
         //Si captcha OK et honeypot vide, on procèe à la suite
@@ -123,7 +123,7 @@ class ListEmailController extends Controller
                     ->where('email', '=', $validated['email'])
                     ->first();
         $listEmail = ListEmail::find($listEmail->id);
-        
+
        $delete =  $listEmail->delete();
        if($delete){
         return view('newsletter.delete');
