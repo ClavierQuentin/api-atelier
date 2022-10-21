@@ -63,18 +63,24 @@ class ListEmailController extends Controller
             }
             $validated = $validator->validated();
 
-            $item = new ListEmail($validated);
+            $alreadyIn = ListEmail::where('email','=', $validated['email'])->first();
 
-            $saved = $item->save();
+            if($alreadyIn == null){
+                $item = new ListEmail($validated);
 
-            if($saved){
-                return response()->json(['status' => true], 201);
+                $saved = $item->save();
+
+                if($saved){
+                    return response()->json(['status' => true , 'message'=>'Inscription réalisée'], 201);
+                }
+                return response()->json(['status' => false , 'message'=>'Une erreur est survenue'], 404);
+
             }
-            return response()->json(['status' => false], 404);
+            return response()->json(['status' => false, 'message'=>'Déja inscrit'], 404);
 
         }
 
-        return response()->json(['status' => false], 404);
+        return response()->json(['status' => false , 'message'=>'Une erreur est survenue'], 404);
 
     }
 
