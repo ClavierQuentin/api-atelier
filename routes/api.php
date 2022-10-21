@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\DeuxiemeBanniereController;
+use App\Http\Controllers\ListEmailController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PremiereBanniereController;
@@ -67,4 +68,6 @@ Route::post('recaptcha/{token}',[RecaptchaController::class, 'googleResponse']);
 
 Route::post('message',[MessageController::class,'store']); //Route pour reception de message et gestion d'envoie de l'email
 
-Route::get('send',[NewsletterController::class,'sendEmails']);
+// Route::get('send',[NewsletterController::class,'sendEmails']);
+
+Route::post('add-email', [ListEmailController::class, 'store']); //Route pour l'enregistrement d'une adresse mail

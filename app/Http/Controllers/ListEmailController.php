@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\ListEmail;
 use App\Http\Requests\StoreListEmailRequest;
 use App\Http\Requests\UpdateListEmailRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Validator;
 
 class ListEmailController extends Controller
 {
@@ -36,7 +40,32 @@ class ListEmailController extends Controller
      */
     public function store(StoreListEmailRequest $request)
     {
-        //
+        //Récupération du Token google côté client pour le faire vérifier
+        $recaptchaToken = $request['token'];
+        $secretKey = env('SECRET_KEY');
+
+        $response = Http::post('https://www.google.com/recaptcha/api/siteverify?secret='.$secretKey.'&response='.$recaptchaToken);
+
+        if($response->failed()){
+            return response()->json(['status' => 'false'], 500);
+        }
+
+        //Si captcha OK et honeypot vide, on procèe à la suite
+        if($response->ok() && $request['pot'] == NULL){
+
+            $item = new ListEmail($request->validated());
+
+            $saved = $item->save();
+
+            if($saved){
+                return response()->json(['status' => true], 201);
+            }
+            return response()->json(['status' => false], 404);
+
+        }
+
+        return response()->json(['status' => false], 404);
+
     }
 
     /**
@@ -56,9 +85,9 @@ class ListEmailController extends Controller
      * @param  \App\Models\ListEmail  $listEmail
      * @return \Illuminate\Http\Response
      */
-    public function edit(ListEmail $listEmail)
+    public function edit()
     {
-        //
+        return view('newsletter.edit_email');
     }
 
     /**
@@ -79,8 +108,26 @@ class ListEmailController extends Controller
      * @param  \App\Models\ListEmail  $listEmail
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ListEmail $listEmail)
+    public function destroy(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(),[
+            'email' => 'required|string'
+        ]);
+        if($validator->fails()){
+            abort(500);
+        }
+
+        $validated = $validator->validated();
+
+        $listEmail = DB::table('list_emails')
+                    ->where('email', '=', $validated['email'])
+                    ->first();
+        $listEmail = ListEmail::find($listEmail->id);
+        
+       $delete =  $listEmail->delete();
+       if($delete){
+        return view('newsletter.delete');
+       }
+       abort(404);
     }
 }

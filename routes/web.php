@@ -2,12 +2,14 @@
 
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\DeuxiemeBanniereController;
+use App\Http\Controllers\ListEmailController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PremiereBanniereController;
 use App\Http\Controllers\PresentationController;
 use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\TexteAccueilController;
 use App\Http\Controllers\TroisiemeBanniereController;
+use App\Models\Newsletter;
 use App\Models\TexteAccueil;
 use App\Models\TroisiemeBanniere;
 use Illuminate\Support\Facades\Route;
@@ -144,7 +146,17 @@ Route::middleware('auth','role:admin')->group(function(){
 
 
     Route::get('newsletter/create',[NewsletterController::class, 'create'])->name('newsletter.create');
+
     Route::post('newsletter/save',[NewsletterController::class, 'sendEmails'])->name('newsletter.store');
+
+    Route::get('newsletter', [NewsletterController::class, 'index'])->name('newsletter.index');
+
+    Route::get('newsletter/{newsletter}',[NewsletterController::class, 'show'])->name('newsletter.show');
+
+    Route::delete('newsletter/delete/{newsletter}',[NewsletterController::class, 'destroy'])->name('newsletter.delete');
 
 }); //Sortie du group middleware
 
+Route::get('edit-email',[ListEmailController::class, 'edit'])->name('email.edit');
+
+Route::post('delete-email',[ListEmailController::class, 'destroy'])->name('email.delete'); //Route pour suppression email de newsletter

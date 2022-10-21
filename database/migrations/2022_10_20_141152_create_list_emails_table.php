@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('list_emails', function (Blueprint $table) {
             $table->id();
+            $table->string('email');
             $table->timestamps();
         });
     }

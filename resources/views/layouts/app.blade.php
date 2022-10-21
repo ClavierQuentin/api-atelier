@@ -18,6 +18,7 @@
 
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
 
+    {{-- Composants pour configurer l'éditeur de texte --}}
     @include('components.head.tinymce-config')
 
 </head>
@@ -45,7 +46,7 @@
                                 <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Page "Accueil"</a>
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                        <a href="{{ url('/texte-accueil') }}" class="dropdown-item">Editer</a>
+                                        <a href="{{ route('texteAccueil.index') }}" class="dropdown-item">Editer</a>
                                         <a class="dropdown-item" href="https://atelier-ginette.netlify.app/" target="_blank">Voir sur le site</a>
                                     </div>
                                 </li>
@@ -53,7 +54,7 @@
                                 <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Page "Présentation"</a>
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                        <a href="{{ url('/presentation') }}" class="dropdown-item">Editer</a>
+                                        <a href="{{ route('presentation.index') }}" class="dropdown-item">Editer</a>
                                         <a class="dropdown-item" href="https://atelier-ginette.netlify.app/#/pages/about" target="_blank">Voir sur le site</a>
                                     </div>
                                 </li>
@@ -61,17 +62,26 @@
                                 <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Catégories</a>
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                        <a href="{{ url('/categorie') }}" class="dropdown-item">Voir toutes les catégories</a>
-                                        <a class="dropdown-item" href="{{ url('/categorie/create') }}">Créer une nouvelle catégorie</a>
+                                        <a href="{{ route('categorie.index') }}" class="dropdown-item">Voir toutes les catégories</a>
+                                        <a class="dropdown-item" href="{{ route('categorie.create') }}">Créer une nouvelle catégorie</a>
                                     </div>
                                 </li>
 
                                 <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Produits</a>
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                        <a href="{{ url('/produit') }}" class="dropdown-item">Voir tous les produits</a>
+                                        <a href="{{ route('produit.index') }}" class="dropdown-item">Voir tous les produits</a>
                                     </div>
                                 </li>
+
+                                <li class="nav-item dropdown">
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Newsletter</a>
+                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                        <a href="{{ route('newsletter.create') }}" class="dropdown-item">Créer une nouvelle campagne</a>
+                                        <a href="{{ route('newsletter.index') }}"" class="dropdown-item">Voir les anciennes campagnes</a>
+                                    </div>
+                                </li>
+
 
                             @endif
                         @endauth

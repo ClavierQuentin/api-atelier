@@ -96,7 +96,7 @@
         @else
 
             <div class="border border-danger text-center m-4">
-                Il n'y a aucune donn"e à afficher
+                Il n'y a aucune donnée à afficher
             </div>
 
         @endif

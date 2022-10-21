@@ -73,14 +73,15 @@ class MessageController extends Controller
             Mail::to('clavier.quentin@gmail.com')->send(new \App\Mail\MessageMail($message));
 
             //Sauvegarde en base de données
-            $response = $message->save();
+            $saved = $message->save();
 
-            if($response){
+            if($saved){
                 return response()->json(['status' => true], 200);
             }
             return response()->json(['status' => false], 404);
         }
 
+        return response()->json(['status' => false], 404);
 
     }
 
