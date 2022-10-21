@@ -63,7 +63,7 @@ class ListEmailController extends Controller
             }
             $validated = $validator->validated();
 
-            $item = new ListEmail($validated['email']);
+            $item = new ListEmail($validated);
 
             $saved = $item->save();
 
