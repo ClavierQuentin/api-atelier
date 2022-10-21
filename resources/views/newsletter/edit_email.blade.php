@@ -6,6 +6,10 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>{{ config('app.name', 'Laravel') }}</title>
+
+    <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
@@ -13,20 +17,19 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
-
-    {{-- Composants pour configurer l'éditeur de texte --}}
-    @include('components.head.tinymce-config')
-
+    
 </head>
 
+<body>
+    <form method="POST" class="custom-form" action="{{ route('email.delete') }}">
+        @csrf
+        <div class="form-group">
+            <label for="email">Indiquez votre email</label>
+            <input type="email" name="email" id="email" class="form-control">
+        </div>
+        <button>Se désinscrire</button>
+    </form>
 
-<form method="POST" class="custom-form" action="{{ route('email.delete') }}">
-    @csrf
-    <div class="form-group">
-        <label for="email">Indiquez votre email</label>
-        <input type="email" name="email" id="email" class="form-control">
-    </div>
-    <button>Se désinscrire</button>
-</form>
+</body>
 
 </html>
