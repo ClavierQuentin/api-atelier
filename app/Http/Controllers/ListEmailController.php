@@ -38,7 +38,7 @@ class ListEmailController extends Controller
      * @param  \App\Http\Requests\StoreListEmailRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreListEmailRequest $request)
+    public function store(Request $request)
     {
         //Récupération du Token google côté client pour le faire vérifier
         $recaptchaToken = $request['token'];
@@ -47,13 +47,23 @@ class ListEmailController extends Controller
         $response = Http::post('https://www.google.com/recaptcha/api/siteverify?secret='.$secretKey.'&response='.$recaptchaToken);
 
         if($response->failed()){
-            return response()->json(['status' => 'false', 'errors'=>$response], 500);
+            return response()->json(['status' => false, 'errors'=>$response], 500);
         }
 
         //Si captcha OK et honeypot vide, on procèe à la suite
         if($response->ok() && $request['pot'] == NULL){
 
-            $item = new ListEmail($request->validated());
+            //Regles de validation
+            $validator = Validator::make($request->all(),[
+                'email' => 'required|string',
+            ]);
+
+            if($validator->fails()){
+                return response()->json(['status' => false, 'errors'=> $validator->errors()], 404);
+            }
+            $validated = $validator->validated();
+
+            $item = new ListEmail($validated['email']);
 
             $saved = $item->save();
 
