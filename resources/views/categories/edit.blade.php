@@ -14,6 +14,7 @@
                 <label for="nom_categorie">
                     Nom de la catégorie
                 </label>
+                {{-- Formulaire pour le nom --}}
                 <input type="text" name="nom_categorie" id="nom_categorie" class="form-control" value="{{ $categorie->nom_categorie }}">
 
             </div>
@@ -29,12 +30,14 @@
                     <img src="{{ $categorie->url_image_categorie }}" alt="Image d'illustration" height="200" class=" border-info">
                 @endif
 
+                {{-- Fomulaire pour l'image --}}
                 <input type="file" name="image" id="image" class="form-control" accept="image/*">
 
             </div>
 
             <div class="form-group m-3">
 
+                {{-- Checkbox pour mise en avant en page d'accueil --}}
                 <div class="form-check">
                     <input type="checkbox" name="isAccueil" id="isAccueil" class="form-check-input" @if($categorie->isAccueil == 1) checked = 'true'  @endif value = "1">
                     <label for="isAccueil" class="form-check-label">Mettre en avant sur l'accueil</label>

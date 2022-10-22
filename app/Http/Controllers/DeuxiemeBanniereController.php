@@ -30,21 +30,24 @@ class DeuxiemeBanniereController extends Controller
 
     }
 
-    //Controller pour l'API cot� Front
+    //Controller pour l'API coté Front
     public function indexApi()
     {
+        //On récupère les données dont Online est à 1
         $deuxiemeBanniere = DB::table('deuxieme_bannieres')
                         ->where('online', '=', '1')
                         ->first();
 
+        //On contrôle que la donnée est existante
         if(isset($deuxiemeBanniere)){
+            //on retourne le tableau d'urls d'image décodé pour la lecture au front
             return response()->json(['data'=>$deuxiemeBanniere,'urls'=>json_decode($deuxiemeBanniere->url_image)], 200);
         }
 
         return response()->json(['status'=>false], 404);
     }
 
-    //Affichage du formulaire de cr�ation
+    //Affichage du formulaire de création
     public function create()
     {
         return view('deuxiemeBannieres.create');
@@ -59,24 +62,25 @@ class DeuxiemeBanniereController extends Controller
      */
     public function store(StoreDeuxiemeBanniereRequest $request)
     {
+        //Déclaration d'un tableau vide
         $data = array();
 
-        //R�gles de validation du fichier
+        //Règles de validation du fichier
         $this->validate($request ,[
             'image'=>'required',
             'image.*'=>'mimes:jpg,jepg,png,JPG,JPEG'
         ]);
 
-        //On upload chaque image
+        //On upload chaque image et on stocke l'url d'accès
         foreach($request->file('image') as $file){
             $path = cloudinary()->upload($file->getRealPath())->getSecurePath();
             $data[] = $path;
         }
 
-        //Cr�ation du nouvel objet
+        //Création du nouvel objet
         $deuxiemeBanniere = new DeuxiemeBanniere($request->validated());
 
-        //On enregistre certain param�tres
+        //On enregistre le tableau d'url encodé en JSON
         $deuxiemeBanniere->url_image = json_encode($data);
 
         //Enregistrement en DB
@@ -115,6 +119,7 @@ class DeuxiemeBanniereController extends Controller
         //Si checkbox deleteImage = true, on supprime les images existantes
         if(isset($request['deleteAllImages']) && $request['deleteAllImages'] == true) {
 
+            //Suppression en ligne
             $deuxiemeBanniere->deleteImages(); //Voir model
 
             //On vide le tableau d'urls
@@ -129,15 +134,15 @@ class DeuxiemeBanniereController extends Controller
                 'image'=>'required',
                 'image.*'=>'mimes:jpg,jepg,png,JPG,JPEG'
             ]);
-            //Upload des nouvelles images
+            //Upload des nouvelles images et enregistrement de l'url d'accès
             foreach($request->file('image') as $file){
                 $path = cloudinary()->upload($file->getRealPath())->getSecurePath();
                 $data[] = $path;
             }
         }
 
-
-        $deuxiemeBanniere->url_image = json_encode($data); //On enregistre les nouvelles urls si présentent, sinon un tableau vide
+        //On enregistre les nouvelles urls si présentent, sinon le tableau vide
+        $deuxiemeBanniere->url_image = json_encode($data);
 
         //Update
         $update = $deuxiemeBanniere->update($request->validated());
@@ -173,6 +178,11 @@ class DeuxiemeBanniereController extends Controller
     }
 
     //Fonction pour supprimer 1 image précise
+    /**
+     * Fonction pour supprimer 1 image précise
+     * @param Model DeuxiemeBanniere $deuxiemeBanniere
+     * @param Url Image $image
+     */
     public function deleteImage(DeuxiemeBanniere $deuxiemeBanniere, $image)
     {
 
@@ -183,16 +193,16 @@ class DeuxiemeBanniereController extends Controller
 
             //Déclaration des variables
             $publicId = "";
-            $name = "";
+            $fileName = "";
 
-            //On décompose l'url stockées en DB
-            $name = explode("/", $array[$i]);
+            //On décompose l'url stockée en DB et on récupère le nom du fichier en récupérant le dernier élément du tableau sorti par la méthode explode()
+            $fileName = explode("/", $array[$i])[count($array[$i])-1];
 
-            //On récupère  le nom de l'image
-            $publicId = $name[count($name)-1];
+            //On récupère  le nom de l'image dans l'url
+            // $publicId = $name[count($name)-1];
 
-            //On récupère sans l'extension
-            $publicName = explode(".", $publicId)[0];
+            //On récupère le nom sans l'extension
+            $publicName = explode(".", $fileName)[0];
 
             //Comparaison avec les valeurs en DB
             if($publicId == $image){
@@ -218,18 +228,22 @@ class DeuxiemeBanniereController extends Controller
         abort(404);
     }
 
-    //Fonction pour mettre a jour le booleen en DB pour mettre en avant une donn�e
+    //Fonction pour mettre a jour le booleen en DB pour mettre en avant sur le front une donnée
     public function updateOnline(DeuxiemeBanniere $deuxiemeBanniere)
     {
-        //On met tous les modèle à 0
+        //On met tous les modèles à 0
         $all = DeuxiemeBanniere::all();
-        foreach ($all as $item){
-            $item->online = "0";
-            $item->save();
+
+        if(isset($all)){
+            foreach ($all as $item){
+                $item->online = "0";
+                $item->save();
+            }
         }
 
         //On passe le modèle en cours à 1
         $deuxiemeBanniere->online = 1;
+        //On enregistre le changement
         $response = $deuxiemeBanniere->save();
 
         if($response){

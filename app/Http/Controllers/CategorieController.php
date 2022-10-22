@@ -34,10 +34,7 @@ class CategorieController extends Controller
     {
         $produits = $categorie->produits;
 
-        if(isset($produits) && sizeof($produits) > 0){
-            return view('produits.index_categorie',compact('produits','categorie'));
-        }
-        abort(404);
+        return view('produits.index_categorie',compact('produits','categorie'));
     }
 
     //Fonction pour gérer la route de l'API pour le front
@@ -45,6 +42,7 @@ class CategorieController extends Controller
     {
         $categories = Categorie::all();
 
+        //On controle que des données soient présentes
         if(isset($categories) && sizeof($categories) > 0){
             return response()->json($categories, 200);
         }
@@ -62,6 +60,7 @@ class CategorieController extends Controller
                     ->orderByDesc('updated_at')
                     ->get();
 
+        //On controle que des données soient présentes
         if(isset($categories) && sizeof($categories) > 0){
             return response()->json($categories, 200);
         }
@@ -119,10 +118,11 @@ class CategorieController extends Controller
                     'errors'=>$validatorBool->errors()
                 ],404);
             };
+            //On passe le booléen à 1
             $categorie->isAccueil = 1;
         }
 
-        //On enregistre l'url
+        //On enregistre l'url pour l'image
         $categorie->url_image_categorie = $path;
 
         //On enregistre en base
@@ -202,6 +202,7 @@ class CategorieController extends Controller
                     'errors'=>$validatorBool->errors()
                 ],404);
             };
+            //On passe le booléen à 1
             $categorie->isAccueil = 1;
         }
 
@@ -245,6 +246,7 @@ class CategorieController extends Controller
     {
         $produits = $categorie->produits;
 
+        //On contrôle si des données sont présentes
         if(isset($produits) && sizeof($produits) > 0){
             return response()->json($produits, 200);
         }

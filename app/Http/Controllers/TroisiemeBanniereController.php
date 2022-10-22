@@ -27,12 +27,14 @@ class TroisiemeBanniereController extends Controller
         return view('troisiemeBannieres.index',['troisiemeBannieres' => $troisiemeBannieres]);
     }
 
-    //Controller pour l'API cot� Front
+    //Controller pour l'API coté Front
     public function indexApi()
     {
         $troisiemeBanniere = DB::table('troisieme_bannieres')
                         ->where('online', '=', '1')
                         ->first();
+
+        //Controle de la présence des données
         if(isset($troisiemeBanniere)){
             return response()->json($troisiemeBanniere, 200);
         }
@@ -75,10 +77,11 @@ class TroisiemeBanniereController extends Controller
 
         $validated = $validator->validated();
 
-        //On upload chaque image
+        //On upload chaque image et on garde les urls d'accès
         $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
 
         $path2 = cloudinary()->upload($validated['image2']->getRealPath())->getSecurePath();
+
         //Création du nouvel objet
         $troisiemeBanniere = new TroisiemeBanniere($request->validated());
 
@@ -135,10 +138,10 @@ class TroisiemeBanniereController extends Controller
             ],404);
         };
 
-        //R�cup�ration des donn�e valid�es
+        //Récupération des données validées
         $validated = $validator->validated();
 
-        //Si une image a �t� fournie au formulaire pour la 1ere image
+        //Si une image a été fournie au formulaire pour la 1ere image
         if(isset($validated['image']) && !isset($validated['image2'])){
 
             //Suppression de l'ancienne image
@@ -151,27 +154,27 @@ class TroisiemeBanniereController extends Controller
 
         }
 
-        //Si une image a �t� fournie au formulaire pour la deuxieme image
+        //Si une image a été fournie au formulaire pour la deuxieme image
         if(!isset($validated['image']) && isset($validated['image2'])){
 
             //Suppression de l'image actuelle
             $troisiemeBanniere->deleteImage2();
 
-            //Enregistrement au cloud et r�cup�ration de l'url
+            //Enregistrement au cloud et récupération de l'url
             $updatedUrl = cloudinary()->upload($validated['image2']->getRealPath())->getSecurePath();
 
             //On enregistre la nouvelle url
             $troisiemeBanniere->url_image_2 = $updatedUrl;
         }
 
-        //Si les 2 images ont �t� envoy�es au formulaire
+        //Si les 2 images ont été envoyées au formulaire
         if(isset($validated['image']) && isset($validated['image2'])){
 
             //On supprime les images existantes
             $troisiemeBanniere->deleteImage1();
             $troisiemeBanniere->deleteImage2();
 
-            //On enregistre les nouvelles images et on r�cup�re les urls
+            //On enregistre les nouvelles images et on récupère les urls
             $updatedUrl = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
             $updatedUrl2 = cloudinary()->upload($validated['image2']->getRealPath())->getSecurePath();
 
@@ -194,12 +197,15 @@ class TroisiemeBanniereController extends Controller
     public function updateOnline( TroisiemeBanniere $troisiemeBanniere)
     {
         $all = TroisiemeBanniere::all();
+
+        //On passe toutes les entrées à 0
         if(isset($all) && sizeof($all) > 0)
         foreach ($all as $item){
             $item->online = "0";
             $item->save();
         }
 
+        //On passe l'entrée en cours à 1
         $troisiemeBanniere->online = 1;
         $troisiemeBanniere->save();
 
@@ -215,10 +221,11 @@ class TroisiemeBanniereController extends Controller
      */
     public function destroy(TroisiemeBanniere $troisiemeBanniere)
     {
-        //Suppression des images sur le cloud
+        //Suppression des images sur le cloud, voir model
         $troisiemeBanniere->deleteImage1();
         $troisiemeBanniere->deleteImage2();
 
+        //Suppression en base
         $delete = $troisiemeBanniere->delete();
         if(!$delete){
             abort(404);

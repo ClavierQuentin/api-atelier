@@ -4,14 +4,16 @@
 
     <div class="container">
 
+        {{-- Formulaire d'édition --}}
         <form class="custom-form" action="{{ route('premiereBanniere.update',['premiereBanniere'=>$premiereBanniere]) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
             <div class="form-group mt-2">
 
+                {{-- Formulaire titre --}}
                 <label for="titre">
-                    Titre principal
+                    Titre
                 </label>
                 <input type="text" name="titre" id="titre" class="form-control" value = "{{ $premiereBanniere->titre }}">
 
@@ -19,6 +21,7 @@
 
             <div class="form-group mt-2">
 
+                {{-- Editeur de texte --}}
                 <label for="editeur">
                     Texte d'accueil
                 </label>
@@ -35,10 +38,12 @@
                 {{-- Si une image est enregistrée en base on l'affiche --}}
                 @if(isset($premiereBanniere->url_image))
                     <div>
+                        {{-- Image --}}
                         <img class="mx-3 mb-3" height="200px" src="{{ $premiereBanniere->url_image }}" alt="Image d'illustration" title="Image actuelle">
                     </div>
                 @endif
 
+                {{-- Formulaire image --}}
                 <input type="file" name="image" id="image" class="form-control" accept="image/*">
             </div>
 

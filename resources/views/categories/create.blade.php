@@ -10,6 +10,7 @@
 
             <div class="form-goup m-2">
 
+                {{-- Formulaire pour le nom de la catégorie --}}
                 <label for="nom_categorie">
                     Nom de la catégorie
                 </label>
@@ -23,6 +24,7 @@
 
             <div class="form-group m-2">
 
+                {{-- Formulaire pour l'image --}}
                 <label for="image">
                     Image d'illustration
                 </label>
@@ -38,6 +40,7 @@
 
             <div class="form-group m-3">
 
+                {{-- Checkbox pour mettre sur la page d'accueil du site vitrine --}}
                 <div class="form-check">
                     <input type="checkbox" name="isAccueil" id="isAccueil" class="form-check-input"  value = "1">
                     <label for="isAccueil" class="form-check-label">Mettre en avant sur l'accueil</label>

@@ -8,6 +8,7 @@
 
         <div class="form-group mt-2">
 
+            {{-- Formulaire pour le titre de la newsletter --}}
             <label for="titre">Titre de la campagne d'email</label>
             <input class="form-control @error('titre') is-invalid @enderror" value="{{ old('titre') }}" type="text" name="titre" id="titre">
 
@@ -19,6 +20,7 @@
 
         <div class="form-group mt-2">
 
+            {{-- Editeur de texte --}}
             <label for="editeur">Message de la campagne</label>
             <textarea name="body" id="editeur" rows="30" class="@error('body') is-invalid @enderror">{{ old('body') }}</textarea>
 

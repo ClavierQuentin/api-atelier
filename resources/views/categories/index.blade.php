@@ -60,6 +60,7 @@
 
                     <div class="card-footer">
 
+                        {{-- Lien pour afficher les produits de la catégorie (categorie_id en paramètre d'url) --}}
                         <a href="{{ route('categorie.produits',['categorie'=>$categorie]) }}" class="nav-link">Voir les produits affiliés</a>
 
                     </div>

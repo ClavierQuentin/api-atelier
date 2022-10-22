@@ -25,11 +25,13 @@ class PremiereBanniere extends Model
     //Fonction pour supprimer les images dans le cloud
     public function deleteImage()
     {
-        //On rÈcupËre le nom de l'image via l'url
-        $urlImage = explode("/", $this->url_image);
-        $publicId = $urlImage[count($urlImage)-1];
-        //On enlËve l'extension
-        $publicName = explode(".", $publicId)[0];
+        //On r√©cup√®re le nom de l'image en d√©composant l'url
+        $fileName = explode("/", $this->url_image)[count($this->url_image)-1];
+
+        // $publicId = $urlImage[count($urlImage)-1];
+
+        //On enl√®ve l'extension
+        $publicName = explode(".", $fileName)[0];
 
         //Suppresion sur le cloud
         return $result = Cloudinary::destroy($publicName);

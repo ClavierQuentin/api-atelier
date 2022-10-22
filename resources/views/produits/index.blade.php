@@ -65,6 +65,7 @@
 
                         </div>
 
+                        {{-- Tarif --}}
                         <div class="card-footer">
                             <p>
                                 Tarif indiqué : {{ $produit->prix_produit }}€

@@ -33,6 +33,7 @@ class PremiereBanniereController extends Controller
                         ->where('online', '=', '1')
                         ->first();
 
+        //On contrôle la présence des données
         if(isset($premiereBanniere)){
             return response()->json($premiereBanniere, 200);
         }
@@ -118,10 +119,10 @@ class PremiereBanniereController extends Controller
             };
         };
 
-        //R�cup�ration des donn�e valid�es
+        //Récupération des données validées
         $validated = $validator->validated();
 
-        //Si une image a �t� fournie au formulaire
+        //Si une image a été fournie au formulaire
         if(isset($validated['image'])){
 
             //Suppression de l'ancienne image
@@ -150,6 +151,7 @@ class PremiereBanniereController extends Controller
     {
         $all = PremiereBanniere::all();
 
+        //On passe toutes les entrées à 0
         if(isset($all)){
             foreach ($all as $item){
                 $item->online = "0";
@@ -157,6 +159,7 @@ class PremiereBanniereController extends Controller
             }
         }
 
+        //On passe l'entrée séléctionnée à 1 et on sauvegarde
         $premiereBanniere->online = 1;
         $response = $premiereBanniere->save();
 
@@ -175,9 +178,10 @@ class PremiereBanniereController extends Controller
      */
     public function destroy(PremiereBanniere $premiereBanniere)
     {
-        //Suppression de l'image sur le cloud
+        //Suppression de l'image sur le cloud, voir Model
         $premiereBanniere->deleteImage();
 
+        //Suppression en BDD
         $delete = $premiereBanniere->delete();
 
         if(!$delete){
@@ -186,22 +190,5 @@ class PremiereBanniereController extends Controller
         return redirect('premiere-banniere');
     }
 
-        /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\PremiereBanniere  $premiereBanniere
-     * @return \Illuminate\Http\Response
-     */
-    public function show(PremiereBanniere $premiereBanniere)
-    {
-        // $premiereBanniere = DB::table('premiere_bannieres')
-        //                 ->where('online', '=', '1')
-        //                 ->first();
-
-        // if(isset($premiereBanniere)){
-        //     return response()->json($premiereBanniere, 200);
-        // }
-        // return response()->json(['status'=> false], 404);
-    }
 
 }

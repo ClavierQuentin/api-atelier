@@ -3,11 +3,13 @@
 
     <div class="container">
 
+        {{-- Formulaire de création --}}
         <form class="custom-form" action="{{ route('produit.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div class="form-group m-3">
 
+                {{-- Formulaire pour le nom --}}
                 <label for="nom_produit">
                     Nom du produit
                 </label>
@@ -21,10 +23,11 @@
 
             <div class="form-group m-3">
 
-                <label for="description_courte_produit">
+                {{-- Editeur de texte pour description courte --}}
+                <label for="editeur">
                     Courte description
                 </label>
-                <textarea class="form-control @error('description_courte_produit') is-invalid @enderror" name="description_courte_produit" id="description_courte_produit" cols="10" rows="5">{{ old('description_courte_produit') }}</textarea>
+                <textarea class="form-control @error('description_courte_produit') is-invalid @enderror" name="description_courte_produit" id="editeur" cols="10" rows="5">{{ old('description_courte_produit') }}</textarea>
 
                 @error('description_courte_produit')
                     <div class="alert alert-danger m-1">{{ $message }}</div>
@@ -37,7 +40,8 @@
                 <label for="editeur">
                     Description longue
                 </label>
-                
+
+                {{-- Editeur de texte description longue --}}
                 <textarea id="editeur" class="form-control @error('description_longue_produit') is-invalid @enderror" name="description_longue_produit"  cols="10" rows="10">{{ old('description_longue_produit') }}</textarea>
 
                 @error('description_longue_produit')
@@ -48,6 +52,7 @@
 
             <div class="form-group m-3">
 
+                {{-- Formulaire tarif --}}
                 <label for="prix_produit">
                     Prix du produit
                 </label>
@@ -61,6 +66,7 @@
 
             <div class="form-group m-3">
 
+                {{-- Formulaire image --}}
                 <label for="image">
                     Image d'illustration
                 </label>
@@ -70,6 +76,7 @@
 
             <div class="form-group m-3">
 
+                {{-- Select pour catégorie --}}
                 <label for="categorie_id">
                     Catégorie du produit
                 </label>
@@ -77,8 +84,10 @@
 
                     <option value="0">Choisir une catégorie</option>
 
+                    {{-- On boucle les catégories --}}
                     @foreach ($categories as $categorie)
 
+                        {{-- Si l'id de la catégorie est dans l'url, on passe l'option en selected lorsque qu'on égalité sur la liste --}}
                         <option @if(isset($_GET['categorie']) && $_GET['categorie'] == $categorie->id) selected @endif  value="{{ $categorie->id }}">{{ $categorie->nom_categorie }}</option>
 
                         @endforeach
@@ -92,6 +101,7 @@
 
             <div class="form-group m-3">
 
+                {{-- Formulaire pour URL --}}
                 <label for="url_externe">
                     URL menant au site marchand s'il existe
                 </label>
@@ -105,6 +115,7 @@
 
             <div class="form-group m-3">
 
+                {{-- Checkbox pour mise en avant sur carrousel page d'accueil site vitrine --}}
                 <div class="form-check">
                     <input type="checkbox" name="isAccueil" id="isAccueil" class="form-check-input"  value = "1">
                     <label for="isAccueil" class="form-check-label">Mettre en avant sur la bannière de l'accueil</label>

@@ -1,3 +1,5 @@
+{{-- Template pour formulaire de suppression des addresse email coté client --}}
+
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -17,7 +19,7 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
-    
+
 </head>
 
 <body>

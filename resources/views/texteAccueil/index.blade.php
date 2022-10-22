@@ -4,6 +4,7 @@
 
     <div class="container">
 
+        {{-- Lien formulaire création --}}
         <ul class="navbar-nav me-auto">
             <li class="nav-item">
                 <a href="{{ route('texteAccueil.create') }}" class="nav-link border d-inline m-2 p-1">Créer des nouvelles entrées</a>
@@ -13,6 +14,7 @@
         {{-- Controle du nombre de données en base --}}
         @if(isset($data) && sizeof($data) > 0)
 
+            {{-- tableau --}}
             <table class="table m-1">
 
                 <thead>
@@ -45,20 +47,26 @@
                     @foreach ($data as $item)
 
                         <tr>
+                            {{-- ID --}}
                             <td>{{ $item->id }}</td>
 
+                            {{-- Titre + lien édition --}}
                             <td><a href="{{ route('texteAccueil.edit',['texteAccueil'=>$item]) }}"class="nav-link">{{ $item->titre_accueil }}</a></td>
 
+                            {{-- Date création --}}
                             <td>{{ $item->created_at->format('d/m/Y h:i:s') }}</td>
 
+                            {{-- Date MAJ --}}
                             <td>{{ $item->updated_at->format('d/m/Y h:i:s') }}</td>
 
+                            {{-- Icone + lien édition --}}
                             <td>
                                 <a href="{{ route('texteAccueil.edit',['texteAccueil'=>$item]) }}"class="nav-link">
                                     <img  src="{{ asset('assets/edit.svg') }}" alt="icone d'édition" title="Mettre à jour">
                                 </a>
                             </td>
 
+                            {{-- Icone + formulaire suppression --}}
                             <td>
                                 <form action="{{ route('texteAccueil.delete',['texteAccueil'=>$item]) }}" method="POST">
                                     @csrf
@@ -67,6 +75,7 @@
                                 </form>
                             </td>
 
+                            {{-- Bouton mise en avant site vitrine --}}
                             <td>
                                 <form action="{{ route('texteAccueil.online',['texteAccueil'=>$item]) }}" method="POST">
                                     @csrf
@@ -81,6 +90,7 @@
 
             </table>
 
+            {{-- Pagination --}}
             {!! $data->links() !!}
 
         @else

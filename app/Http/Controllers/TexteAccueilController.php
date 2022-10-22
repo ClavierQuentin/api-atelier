@@ -24,19 +24,21 @@ class TexteAccueilController extends Controller
         return view('texteAccueil.index',['data'=>$data]);
     }
 
-    //Fonction pour l'acc�s via API
+    //Fonction pour l'accès via API
     public function indexApi()
     {
         $texteAccueil = DB::table('texte_accueils')
                         ->where('online', '=', 1)
                         ->first();
+
+        //On contrôle la présence des données
         if(isset($texteAccueil)){
             return response()->json($texteAccueil, 200);
         }
         return response()->json(['status' => false], 404);
     }
 
-    //Affichage du formulaire de cr�ation
+    //Affichage du formulaire de création
     public function create()
     {
         return view('texteAccueil.create');
@@ -51,7 +53,7 @@ class TexteAccueilController extends Controller
     public function store(StoreTexteAccueilRequest $request)
     {
         $texte = new TexteAccueil($request->validated());
-        // $texte->online = 0;
+
         $texte = Auth::user()->texteAccueils()->save($texte);
 
         if($texte){
@@ -92,8 +94,9 @@ class TexteAccueilController extends Controller
     //Fonction pour mettre a jour le booleen en DB pour mettre en avant une data
     public function updateOnline(UpdateTexteAccueilRequest $request, TexteAccueil $texteAccueil)
     {
-        //On r�cup�re toutes les donn�es pour changer la valeur de Online � 0
+        //On récupère toutes les données pour changer la valeur de Online à 0
         $all = TexteAccueil::all();
+
         if(isset($all) && sizeof($all) > 0){
             foreach ($all as $item){
                 $item->online = "0";
@@ -101,7 +104,7 @@ class TexteAccueilController extends Controller
             }//foreach
         }//if
 
-        //On change la valeur du mod�le en cours de s�lection
+        //On change la valeur du modèle en cours de sélection
         $texteAccueil->online = 1;
         $response = $texteAccueil->save();
 

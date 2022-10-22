@@ -4,13 +4,15 @@
 
     <div class="container">
 
+        {{-- Formulaire de création --}}
         <form class="custom-form" action="{{ route('premiereBanniere.store') }}" method="POST"  enctype="multipart/form-data">
             @csrf
 
             <div class="form-group mt-2">
 
+                {{-- Formulaire titre  --}}
                 <label for="titre">
-                    Titre principal
+                    Titre
                 </label>
                 <input type="text" name="titre" id="titre" class="form-control @error('titre') is-invalid @enderror" value="{{ old('titre') }}">
 
@@ -22,6 +24,7 @@
 
             <div class="form-group mt-2">
 
+                {{-- Editeur de texte --}}
                 <label for="editeur">
                     Texte
                 </label>
@@ -35,6 +38,7 @@
 
             <div class="form-group mt-2">
 
+                {{-- Formulaire d'envoie image --}}
                 <label for="image">
                     Image
                 </label>

@@ -11,6 +11,7 @@
 
             <div class="form-group mt-2">
 
+                {{-- Titre principal --}}
                 <label for="titre_principal">
                     Titre principal
                 </label>
@@ -20,16 +21,19 @@
 
             <div class="form-group mt-2">
 
+                {{-- Titre 1 --}}
                 <label for="titre_1">
                     Premier titre
                 </label>
                 <input type="text" class="form-control " name="titre_1" id="titre_1" value="{{ $troisiemeBanniere->titre_1 }}">
 
+                {{-- Editeur de texte pour texte 1 --}}
                 <label for="editeur">
                     Premier texte
                 </label>
                 <textarea class="form-control" name="texte_1" id="editeur" cols="10" rows="5">{{ $troisiemeBanniere->texte_1 }}</textarea>
 
+                {{-- Image 1 --}}
                 <label for="image">
                     Image
                 </label>
@@ -41,22 +45,26 @@
 
                 @endif
 
+                {{-- Formulaire File --}}
                 <input type="file" name="image" id="image" class="form-control" accept="image/*">
 
             </div>
 
             <div class="form-group mt-2">
 
+                {{-- Titre 2 --}}
                 <label for="titre_2">
                     Deuxième titre
                 </label>
                 <input type="text" class="form-control " name="titre_2" id="titre_2" value="{{ $troisiemeBanniere->titre_2 }}">
 
+                {{-- Editeur de texte pour texte 2 --}}
                 <label for="editeur">
                     Deuxième texte
                 </label>
                 <textarea class="form-control" name="texte_2" id="editeur" cols="10" rows="5">{{ $troisiemeBanniere->texte_2 }}</textarea>
 
+                {{-- Image 2 --}}
                 <label for="image2">
                     Image
                 </label>
@@ -68,6 +76,7 @@
 
                 @endif
 
+                {{-- Formulaire FILE --}}
                 <input type="file" name="image2" id="image2" class="form-control" accept="image/*">
 
             </div>

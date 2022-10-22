@@ -14,6 +14,7 @@
         {{-- Controle du nombre d'entrée en base --}}
         @if(isset ($newsletters) && sizeof($newsletters) > 0)
 
+            {{-- Tableau --}}
             <table class="table m-1">
 
                 <thead>
@@ -38,14 +39,18 @@
                     @foreach ($newsletters as $item)
 
                         <tr>
+                            {{-- ID --}}
                             <td>{{ $item->id }}</td>
 
+                            {{-- Titre + lien détail --}}
                             <td>
                                 <a href="{{ route('newsletter.show',['newsletter'=>$item->id]) }}"class="nav-link">{{ $item->titre }}</a>
                             </td>
 
+                            {{-- Date de création --}}
                             <td>{{ date('d/m/Y h:i:s', strtotime($item->created_at))  }}</td>
 
+                            {{-- Icone + formulaire de suppression --}}
                             <td>
                                 <form action="{{ route('newsletter.delete',['newsletter'=>$item->id]) }}" method="POST">
                                     @csrf
@@ -53,8 +58,6 @@
                                     <button class="trash"><img  src="{{ asset('assets/trash.svg') }}" alt="Icone corbeille" title="Supprimer"></button>
                                 </form>
                             </td>
-
-
 
                         </tr>
 
@@ -64,6 +67,7 @@
 
             </table>
 
+            {{-- Pagination --}}
             {!! $newsletters->links() !!}
 
         @else

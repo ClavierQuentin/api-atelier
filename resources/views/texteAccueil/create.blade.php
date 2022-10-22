@@ -8,9 +8,10 @@
         <form class="custom-form" action="{{ route('texteAccueil.store') }}" method="POST">
             @csrf
 
+            {{-- Formulaire titre --}}
             <div class="form-group mt-2">
                 <label for="titre_accueil">
-                    Titre principal
+                    Titre
                 </label>
                 <input type="text" name="titre_accueil" id="titre_accueil" class="form-control @error('titre_accueil') is-invalid @enderror" value="{{ old('titre_accueil') }}">
 
@@ -22,6 +23,7 @@
 
             <div class="form-group mt-2">
 
+                {{-- Editeur de texte --}}
                 <label for="editeur">
                     Texte d'accueil
                 </label>
@@ -35,6 +37,7 @@
 
             <div class="form-group mt-2">
 
+                {{-- Formulaire pour titre bannière catégories --}}
                 <label for="titre_categories">
                     Titre champs Catégories
                 </label>

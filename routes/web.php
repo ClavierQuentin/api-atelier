@@ -157,6 +157,7 @@ Route::middleware('auth','role:admin')->group(function(){
 
 }); //Sortie du group middleware
 
-Route::get('edit-email',[ListEmailController::class, 'edit'])->name('email.edit');
+/**---------------------ROUTES SANS AUTH--------------------- */
+Route::get('edit-email',[ListEmailController::class, 'edit'])->name('email.edit'); //Route pour le formulaire pour supprimer adresse email
 
 Route::post('delete-email',[ListEmailController::class, 'destroy'])->name('email.delete'); //Route pour suppression email de newsletter

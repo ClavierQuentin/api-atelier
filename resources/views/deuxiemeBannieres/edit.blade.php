@@ -12,8 +12,9 @@
             <div class="form-group mt-2">
 
                 <label for="titre">
-                    Titre principal
+                    Titre
                 </label>
+                {{-- Formulaire pour le titre --}}
                 <input type="text" name="titre" id="titre" class="form-control" value = "{{ $deuxiemeBanniere->titre }}">
 
             </div>
@@ -23,6 +24,7 @@
                 <label for="editeur">
                     Texte d'accueil
                 </label>
+                {{-- Editeur de texte --}}
                 <textarea class="form-control" name="texte" id="editeur" cols="20" rows="5">{{ $deuxiemeBanniere->texte }}</textarea>
 
             </div>
@@ -44,15 +46,11 @@
 
                             <div class="border border-info p-1 m-2 " style="position: relative;">
 
+                                {{-- Image --}}
                                 <img height="200px" src="{{ $url }}" alt="Image d'illustration" title="Image actuelle">
 
-                                {{-- Bouton de suppression d'une image --}}
-                                {{-- <form action="{{ route('delete.image',['image'=>$deuxiemeBanniere->getNameFromUrl($url),'deuxiemeBanniere'=>$deuxiemeBanniere]) }}" method='POST'> --}}
-                                    {{-- @csrf
-                                    @method('put') --}}
-
+                                    {{-- Lien pour suppression de l'image séléctionnée --}}
                                     <a href="{{ url('deuxieme-banniere/delete-image/') }}/{{ $deuxiemeBanniere->id }}/{{ $deuxiemeBanniere->getNameFromUrl($url) }} " class="trash custom-btn"><img  src="{{ asset('assets/trash.svg') }}" alt="icone corbeille" title="Supprimer"></a>
-                                {{-- </form> --}}
 
                             </div>
 
@@ -62,10 +60,12 @@
 
                 @endif
 
+                {{-- Formulaire pour plusieurs images --}}
                 <input type="file" name="image[]" id="image" class="form-control" accept="image/*" multiple>
 
                 <div class="form-check">
 
+                    {{-- Checkbox pour supprimer toutes les images --}}
                     <input type="checkbox" name="deleteAllImages" id="deleteAllImages" class="form-check-input"  value="true">
                     <label for="deleteAllImages" class="form-check-label">
                         Supprimer toutes les images actuelles?

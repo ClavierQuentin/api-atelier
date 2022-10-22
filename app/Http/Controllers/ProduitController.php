@@ -25,12 +25,14 @@ class ProduitController extends Controller
     {
         $produits = Produit::all();
 
+        //On controle une présence des données
         if(isset($produits) && sizeof($produits) > 0){
             return response()->json($produits, 200);
         }
         return response()->json(['status'=>false],404);
     }
 
+    //Listing de tous les produits
     public function index()
     {
         $produits = Produit::all();
@@ -38,13 +40,15 @@ class ProduitController extends Controller
     }
 
 
+    //Formulaire de création
     public function create()
     {
         //On récupère les catégories pour les affiches dans le select lors de la création d'un produit
         $categories = Categorie::all();
-        $_name = "description_longue_produit";
+
+        //On controle que les catégories existent
         if(isset($categories) && sizeof($categories) > 0){
-            return view('produits.create', compact('categories','_name'));
+            return view('produits.create', compact('categories'));
         }
         abort(404);
     }
@@ -107,7 +111,7 @@ class ProduitController extends Controller
         //Contrôle de la présence d'une url externe remplie au formulaire
         if($request['url_externe']){
             $validatorUrl = Validator::make($request->all(),[
-                'url_externe'=>'string|url'
+                'url_externe'=>'url'
             ]);
             if($validatorUrl->fails()){
                 return response()->json([
@@ -150,8 +154,9 @@ class ProduitController extends Controller
     public function edit(Produit $produit)
     {
         //On récupère les catégories pour les affiches dans le select lors de la création d'un produit
-        $_name = "description_longue_produit";
          $categories = Categorie::all();
+
+         //On controle la présence des données
          if(isset($categories) && sizeof($categories) > 0){
             return view('produits.edit', compact('produit','categories','_name'));
         }
@@ -216,7 +221,7 @@ class ProduitController extends Controller
         //Contrôle de la présence d'une url externe remplie au formulaire
         if($request['url_externe']){
             $validatorUrl = Validator::make($request->all(),[
-                'url_externe'=>'string|url'
+                'url_externe'=>'url'
             ]);
             if($validatorUrl->fails()){
                 return response()->json([
@@ -248,7 +253,7 @@ class ProduitController extends Controller
      */
     public function destroy(Produit $produit)
     {
-        // //Suppression de l'image sur le cloud
+        // //Suppression de l'image sur le cloud, voir model
         $produit->deleteImage();
 
         //Suppression en DB
@@ -268,8 +273,8 @@ class ProduitController extends Controller
                     ->where('isAccueil', '=', 1)
                     ->get();
 
-        if(isset($produits) && sizeof($produits) > 0)
-        {
+        //On controle la présence des données
+        if(isset($produits) && sizeof($produits) > 0){
             return response()->json($produits, 200);
         }
         return response()->json(['status' => false], 404);
@@ -286,6 +291,7 @@ class ProduitController extends Controller
                     ->orderByDesc('created_at')
                     ->get();
 
+        //On controle la présence des données
         if(isset($produits) && sizeof($produits) > 0){
             return response()->json($produits,200);
         }

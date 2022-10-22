@@ -20,6 +20,7 @@
         {{-- Controle du nombre d'entrées en base --}}
         @if(isset($deuxiemeBannieres) && sizeof($deuxiemeBannieres) > 0)
 
+            {{-- Tableau --}}
             <table class="table m-1">
 
                 <thead>
@@ -52,22 +53,28 @@
                     @foreach ($deuxiemeBannieres as $item)
 
                         <tr>
+                            {{-- ID --}}
                             <td>{{ $item->id }}</td>
 
+                            {{-- Titre + lien pour édition --}}
                             <td>
                                 <a href="{{ route('deuxiemeBanniere.edit',['deuxiemeBanniere'=>$item]) }}"class="nav-link">{{ $item->titre }}</a>
                             </td>
 
+                            {{-- Date de création --}}
                             <td>{{ date('d/m/Y h:i:s', strtotime($item->created_at))  }}</td>
 
+                            {{-- Date de MAJ --}}
                             <td>{{ date('d/m/Y h:i:s', strtotime($item->updated_at)) }}</td>
 
+                            {{-- Icone + lien pour édition --}}
                             <td>
                                 <a href="{{ route('deuxiemeBanniere.edit',['deuxiemeBanniere'=>$item]) }}"class="nav-link">
                                     <img  src="{{ asset('assets/edit.svg') }}" alt="icone d'édition" title="Mettre à jour">
                                 </a>
                             </td>
 
+                            {{-- Icone + formulaire de suppression --}}
                             <td>
                                 <form action="{{ route('deuxiemeBanniere.delete',['deuxiemeBanniere'=>$item]) }}" method="POST">
                                     @csrf
@@ -76,7 +83,7 @@
                                 </form>
                             </td>
 
-
+                            {{-- Bouton pour mise en avant sur le site --}}
                             <td>
                                 <form action="{{ route('deuxiemeBanniere.online',['deuxiemeBanniere'=>$item]) }}" method="POST">
                                     @csrf
@@ -92,6 +99,7 @@
 
             </table>
 
+            {{-- Pagination --}}
             {!! $deuxiemeBannieres->links() !!}
 
         @else

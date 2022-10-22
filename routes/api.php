@@ -64,10 +64,6 @@ Route::get('produits/{produit}/all',[ProduitController::class, 'sameProduct']); 
 
 /*----------------------------------Autres routes-------------------------------*/
 
-Route::post('recaptcha/{token}',[RecaptchaController::class, 'googleResponse']); //Route repatcha pour contrôle au formulaire de contact
-
 Route::post('message',[MessageController::class,'store']); //Route pour reception de message et gestion d'envoie de l'email
-
-// Route::get('send',[NewsletterController::class,'sendEmails']);
 
 Route::post('add-email', [ListEmailController::class, 'store']); //Route pour l'enregistrement d'une adresse mail

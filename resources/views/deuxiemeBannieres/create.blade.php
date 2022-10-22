@@ -11,8 +11,9 @@
             <div class="form-group mt-2">
 
                 <label for="titre">
-                    Titre principal
+                    Titre
                 </label>
+                {{-- Formulaire pour le titre  de la banniere --}}
                 <input type="text" name="titre" id="titre" class="form-control @error('titre') is-invalid @enderror" value="{{ old('titre') }}">
 
                 @error('titre')
@@ -26,6 +27,7 @@
                 <label for="editeur">
                     Texte
                 </label>
+                {{-- Editeur de texte --}}
                 <textarea class="form-control @error('texte') is-invalid @enderror" name="texte" id="editeur" cols="10" rows="5">{{ old('texte') }}</textarea>
 
                 @error('texte')
@@ -39,7 +41,7 @@
                 <label for="image">
                     Images
                 </label>
-
+                {{-- Formulaire pour l'image --}}
                 <input type="file" name="image[]" id="image" class="form-control" accept="image/*" multiple>
 
             </div>

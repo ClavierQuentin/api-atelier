@@ -10,6 +10,7 @@
 
             <div class="form-group mt-2">
 
+                {{-- Titre principal --}}
                 <label for="titre_principal">
                     Titre principal
                 </label>
@@ -23,6 +24,7 @@
 
             <div class="form-group mt-2">
 
+                {{-- Titre 1 --}}
                 <label for="titre_1">
                     Premier titre
                 </label>
@@ -32,6 +34,7 @@
                     <div class="alert alert-danger m-1">{{ $message }}</div>
                 @enderror
 
+                {{-- Editeur de texte pour texte 1 --}}
                 <label for="editeur">
                     Premier texte
                 </label>
@@ -41,6 +44,7 @@
                     <div class="alert alert-danger m-1">{{ $message }}</div>
                 @enderror
 
+                {{-- Image 1 --}}
                 <label for="image">
                     Image
                 </label>
@@ -50,6 +54,7 @@
 
             <div class="form-group mt-2">
 
+                {{-- Titre 2 --}}
                 <label for="titre_2">
                     Deuxième titre
                 </label>
@@ -59,6 +64,7 @@
                     <div class="alert alert-danger m-1">{{ $message }}</div>
                 @enderror
 
+                {{-- Editeur de texte pour texte 2 --}}
                 <label for="editeur">
                     Deuxième texte
                 </label>
@@ -68,6 +74,7 @@
                     <div class="alert alert-danger m-1">{{ $message }}</div>
                 @enderror
 
+                {{-- Image 2 --}}
                 <label for="image2">
                     Image
                 </label>
