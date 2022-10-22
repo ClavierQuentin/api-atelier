@@ -49,7 +49,7 @@
                                 {{-- Image --}}
                                 <img height="200px" src="{{ $url }}" alt="Image d'illustration" title="Image actuelle">
 
-                                    {{-- Lien pour suppression de l'image séléctionnée --}}
+                                    {{-- Lien + icone pour suppression de l'image séléctionnée --}}
                                     <a href="{{ url('deuxieme-banniere/delete-image/') }}/{{ $deuxiemeBanniere->id }}/{{ $deuxiemeBanniere->getNameFromUrl($url) }} " class="trash custom-btn"><img  src="{{ asset('assets/trash.svg') }}" alt="icone corbeille" title="Supprimer"></a>
 
                             </div>

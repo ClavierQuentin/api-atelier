@@ -41,7 +41,9 @@
                 {{-- Si une image existe en base, on l'affiche --}}
                 @if(isset($troisiemeBanniere->url_image))
 
-                    <img class="mx-3 mb-3" height="200px" src="{{ $troisiemeBanniere->url_image }}" alt="Image d'illustration" title="Image actuelle">
+                    <div class="border border-info p-1 m-2">
+                        <img class="mx-3 mb-3" height="200px" src="{{ $troisiemeBanniere->url_image }}" alt="Image d'illustration" title="Image actuelle">
+                    </div>
 
                 @endif
 

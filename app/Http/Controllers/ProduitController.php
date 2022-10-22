@@ -261,7 +261,7 @@ class ProduitController extends Controller
         if(!$delete){
             abort(404);
         }
-        return view('produits.index');
+        return redirect('produit');
 
     }
 

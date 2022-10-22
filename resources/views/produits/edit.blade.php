@@ -75,7 +75,9 @@
                 {{-- Si une image est enregistrée en base, on l'affiche --}}
                 @if(isset($produit->url_image_produit))
                     {{-- Image --}}
-                    <img src="{{ $produit->url_image_produit }}" alt="Image d'illustration" height="200" class=" border-info">
+                    <div class="border border-info p-1 m-2">
+                        <img src="{{ $produit->url_image_produit }}" alt="Image d'illustration" height="200" class=" border-info">
+                    </div>
                 @endif
 
                 {{-- Input file --}}

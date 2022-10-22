@@ -27,7 +27,12 @@
 
                 {{-- Si une image est stockée en base, on l'affiche --}}
                 @if(isset($categorie->url_image_categorie))
-                    <img src="{{ $categorie->url_image_categorie }}" alt="Image d'illustration" height="200" class=" border-info">
+
+                    {{-- Image --}}
+                    <div class="border border-info p-1 m-2">
+                        <img src="{{ $categorie->url_image_categorie }}" alt="Image d'illustration" height="200" class=" border-info">
+                    </div>
+
                 @endif
 
                 {{-- Fomulaire pour l'image --}}

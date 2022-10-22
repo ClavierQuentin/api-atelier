@@ -3,6 +3,9 @@
 @section('content')
 
     <div class="container">
+
+        <h2 class="text-info">{{ $categorie->nom_categorie }}</h2>
+
         <a href="{{ route('produit.create',['categorie'=>$categorie]) }}" class="btn btn-success  m-3">Ajouter un nouveau produit</a>
 
         {{-- Fenetre de message d'erreur --}}
