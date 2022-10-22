@@ -186,7 +186,7 @@ class DeuxiemeBanniereController extends Controller
     public function deleteImage(DeuxiemeBanniere $deuxiemeBanniere, $image)
     {
 
-        //On récupère toutes les urls et on les parcours
+        //On récupère toutes les urls, on les stock et on les parcours
         $array = $deuxiemeBanniere->getArrayFromUrlsImages();
 
         for($i = 0; $i < sizeof($array); $i++){
@@ -195,14 +195,14 @@ class DeuxiemeBanniereController extends Controller
             $publicId = "";
             $fileName = "";
 
-            //On décompose l'url stockée en DB et on récupère le nom du fichier en récupérant le dernier élément du tableau sorti par la méthode explode()
-            $fileName = explode("/", $array[$i])[count($array[$i])-1];
+            //On décompose l'url stockée en DB
+            $fileName = explode("/", $array[$i]);
 
             //On récupère  le nom de l'image dans l'url
-            // $publicId = $name[count($name)-1];
+            $publicId = $fileName[count($fileName)-1];
 
             //On récupère le nom sans l'extension
-            $publicName = explode(".", $fileName)[0];
+            $publicName = explode(".", $publicId)[0];
 
             //Comparaison avec les valeurs en DB
             if($publicId == $image){

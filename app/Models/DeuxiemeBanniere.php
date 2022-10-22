@@ -32,13 +32,13 @@ class DeuxiemeBanniere extends Model
     //Fonction pour récuper le nom du fichier à partir de l'url stockée en base
     public function getNameFromUrl($url)
     {
-        //On décompose l'url stockées en DB et on récupère le nom du fichier
-        $fileName = explode("/", $url)[count($url)-1];
+        //On décompose l'url stockée en DB
+        $fileName = explode("/", $url);
 
         //On récupère  le nom de l'image avec l'extension
-        // $publicName = $urlImage[count($urlImage)-1];
+        $publicName = $fileName[count($fileName)-1];
 
-        return $fileName;
+        return $publicName;
     }
 
     // Fonction pour supprimer toutes les images stockées en base sur le cloud

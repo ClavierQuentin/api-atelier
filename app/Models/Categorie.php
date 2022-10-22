@@ -31,11 +31,14 @@ class Categorie extends Model
     //Fonction pour supprimer les images dans le cloud
     public function deleteImage()
     {
-        //On récupère le nom de l'image via l'url
-        $fileName = explode("/", $this->url_image_categorie)[count($this->url_image_categorie)-1];
+        //On décompose l'url
+        $fileName = explode("/", $this->url_image_categorie);
+
+        //On récupère le nom du ficher
+        $publicId = $fileName[count($fileName)-1];
 
         //On enlève l'extension
-        $publicName = explode(".", $fileName)[0];
+        $publicName = explode(".", $publicId)[0];
 
         //Suppresion sur le cloud
         return $result = Cloudinary::destroy($publicName);

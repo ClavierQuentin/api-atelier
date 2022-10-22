@@ -28,14 +28,14 @@ class TroisiemeBanniere extends Model
     //FOnction pour supprimer la premiere image
     public function deleteImage1()
     {
-        //On décompose l'url stockée en DB et on récupère le nom du fichier
-        $fileName = explode("/", $this->url_image)[count($this->url_image)-1];
+        //On décompose l'url stockée en DB
+        $fileName = explode("/", $this->url_image);
 
-        //On r�cup�re  le nom de l'image
-        // $publicId = $urlImage[count($urlImage)-1];
+        //On récupère  le nom de l'image
+        $publicId = $fileName[count($fileName)-1];
 
         //On récupère sans l'extension
-        $publicName = explode(".", $fileName)[0];
+        $publicName = explode(".", $publicId)[0];
 
         //Suppression au cloud
         return $result = Cloudinary::destroy($publicName);
@@ -44,14 +44,14 @@ class TroisiemeBanniere extends Model
         //FOnction pour supprimer la deuxieme image
         public function deleteImage2()
         {
-            //On décompose l'url stockée en DB et on récupère le nom du fichier
-            $fileName = explode("/", $this->url_image_2)[count($this->url_image_2)-1];
+        //On décompose l'url stockée en DB
+        $fileName = explode("/", $this->url_image_2);
 
-            //On r�cup�re  le nom de l'image
-            // $publicId = $urlImage[count($urlImage)-1];
+        //On récupère  le nom de l'image
+        $publicId = $fileName[count($fileName)-1];
 
-            //On récupère sans l'extension
-            $publicName = explode(".", $fileName)[0];
+        //On récupère sans l'extension
+        $publicName = explode(".", $publicId)[0];
 
             //Suppression au cloud
             return $result = Cloudinary::destroy($publicName);
