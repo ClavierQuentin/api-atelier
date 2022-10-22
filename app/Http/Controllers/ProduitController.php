@@ -158,7 +158,7 @@ class ProduitController extends Controller
 
          //On controle la présence des données
          if(isset($categories) && sizeof($categories) > 0){
-            return view('produits.edit', compact('produit','categories','_name'));
+            return view('produits.edit', compact('produit','categories'));
         }
         abort(404);
     }
