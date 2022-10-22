@@ -76,7 +76,7 @@
                     <div class="d-flex">
                         <div class="border border-info m-2 p-1">
                             {{-- Image 2--}}
-                            <img class="mx-3 mb-3" height="200px" src="{{ $troisiemeBanniere->url_image_2 }}" alt="Image d'illustration" title="Image actuelle">
+                            <img height="200px" src="{{ $troisiemeBanniere->url_image_2 }}" alt="Image d'illustration" title="Image actuelle">
                         </div>
                     </div>
 
