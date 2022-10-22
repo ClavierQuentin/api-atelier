@@ -33,16 +33,16 @@
                 </label>
                 <textarea class="form-control" name="texte_1" id="editeur" cols="10" rows="5">{{ $troisiemeBanniere->texte_1 }}</textarea>
 
-                {{-- Image 1 --}}
                 <label for="image">
                     Image
                 </label>
 
                 {{-- Si une image existe en base, on l'affiche --}}
                 @if(isset($troisiemeBanniere->url_image))
-
-                    <div class="border border-info p-1 m-2">
-                        <img class="mx-3 mb-3" height="200px" src="{{ $troisiemeBanniere->url_image }}" alt="Image d'illustration" title="Image actuelle">
+                    <div class="d-flex">
+                        <div class="border border-info p-1 m-2">
+                            <img  height="200px" src="{{ $troisiemeBanniere->url_image }}" alt="Image d'illustration" title="Image actuelle">
+                        </div>
                     </div>
 
                 @endif
@@ -66,7 +66,6 @@
                 </label>
                 <textarea class="form-control" name="texte_2" id="editeur" cols="10" rows="5">{{ $troisiemeBanniere->texte_2 }}</textarea>
 
-                {{-- Image 2 --}}
                 <label for="image2">
                     Image
                 </label>
@@ -74,7 +73,12 @@
                 {{-- Si une image existe en base, on l'affiche --}}
                 @if(isset($troisiemeBanniere->url_image_2))
 
-                    <img class="mx-3 mb-3" height="200px" src="{{ $troisiemeBanniere->url_image_2 }}" alt="Image d'illustration" title="Image actuelle">
+                    <div class="d-flex">
+                        <div class="border border-info m-2 p-1">
+                            {{-- Image 2--}}
+                            <img class="mx-3 mb-3" height="200px" src="{{ $troisiemeBanniere->url_image_2 }}" alt="Image d'illustration" title="Image actuelle">
+                        </div>
+                    </div>
 
                 @endif
 
