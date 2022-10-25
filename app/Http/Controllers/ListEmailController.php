@@ -52,6 +52,9 @@ class ListEmailController extends Controller
             if($alreadyIn == null){
                 $item = new ListEmail($validated);
 
+                //Génération d'un id unique par email
+                $item->identifiant = uniqid();
+
                 $saved = $item->save();
 
                 //Si la sauvegarde est faite, on retourne un message de succès
@@ -82,7 +85,8 @@ class ListEmailController extends Controller
         {
         //Regle de validation
         $validator = Validator::make($request->all(),[
-            'email' => 'email:rfc,dns'
+            'email' => 'email:rfc,dns',
+            'identifiant' => 'string'
         ]);
         if($validator->fails()){
             abort(500);
@@ -94,6 +98,7 @@ class ListEmailController extends Controller
         //On retrouve la donnée en BDD grace au mail donné
         $listEmail = DB::table('list_emails')
                     ->where('email', '=', $validated['email'])
+                    ->where('identifiant', '=', $validated['identifiant'])
                     ->first();
         $listEmail = ListEmail::find($listEmail->id);
 
@@ -104,5 +109,12 @@ class ListEmailController extends Controller
         return view('newsletter.delete');
        }
        abort(404);
+    }
+
+    public function edit()
+    {
+        //On récupère l'identifiant unique de la personne passé en paramètre de l'url
+        $token = $_GET['id'];
+        return view('newsletter.edit_email', compact('token'));
     }
 }

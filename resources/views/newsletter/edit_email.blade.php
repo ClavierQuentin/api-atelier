@@ -25,6 +25,8 @@
 <body>
     <form method="POST" class="custom-form" action="{{ route('email.delete') }}">
         @csrf
+        {{-- On incorpore l'id unique au formulaire, récupéré via l'url --}}
+        <input type="hidden" name="identifiant" value={{$token}}>
         <div class="form-group">
             <label for="email">Indiquez votre email</label>
             <input type="email" name="email" id="email" class="form-control">

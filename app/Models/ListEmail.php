@@ -10,7 +10,8 @@ class ListEmail extends Model
     use HasFactory;
 
     protected $fillable = [
-        'email'
+        'email',
+        'identifiant'
     ];
 
 }
