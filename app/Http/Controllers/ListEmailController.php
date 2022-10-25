@@ -100,15 +100,19 @@ class ListEmailController extends Controller
                     ->where('email', '=', $validated['email'])
                     ->where('identifiant', '=', $validated['identifiant'])
                     ->first();
-        $listEmail = ListEmail::find($listEmail->id);
+        if(isset($listEmail)){
+            $listEmail = ListEmail::find($listEmail->id);
 
-        //On supprime l'entrée
-       $delete =  $listEmail->delete();
+            //On supprime l'entrée
+           $delete =  $listEmail->delete();
 
-       if($delete){
-        return view('newsletter.delete');
-       }
-       abort(404);
+           if($delete){
+            return view('newsletter.delete');
+           }
+           abort(404);
+
+        }
+        abort(404);
     }
 
     public function edit()
