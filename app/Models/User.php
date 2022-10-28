@@ -64,7 +64,7 @@ class User extends Authenticatable
 
     public function categories()
     {
-        return $this->belongsToMany(Categorie::class);
+        return $this->hasMany(Categorie::class);
     }
 
     public function newsletter()
