@@ -14,6 +14,8 @@ class TrustHosts extends Middleware
     public function hosts()
     {
         return [
+            'localhost',
+            'atelier-ginette.netlify.app',
             $this->allSubdomainsOfApplicationUrl(),
         ];
     }
