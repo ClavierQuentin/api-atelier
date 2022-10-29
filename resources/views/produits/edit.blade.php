@@ -81,7 +81,7 @@
                 @endif
 
                 {{-- Input file --}}
-                <input type="file" name="url_image_produit" id="url_image_produit"  class="form-control" accept="image/*">
+                <input type="file" name="image" id="url_image_produit"  class="form-control" accept="image/*">
 
             </div>
 
