@@ -2,6 +2,10 @@
 
 @section('content')
 
+    <div class="container">
+        <a href="{{ route('categorie.create') }}" class="btn btn-success  m-3">Ajouter une nouvelle catégorie</a>
+    </div>
+    
     <div class="container d-flex flex-wrap">
 
         {{-- Fenetre d'erreur --}}

@@ -72,6 +72,8 @@
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Produits</a>
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                         <a href="{{ route('produit.index') }}" class="dropdown-item">Voir tous les produits</a>
+                                        <a class="dropdown-item" href="{{ route('produit.create') }}">Créer un nouveau produit</a>
+
                                     </div>
                                 </li>
 
