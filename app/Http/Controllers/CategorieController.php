@@ -56,8 +56,8 @@ class CategorieController extends Controller
         //On récupère ici les catégories mise en avant, au nombre de 4 max, dans l'ordre décroissant de date de MAJ
         $categories = DB::table('categories')
                     ->where('isAccueil','=', 1)
-                    ->limit("4")
                     ->orderByDesc('updated_at')
+                    ->limit("4")
                     ->get();
 
         //On controle que des données soient présentes
@@ -65,7 +65,6 @@ class CategorieController extends Controller
             return response()->json($categories, 200);
         }
         return response()->json(['status'=>false], 404);
-
     }
 
     //Formulaire de création
@@ -114,17 +113,6 @@ class CategorieController extends Controller
             return redirect('categorie')->with('error', 'Une erreur est survenue pendant l\'enregistrement');
         }
         return redirect('categorie');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Categorie  $categorie
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Categorie $categorie)
-    {
-        return response()->json($categorie, 200);
     }
 
     /**
@@ -197,7 +185,7 @@ class CategorieController extends Controller
         //Suppression en DB
         $delete = $categorie->delete();
         if(!$delete){
-            return redirect('categorie')->with('error', 'Une erreur est survenue pendant l\'enregistrement');
+            return redirect('categorie')->with('error', 'Une erreur est survenue pendant la suppression');
         }
         return redirect('categorie');
     }
