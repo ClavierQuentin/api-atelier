@@ -56,31 +56,10 @@ class TroisiemeBanniereController extends Controller
      */
     public function store(StoreTroisiemeBanniereRequest $request)
     {
-        //Règles de validation du fichier
-        $validator = Validator::make($request->all(),[
-            'image'=>[
-                'required',
-                File::image()
-            ],
-            'image2'=>[
-                'required',
-                File::image()
-            ]
-        ]);
-        if($validator->fails()){
-            return response()->json([
-                'status'=>false,
-                'message'=>'Une erreur est survenue',
-                'errors'=>$validator->errors()
-            ],404);
-        };
-
-        $validated = $validator->validated();
-
         //On upload chaque image et on garde les urls d'accès
-        $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
+        $path = cloudinary()->upload($request->validated('image')->getRealPath())->getSecurePath();
 
-        $path2 = cloudinary()->upload($validated['image2']->getRealPath())->getSecurePath();
+        $path2 = cloudinary()->upload($request->validated('image2')->getRealPath())->getSecurePath();
 
         //Création du nouvel objet
         $troisiemeBanniere = new TroisiemeBanniere($request->validated());
@@ -120,34 +99,13 @@ class TroisiemeBanniereController extends Controller
      */
     public function update(UpdateTroisiemeBanniereRequest $request, TroisiemeBanniere $troisiemeBanniere)
     {
-        //Regle de validation du fichier image
-        $validator = Validator::make($request->all(),[
-            'image'=>[
-                File::image()
-            ],
-            'image2' => [
-                File::image()
-            ]
-        ]);
-        //Sortie et erreur en cas de non validation
-        if($validator->fails()){
-            return response()->json([
-                'status'=>false,
-                'message'=>'Une erreur est survenue',
-                'errors'=>$validator->errors()
-            ],404);
-        };
-
-        //Récupération des données validées
-        $validated = $validator->validated();
-
         //Si une image a été fournie au formulaire pour la 1ere image
-        if(isset($validated['image']) && !isset($validated['image2'])){
+        if($request->validated('image') && !$request->validated('image2')){
 
             //Suppression de l'ancienne image
             $troisiemeBanniere->deleteImage1();
             //Upload de la nouvelle image
-            $updatedUrl = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
+            $updatedUrl = cloudinary()->upload($request->validated('image')->getRealPath())->getSecurePath();
 
             //Enregistrement de la nouvelle URL
             $troisiemeBanniere->url_image = $updatedUrl;
@@ -155,28 +113,28 @@ class TroisiemeBanniereController extends Controller
         }
 
         //Si une image a été fournie au formulaire pour la deuxieme image
-        if(!isset($validated['image']) && isset($validated['image2'])){
+        if(!$request->validated('image') && $request->validated('image2')){
 
             //Suppression de l'image actuelle
             $troisiemeBanniere->deleteImage2();
 
             //Enregistrement au cloud et récupération de l'url
-            $updatedUrl = cloudinary()->upload($validated['image2']->getRealPath())->getSecurePath();
+            $updatedUrl = cloudinary()->upload($request->validated('image2')->getRealPath())->getSecurePath();
 
             //On enregistre la nouvelle url
             $troisiemeBanniere->url_image_2 = $updatedUrl;
         }
 
         //Si les 2 images ont été envoyées au formulaire
-        if(isset($validated['image']) && isset($validated['image2'])){
+        if($request->validated('image') && $request->validated('image2')){
 
             //On supprime les images existantes
             $troisiemeBanniere->deleteImage1();
             $troisiemeBanniere->deleteImage2();
 
             //On enregistre les nouvelles images et on récupère les urls
-            $updatedUrl = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
-            $updatedUrl2 = cloudinary()->upload($validated['image2']->getRealPath())->getSecurePath();
+            $updatedUrl = cloudinary()->upload($request->validated('image')->getRealPath())->getSecurePath();
+            $updatedUrl2 = cloudinary()->upload($request->validated('image2')->getRealPath())->getSecurePath();
 
             //On enregistre les urls
             $troisiemeBanniere->url_image = $updatedUrl;

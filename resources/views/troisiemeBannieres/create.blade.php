@@ -48,7 +48,11 @@
                 <label for="image">
                     Image
                 </label>
-                <input type="file" name="image" id="image" class="form-control" accept="image/*">
+                <input type="file" name="image" id="image" class="form-control @error('image') is-invalid @enderror" accept="image/*">
+
+                @error('image')
+                    <div class="alert alert-danger m-1">{{ $message }}</div>
+                @enderror
 
             </div>
 
@@ -78,7 +82,11 @@
                 <label for="image2">
                     Image
                 </label>
-                <input type="file" name="image2" id="image2" class="form-control" accept="image/*">
+                <input type="file" name="image2" id="image2" class="form-control @error('image2') is-invalid @enderror" accept="image/*">
+
+                @error('image2')
+                    <div class="alert alert-danger m-1">{{ $message }}</div>
+                @enderror
 
             </div>
 

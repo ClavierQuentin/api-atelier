@@ -15,7 +15,11 @@
                 <label for="titre">
                     Titre
                 </label>
-                <input type="text" name="titre" id="titre" class="form-control" value = "{{ $premiereBanniere->titre }}">
+                <input type="text" name="titre" id="titre" class="form-control @error('titre') is-invalid @enderror" value = "{{ $premiereBanniere->titre }}">
+
+                @error('titre')
+                    <div class="alert alert-danger m-1">{{ $message }}</div>
+                @enderror
 
             </div>
 
@@ -25,7 +29,11 @@
                 <label for="editeur">
                     Texte d'accueil
                 </label>
-                <textarea class="form-control" name="texte" id="editeur" cols="20" rows="5">{{ $premiereBanniere->texte }}</textarea>
+                <textarea class="form-control @error('texte') is-invalid @enderror" name="texte" id="editeur" cols="20" rows="5">{{ $premiereBanniere->texte }}</textarea>
+
+                @error('texte')
+                    <div class="alert alert-danger m-1">{{ $message }}</div>
+                @enderror
 
             </div>
 
@@ -46,7 +54,12 @@
                 @endif
 
                 {{-- Formulaire image --}}
-                <input type="file" name="image" id="image" class="form-control" accept="image/*">
+                <input type="file" name="image" id="image" class="form-control @error('image') is-invalid @enderror" accept="image/*">
+
+                @error('image')
+                    <div class="alert alert-danger m-1">{{ $message }}</div>
+                @enderror
+
             </div>
 
             <button class="btn btn-info mt-2">Valider</button>

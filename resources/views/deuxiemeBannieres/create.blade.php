@@ -42,7 +42,15 @@
                     Images
                 </label>
                 {{-- Formulaire pour l'image --}}
-                <input type="file" name="image[]" id="image" class="form-control" accept="image/*" multiple>
+                <input type="file" name="image[]" id="image" class="form-control @if ($errors->any()) is-invalid @endif" accept="image/*" multiple>
+
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        @foreach ($errors->all() as $error)
+                            <span>{{ $error }}</span>
+                        @endforeach
+                    </div>
+                @endif
 
             </div>
 

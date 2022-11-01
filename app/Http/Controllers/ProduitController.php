@@ -62,24 +62,8 @@ class ProduitController extends Controller
      */
     public function store(StoreProduitRequest $request)
     {
-        // Regles de validation pour l'image d'illustration
-        $validator = Validator::make($request->all(),[
-            'image'=>[
-                'required',
-                File::image()
-            ]
-        ]);
-        if($validator->fails()){
-            return response()->json([
-                'status'=>false,
-                'message'=>'Une erreur est survenue',
-                'errors'=>$validator->errors()
-            ],401);
-        };
-        $validated = $validator->validated();
-
         //Upload de l'image sur le cloud
-        $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
+        $path = cloudinary()->upload($request->validated('image')->getRealPath())->getSecurePath();
 
         //On instancie un nouvel objet Produit avec la requete du formulaire
         $produit = new Produit($request->validated());
@@ -99,11 +83,9 @@ class ProduitController extends Controller
                 'isAccueil'=>'boolean'
             ]);
             if($validatorBool->fails()){
-                return response()->json([
-                    'status'=>false,
-                    'message'=>'Une erreur est survenue',
-                    'errors'=>$validatorBool->errors()
-                ],404);
+                return redirect('produit/create')
+                ->withErrors($validatorBool)
+                ->withInput();
             };
             $produit->isAccueil = 1;
         }
@@ -114,11 +96,9 @@ class ProduitController extends Controller
                 'url_externe'=>'url'
             ]);
             if($validatorUrl->fails()){
-                return response()->json([
-                    'status'=>false,
-                    'message'=>'Une erreur est survenue',
-                    'errors'=>$validatorUrl->errors()
-                ],404);
+                return redirect('produit/create')
+                ->withErrors($validatorUrl)
+                ->withInput();
             };
             $validatedUrl = $validatorUrl->validated();
             $produit->url_externe = $validatedUrl('url_externe');
@@ -172,21 +152,6 @@ class ProduitController extends Controller
      */
     public function update(UpdateProduitRequest $request, Produit $produit)
     {
-        //Regle de validation du fichier image
-        $validator = Validator::make($request->all(),[
-            'image'=>[
-                File::image()
-            ]
-        ]);
-        if($validator->fails()){
-            return response()->json([
-                'status'=>false,
-                'message'=>'Une erreur est survenue',
-                'errors'=>$validator->errors()
-            ],404);
-        };
-
-        $validated = $validator->validated();
 
         //Si une image a été fournie au formulaire
         if(isset($validated['image'])){
@@ -195,7 +160,7 @@ class ProduitController extends Controller
             $produit->deleteImage();
 
             //Upload de la nouvelle image
-            $updatedUrl = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
+            $updatedUrl = cloudinary()->upload($request->validated('image')->getRealPath())->getSecurePath();
 
             //CHangement de l'url de l'image
             $produit->url_image_produit = $updatedUrl;
@@ -207,11 +172,9 @@ class ProduitController extends Controller
                 'isAccueil'=>'boolean'
             ]);
             if($validatorBool->fails()){
-                return response()->json([
-                    'status'=>false,
-                    'message'=>'Une erreur est survenue',
-                    'errors'=>$validatorBool->errors()
-                ],404);
+                return redirect('produit/edit/'.$produit->id)
+                ->withErrors($validatorBool)
+                ->withInput();
             };
             $produit->isAccueil = 1;
         }
@@ -224,11 +187,9 @@ class ProduitController extends Controller
                 'url_externe'=>'url'
             ]);
             if($validatorUrl->fails()){
-                return response()->json([
-                    'status'=>false,
-                    'message'=>'Une erreur est survenue',
-                    'errors'=>$validatorUrl->errors()
-                ],404);
+                return redirect('produit/edit/'.$produit->id)
+                ->withErrors($validatorUrl)
+                ->withInput();
             };
             $validatedUrl = $validatorUrl->validated();
             $produit->url_externe = $validatedUrl('url_externe');

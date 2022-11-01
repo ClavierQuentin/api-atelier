@@ -83,40 +83,22 @@ class CategorieController extends Controller
      */
     public function store(StoreCategorieRequest $request)
     {
-        //Regles de validation du fichier
-        $validator = Validator::make($request->all(),[
-            'image'=>[
-                'required',
-                File::image()
-            ]
-        ]);
-        if($validator->fails()){
-            return response()->json([
-                'status'=>false,
-                'message'=>'Une erreur est survenue',
-                'errors'=>$validator->errors()
-            ],404);
-        };
-
-        $validated = $validator->validated();
-
-        //Enregistrement de l'image au cloud et on stock l'url
-        $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
+      //Enregistrement de l'image au cloud et on stock l'url
+        $path = cloudinary()->upload($request->validated('image')->getRealPath())->getSecurePath();
 
         //Création d'un nouvel objet
         $categorie = new Categorie($request->validated());
 
         //Cas où la checbox pour affichage à l'accueil est cochée
         if($request['isAccueil']){
+            //Règles de validation
             $validatorBool = Validator::make($request->all(),[
                 'isAccueil'=>'boolean'
             ]);
             if($validatorBool->fails()){
-                return response()->json([
-                    'status'=>false,
-                    'message'=>'Une erreur est survenue',
-                    'errors'=>$validatorBool->errors()
-                ],404);
+                return redirect('categorie/create')
+                ->withErrors($validatorBool)
+                ->withInput();
             };
             //On passe le booléen à 1
             $categorie->isAccueil = 1;
@@ -165,26 +147,14 @@ class CategorieController extends Controller
      */
     public function update(UpdateCategorieRequest $request, Categorie $categorie)
     {
-        //Regle de validation du fichier
-        $validator = Validator::make($request->all(),[
-            'image'=>[
-                File::image()
-            ]
-        ]);
-        if($validator->fails()){
-            return redirect('categorie/edit/'.$categorie->id)->with('error', $validator->errors());
-        };
-
-        $validated = $validator->validated();
-
         //Dans le cas où une image a été fournie au formulaire
-        if(isset($validated['image'])){
+        if($request->validated('image') != NULL){
 
             //Suppression de l'ancienne image
             $categorie->deleteImage();
 
             //Enregistrement de la nouvelle image et on stock l'url
-            $updatedUrl = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
+            $updatedUrl = cloudinary()->upload($request->validated('image')->getRealPath())->getSecurePath();
 
             //On enregistre l'url
             $categorie->url_image_categorie = $updatedUrl;
@@ -196,11 +166,9 @@ class CategorieController extends Controller
                 'isAccueil'=>'boolean'
             ]);
             if($validatorBool->fails()){
-                return response()->json([
-                    'status'=>false,
-                    'message'=>'Une erreur est survenue',
-                    'errors'=>$validatorBool->errors()
-                ],404);
+                return redirect('categorie/edit/'.$categorie->id)
+                ->withErrors($validatorBool)
+                ->withInput();
             };
             //On passe le booléen à 1
             $categorie->isAccueil = 1;

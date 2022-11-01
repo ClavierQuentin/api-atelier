@@ -32,10 +32,8 @@ class StoreNewsletterRequest extends FormRequest
     public function messages()
     {
         return [
-            'titre.required' => 'Ce champ est obligatoire',
-            'body.required'=> 'Ce champ est obligatoire',
-            'titre.string' => 'Ce champ doit être une chaise de caractères',
-            'body.string'=> 'Ce champ doit être une chaise de caractères'
+            'required' => 'Ce champ est obligatoire',
+            'string' => 'Ce champ doit être une chaise de caractères',
         ];
     }
 }

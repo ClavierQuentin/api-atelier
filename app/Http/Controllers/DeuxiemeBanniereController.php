@@ -65,18 +65,29 @@ class DeuxiemeBanniereController extends Controller
         //Déclaration d'un tableau vide
         $data = array();
 
-        //Règles de validation du fichier
-        $this->validate($request ,[
-            'image'=>'required',
-            'image.*'=>'mimes:jpg,jepg,png,JPG,JPEG'
+        //Règles de validation
+        $validator = Validator::make($request->all(), [
+            'image.*' => 'image',
+            'image'=>'required'
+        ],[
+            'image.required' => 'Une image est requise',
+            'image' =>'Le fichier doit être une image'
         ]);
 
+        if($validator->fails()){
+            return redirect('deuxieme-banniere/create')
+            ->withErrors($validator)
+            ->withInput();;
+        }
+
+        //On recupère les données validées
+        $validatedData = $validator->validated();
+
         //On upload chaque image et on stocke l'url d'accès
-        foreach($request->file('image') as $file){
+        foreach($validatedData['image'] as $file){
             $path = cloudinary()->upload($file->getRealPath())->getSecurePath();
             $data[] = $path;
         }
-
         //Création du nouvel objet
         $deuxiemeBanniere = new DeuxiemeBanniere($request->validated());
 
@@ -129,13 +140,24 @@ class DeuxiemeBanniereController extends Controller
 
         //Si une image a été envoyée au formulaire
         if($request->file('image') != null){
-            //Regle de validation du fichier image
-            $this->validate($request ,[
-                'image'=>'required',
-                'image.*'=>'mimes:jpg,jepg,png,JPG,JPEG'
+            //Règles de validation
+            $validator = Validator::make($request->all(), [
+                'image.*' => 'image',
+            ],[
+                'image' =>'Le fichier doit être une image'
             ]);
-            //Upload des nouvelles images et enregistrement de l'url d'accès
-            foreach($request->file('image') as $file){
+
+            if($validator->fails()){
+                return redirect('deuxieme-banniere/edit/'.$deuxiemeBanniere->id)
+                ->withErrors($validator)
+                ->withInput();
+            }
+
+            //On recupère les données validées
+            $validatedData = $validator->validated();
+
+            //On upload chaque image et on stocke l'url d'accès
+            foreach($validatedData['image'] as $file){
                 $path = cloudinary()->upload($file->getRealPath())->getSecurePath();
                 $data[] = $path;
             }

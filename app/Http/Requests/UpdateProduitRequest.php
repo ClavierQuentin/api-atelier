@@ -29,17 +29,17 @@ class UpdateProduitRequest extends FormRequest
             'description_longue_produit'=>'string',
             'prix_produit'=>'numeric',
             'categorie_id'=>'integer',
+            'image' => 'image'
         ];
     }
 
     public function messages()
     {
         return [
-            'nom_produit.string' => 'Doit être une chaîne de caractères',
-            'description_courte_produit.string' => 'Doit être une chaîne de caractères',
-            'description_longue_produit.string'=> 'Doit être une chaîne de caractères',
-            'prix_produit.numeric' => 'Doit être au format nombre',
-            'categorie_id.integer' => 'Doit être un nombre entier',
+            'string' => 'Doit être une chaîne de caractères',
+            'numeric' => 'Doit être au format nombre',
+            'integer' => 'Doit être un nombre entier',
+            'image' => "Le fichier doit être une image"
         ];
     }
 }

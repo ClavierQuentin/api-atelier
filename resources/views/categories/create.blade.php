@@ -28,13 +28,11 @@
                 <label for="image">
                     Image d'illustration
                 </label>
-                <input type="file" name="image" id="image" class="form-control" accept="image/*">
+                <input type="file" name="image" id="image" class="form-control @error('image') is-invalid @enderror" accept="image/*">
 
-                @if (session('error'))
-                    <div class="alert alert-danger">
-                        {{ session('error') }}
-                    </div>
-                @endif
+                @error('image')
+                    <div class="alert alert-danger m-1">{{ $message }}</div>
+                @enderror
 
             </div>
 
@@ -42,8 +40,17 @@
 
                 {{-- Checkbox pour mettre sur la page d'accueil du site vitrine --}}
                 <div class="form-check">
-                    <input type="checkbox" name="isAccueil" id="isAccueil" class="form-check-input"  value = "1">
+                    <input type="checkbox" name="isAccueil" id="isAccueil" class="form-check-input @if ($errors->any()) is-invalid @endif"  value = "1">
                     <label for="isAccueil" class="form-check-label">Mettre en avant sur l'accueil</label>
+
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            @foreach ($errors->all() as $error)
+                                <span>{{ $error }}</span>
+                            @endforeach
+                        </div>
+                    @endif
+
                 </div>
 
             </div>

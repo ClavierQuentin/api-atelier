@@ -32,12 +32,8 @@ class StoreTexteAccueilRequest extends FormRequest
     public function messages()
     {
         return [
-            'titre_accueil.required'=>'Ce champ est obligatoire',
-            'titre_accueil.string'=>'Ce champs doit être une chaîne de caractères !',
-            'texte_accueil.required'=>'Ce champ est obligatoire',
-            'texte_accueil.string'=>'Ce champs doit être une chaîne de caractères !',
-            'titre_categories.required'=>'Ce champ est obligatoire',
-            'titre_categories.string'=>'Ce champs doit être une chaîne de caractères !',
+            'required'=>'Ce champ est obligatoire',
+            'string'=>'Ce champs doit être une chaîne de caractères !',
         ];
     }
 }

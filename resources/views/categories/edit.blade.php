@@ -15,7 +15,11 @@
                     Nom de la catégorie
                 </label>
                 {{-- Formulaire pour le nom --}}
-                <input type="text" name="nom_categorie" id="nom_categorie" class="form-control" value="{{ $categorie->nom_categorie }}">
+                <input type="text" name="nom_categorie" id="nom_categorie" class="form-control @error('nom_categorie') is-invalid @enderror" value="{{ $categorie->nom_categorie }}">
+
+                @error('nom_categorie')
+                    <div class="alert alert-danger m-1">{{ $message }}</div>
+                @enderror
 
             </div>
 
@@ -36,7 +40,12 @@
                 @endif
 
                 {{-- Fomulaire pour l'image --}}
-                <input type="file" name="image" id="image" class="form-control" accept="image/*">
+                <input type="file" name="image" id="image" class="form-control @error('image') is-invalid @enderror" accept="image/*">
+
+                @error('image')
+                    <div class="alert alert-danger m-1">{{ $message }}</div>
+                @enderror
+
 
             </div>
 
@@ -44,8 +53,17 @@
 
                 {{-- Checkbox pour mise en avant en page d'accueil --}}
                 <div class="form-check">
-                    <input type="checkbox" name="isAccueil" id="isAccueil" class="form-check-input" @if($categorie->isAccueil == 1) checked = 'true'  @endif value = "1">
+                    <input type="checkbox" name="isAccueil" id="isAccueil" class="form-check-input @if ($errors->any()) is-invalid @endif" @if($categorie->isAccueil == 1) checked = 'true'  @endif value = "1">
                     <label for="isAccueil" class="form-check-label">Mettre en avant sur l'accueil</label>
+                    
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            @foreach ($errors->all() as $error)
+                                <span>{{ $error }}</span>
+                            @endforeach
+                        </div>
+                    @endif
+
                 </div>
 
             </div>

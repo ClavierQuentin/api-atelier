@@ -81,7 +81,11 @@
                 @endif
 
                 {{-- Input file --}}
-                <input type="file" name="image" id="url_image_produit"  class="form-control" accept="image/*">
+                <input type="file" name="image" id="url_image_produit"  class="form-control @error('image') is-invalid @enderror" accept="image/*">
+
+                @error('image')
+                    <div class="alert alert-danger m-1">{{ $message }}</div>
+                @enderror
 
             </div>
 
@@ -114,11 +118,15 @@
                 <label for="url_externe">
                     URL menant au site marchand s'il existe
                 </label>
-                <input type="url" pattern="https://.*" name="url_externe" id="url_externe" class="form-control @error('url_externe') is-invalid @enderror">
+                <input type="url" pattern="https://.*" name="url_externe" id="url_externe" class="form-control @if ($errors->any()) is-invalid @endif">
 
-                @error('url_externe')
-                    <div class="alert alert-danger m-1">{{ $message }}</div>
-                @enderror
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        @foreach ($errors->all() as $error)
+                            <span>{{ $error }}</span>
+                        @endforeach
+                    </div>
+                @endif
 
             </div>
 
@@ -126,8 +134,17 @@
 
                 {{-- Checkbox pour affichage carrousel page d'accueil site vitrine --}}
                 <div class="form-check">
-                    <input type="checkbox" name="isAccueil" id="isAccueil" class="form-check-input" @if($produit->isAccueil == 1) checked = 'true'  @endif value = "1">
+
+                    <input type="checkbox" name="isAccueil" id="isAccueil" class="form-check-input @if ($errors->any()) is-invalid @endif" @if($produit->isAccueil == 1) checked = 'true'  @endif value = "1">
                     <label for="isAccueil" class="form-check-label">Mettre en avant sur la bannière de l'accueil</label>
+
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            @foreach ($errors->all() as $error)
+                                <span>{{ $error }}</span>
+                            @endforeach
+                        </div>
+                    @endif
 
                 </div>
             </div>

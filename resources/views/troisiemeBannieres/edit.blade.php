@@ -15,7 +15,11 @@
                 <label for="titre_principal">
                     Titre principal
                 </label>
-                <input type="text" name="titre_principal" id="titre_principal" class="form-control" value="{{ $troisiemeBanniere->titre_principal }}">
+                <input type="text" name="titre_principal" id="titre_principal" class="form-control @error('titre_principal') is-invalid @enderror" value="{{ $troisiemeBanniere->titre_principal }}">
+
+                @error('titre_principal')
+                    <div class="alert alert-danger m-1">{{ $message }}</div>
+                @enderror
 
             </div>
 
@@ -25,13 +29,21 @@
                 <label for="titre_1">
                     Premier titre
                 </label>
-                <input type="text" class="form-control " name="titre_1" id="titre_1" value="{{ $troisiemeBanniere->titre_1 }}">
+                <input type="text" class="form-control @error('titre_1') is-invalid @enderror" name="titre_1" id="titre_1" value="{{ $troisiemeBanniere->titre_1 }}">
+
+                @error('titre_1')
+                    <div class="alert alert-danger m-1">{{ $message }}</div>
+                @enderror
 
                 {{-- Editeur de texte pour texte 1 --}}
                 <label for="editeur">
                     Premier texte
                 </label>
-                <textarea class="form-control" name="texte_1" id="editeur" cols="10" rows="5">{{ $troisiemeBanniere->texte_1 }}</textarea>
+                <textarea class="form-control  @error('texte_1') is-invalid @enderror" name="texte_1" id="editeur" cols="10" rows="5">{{ $troisiemeBanniere->texte_1 }}</textarea>
+
+                @error('texte_1')
+                    <div class="alert alert-danger m-1">{{ $message }}</div>
+                @enderror
 
                 <label for="image">
                     Image
@@ -48,7 +60,11 @@
                 @endif
 
                 {{-- Formulaire File --}}
-                <input type="file" name="image" id="image" class="form-control" accept="image/*">
+                <input type="file" name="image" id="image" class="form-control @error('image') is-invalid @enderror" accept="image/*">
+
+                @error('image')
+                    <div class="alert alert-danger m-1">{{ $message }}</div>
+                @enderror
 
             </div>
 
@@ -58,13 +74,21 @@
                 <label for="titre_2">
                     Deuxième titre
                 </label>
-                <input type="text" class="form-control " name="titre_2" id="titre_2" value="{{ $troisiemeBanniere->titre_2 }}">
+                <input type="text" class="form-control @error('titre_2') is-invalid @enderror" name="titre_2" id="titre_2" value="{{ $troisiemeBanniere->titre_2 }}">
+
+                @error('titre_2')
+                    <div class="alert alert-danger m-1">{{ $message }}</div>
+                @enderror
 
                 {{-- Editeur de texte pour texte 2 --}}
                 <label for="editeur">
                     Deuxième texte
                 </label>
-                <textarea class="form-control" name="texte_2" id="editeur" cols="10" rows="5">{{ $troisiemeBanniere->texte_2 }}</textarea>
+                <textarea class="form-control @error('texte_2') is-invalid @enderror" name="texte_2" id="editeur" cols="10" rows="5">{{ $troisiemeBanniere->texte_2 }}</textarea>
+
+                @error('texte_2')
+                    <div class="alert alert-danger m-1">{{ $message }}</div>
+                @enderror
 
                 <label for="image2">
                     Image
@@ -83,7 +107,11 @@
                 @endif
 
                 {{-- Formulaire FILE --}}
-                <input type="file" name="image2" id="image2" class="form-control" accept="image/*">
+                <input type="file" name="image2" id="image2" class="form-control @error('image2') is-invalid @enderror" accept="image/*">
+
+                @error('image2')
+                    <div class="alert alert-danger m-1">{{ $message }}</div>
+                @enderror
 
             </div>
 

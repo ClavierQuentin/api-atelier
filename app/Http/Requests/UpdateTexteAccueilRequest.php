@@ -33,9 +33,7 @@ class UpdateTexteAccueilRequest extends FormRequest
     public function messages()
     {
         return [
-            'titre_accueil.string'=>'Ce champs doit être une chaîne de caractères !',
-            'texte_accueil.string'=>'Ce champs doit être une chaîne de caractères !',
-            'titre_categories.string'=>'Ce champs doit être une chaîne de caractères !'
+            'string'=>'Ce champs doit être une chaîne de caractères !',
         ];
     }
 

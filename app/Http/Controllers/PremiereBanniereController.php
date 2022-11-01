@@ -54,21 +54,8 @@ class PremiereBanniereController extends Controller
      */
     public function store(StorePremiereBanniereRequest $request)
     {
-        //Règles de validation
-        $validator = Validator::make($request->all(),[
-            'image'=>[
-                'required',
-                File::image()
-            ]
-        ]);
-        if($validator->fails()){
-            return redirect('premiere-banniere')->with('error', $validator->errors());
-        };
-
-        $validated = $validator->validated();
-
         //ON enregistre l'image au cloud en récupérant l'url d'acces
-        $path = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
+        $path = cloudinary()->upload($request->validated('image')->getRealPath())->getSecurePath();
 
         //CRéation d'un nouvel objet
         $premiereBanniere = new PremiereBanniere($request->validated());
@@ -106,22 +93,6 @@ class PremiereBanniereController extends Controller
      */
     public function update(UpdatePremiereBanniereRequest $request, PremiereBanniere $premiereBanniere)
     {
-        //Regle de validation du fichier image
-        $validator = Validator::make($request->all(),[
-            'image'=>[
-                File::image()
-            ]
-        ]);
-        //Sortie et erreur en cas de non validation
-        if($validator->fails()){
-            if($validator->fails()){
-                return redirect('premiere-banniere')->with('error', $validator->errors());
-            };
-        };
-
-        //Récupération des données validées
-        $validated = $validator->validated();
-
         //Si une image a été fournie au formulaire
         if(isset($validated['image'])){
 
@@ -129,7 +100,7 @@ class PremiereBanniereController extends Controller
             $premiereBanniere->deleteImage();
 
             //Upload de la nouvelle image
-            $updatedUrl = cloudinary()->upload($validated['image']->getRealPath())->getSecurePath();
+            $updatedUrl = cloudinary()->upload($request->validated('image')->getRealPath())->getSecurePath();
 
             //Enregistrement de la nouvelle URL
             $premiereBanniere->url_image = $updatedUrl;

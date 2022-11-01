@@ -25,13 +25,15 @@ class UpdateCategorieRequest extends FormRequest
     {
         return [
             'nom_categorie' => 'string|max:250',
+            'image'=>'image'
         ];
     }
 
     public function messages()
     {
         return [
-            'nom_categorie.string' => 'Ce champs doit être une chaîne de caractères !'
+            'string' => 'Ce champs doit être une chaîne de caractères !',
+            'image'=>"Le fichier doit être une image !"
         ];
     }
 }

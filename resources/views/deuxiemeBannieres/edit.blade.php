@@ -15,7 +15,11 @@
                     Titre
                 </label>
                 {{-- Formulaire pour le titre --}}
-                <input type="text" name="titre" id="titre" class="form-control" value = "{{ $deuxiemeBanniere->titre }}">
+                <input type="text" name="titre" id="titre" class="form-control @error('titre') is-invalid @enderror" value = "{{ $deuxiemeBanniere->titre }}">
+
+                @error('titre')
+                    <div class="alert alert-danger m-1">{{ $message }}</div>
+                @enderror
 
             </div>
 
@@ -25,7 +29,11 @@
                     Texte d'accueil
                 </label>
                 {{-- Editeur de texte --}}
-                <textarea class="form-control" name="texte" id="editeur" cols="20" rows="5">{{ $deuxiemeBanniere->texte }}</textarea>
+                <textarea class="form-control @error('texte') is-invalid @enderror" name="texte" id="editeur" cols="20" rows="5">{{ $deuxiemeBanniere->texte }}</textarea>
+
+                @error('texte')
+                    <div class="alert alert-danger m-1">{{ $message }}</div>
+                @enderror
 
             </div>
 
@@ -61,7 +69,15 @@
                 @endif
 
                 {{-- Formulaire pour plusieurs images --}}
-                <input type="file" name="image[]" id="image" class="form-control" accept="image/*" multiple>
+                <input type="file" name="image[]" id="image" class="form-control @if($errors->any()) is-invalid @endif" accept="image/*" multiple>
+
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        @foreach ($errors->all() as $error)
+                            <span>{{ $error }}</span>
+                        @endforeach
+                    </div>
+                @endif
 
                 <div class="form-check">
 

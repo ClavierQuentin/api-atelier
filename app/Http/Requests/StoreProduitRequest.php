@@ -24,28 +24,23 @@ class StoreProduitRequest extends FormRequest
     public function rules()
     {
         return [
-            'nom_produit'=>'string|required|max:250',
-            'description_courte_produit'=>'string|required',
-            'description_longue_produit'=>'string|required',
-            'prix_produit'=>'numeric|required',
-            'categorie_id'=>'integer|required'
-
+            'nom_produit'=>'required|string|max:250',
+            'description_courte_produit'=>'required|string',
+            'description_longue_produit'=>'required|string',
+            'prix_produit'=>'required|numeric',
+            'categorie_id'=>'required|integer',
+            'image'=>'required|image'
         ];
     }
 
     public function messages()
     {
         return [
-            'nom_produit.string' => 'Ce champs doit être une chaîne de caractères !',
-            'description_courte_produit.string' => 'Ce champs doit être une chaîne de caractères !',
-            'description_longue_produit.string'=> 'Ce champs doit être une chaîne de caractères !',
-            'prix_produit.numeric' => 'Doit être au format nombre',
-            'categorie_id.integer' => 'Doit être un nombre entier',
-            'nom_produit.required' => 'Ce champ est requis',
-            'description_courte_produit.required' => 'Ce champ est requis',
-            'description_longue_produit.required'=> 'Ce champ est requis',
-            'prix_produit.required' => 'Ce champ est requis',
-            'categorie_id.required' => 'Ce champ est requis',
+            'required'=> "Ce champs est obligatoire",
+            'string' => 'Ce champs doit être une chaine de caractère',
+            'numeric'=> "Doit être au format nombre",
+            'integer'=> 'Il faut choisir une catégorie',
+            'image'=> 'Le fichier doit être une image'
         ];
     }
 

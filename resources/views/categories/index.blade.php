@@ -4,9 +4,6 @@
 
     <div class="container">
         <a href="{{ route('categorie.create') }}" class="btn btn-success  m-3">Ajouter une nouvelle catégorie</a>
-    </div>
-    
-    <div class="container d-flex flex-wrap">
 
         {{-- Fenetre d'erreur --}}
         @if (session('error'))
@@ -14,6 +11,12 @@
                 {{ session('error') }}
             </div>
         @endif
+
+    </div>
+
+    <div class="container d-flex flex-wrap">
+
+
 
         {{-- Si des catégories existent --}}
         @if(isset($categories) && sizeof($categories) > 0)
