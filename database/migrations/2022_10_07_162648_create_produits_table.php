@@ -22,7 +22,7 @@ return new class extends Migration
             $table->text('description_longue_produit');
             $table->string('url_image_produit');
             $table->decimal('prix_produit');
-            $table->foreignIdFor(Categorie::class);
+            $table->foreignIdFor(Categorie::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->boolean('isAccueil')->nullable();
             $table->string('url_externe')->nullable();
         });

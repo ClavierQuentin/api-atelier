@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->string('titre');
             $table->text('texte');
-            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(User::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->string('url_image');
             $table->boolean('online')->nullable();
             $table->timestamps();

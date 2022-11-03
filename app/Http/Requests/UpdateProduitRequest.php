@@ -24,7 +24,7 @@ class UpdateProduitRequest extends FormRequest
     public function rules()
     {
         return [
-            'nom_produit'=>'string',
+            'nom_produit'=>'string|max:250',
             'description_courte_produit'=>'string',
             'description_longue_produit'=>'string',
             'prix_produit'=>'numeric',

@@ -31,6 +31,4 @@ class MessageMail extends Mailable
         return $this->subject('Vous avez reçu un nouveau message ')
                     ->view('mail.message');
     }
-
-
 }

@@ -24,7 +24,7 @@ class StoreCategorieRequest extends FormRequest
     public function rules()
     {
         return [
-            'nom_categorie' =>'required|string',
+            'nom_categorie' =>'required|string|max:200',
             'image'=>'required|image'
         ];
     }

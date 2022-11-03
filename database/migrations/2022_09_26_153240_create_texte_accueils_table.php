@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('titre_accueil');
             $table->text('texte_accueil');
             $table->string('titre_categories');
-            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(User::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->boolean('online')->nullable();
             $table->timestamps();
         });

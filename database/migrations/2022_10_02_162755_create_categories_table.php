@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('nom_categorie');
             $table->string('url_image_categorie');
             $table->boolean('isAccueil')->nullable();
-            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(User::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

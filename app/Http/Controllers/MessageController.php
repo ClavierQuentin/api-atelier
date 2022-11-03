@@ -36,9 +36,9 @@ class MessageController extends Controller
 
             //Regles de validation
             $validator = Validator::make($request->all(),[
-                'prenom' => 'required|string',
-                'nom' => 'required|string',
-                'sujet' => 'required|string',
+                'prenom' => 'required|string|max:200',
+                'nom' => 'required|string|max:200',
+                'sujet' => 'required|string|max:250',
                 'email' => 'required|email:rfc,dns',
                 'message' => 'required|string'
             ]);

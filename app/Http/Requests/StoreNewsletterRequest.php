@@ -24,7 +24,7 @@ class StoreNewsletterRequest extends FormRequest
     public function rules()
     {
         return [
-            'titre' => 'required|string',
+            'titre' => 'required|string|max:250',
             'body'=> 'required|string'
         ];
     }

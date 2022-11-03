@@ -38,7 +38,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         @auth
-                            @if(Auth::user()->role == 'admin')
+                            @if(Auth::user()->role === 'admin')
 
                                 <li class="nav-item">
                                     <a href="https://atelier-ginette.netlify.app/" class="nav-link" target="_blank" >Aller sur le site</a>

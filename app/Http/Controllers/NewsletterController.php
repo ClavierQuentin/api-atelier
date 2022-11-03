@@ -29,18 +29,12 @@ class NewsletterController extends Controller
         $ids = array();
 
         /**On parcours tous les utilisateurs inscrits pour la newsletter
-         * On envoie un mail à chacun, avec l'id unique affilié à l'adresse mail
+         * On envoie un mail à chacun, avec l'identifiant unique affilié à l'adresse mail
          * On controle ainsi un minimum car l'url est publique
          */
         foreach($users as $user){
             Mail::to($user->email)->send(new \App\Mail\Newsletter([$newsletter, $user->identifiant]));
-            // $mails_adress[] = $user->email;
-            // $ids[] = $user->identifiant;
         }
-
-        //Envoie du mail avec le tableau de destinataires et l'objet newsletter créé
-        // Mail::to($mails_adress)
-        // ->send(new \App\Mail\Newsletter($newsletter));
 
         //On sauvegarde l'objet en BDD
         $response = Auth::user()->newsletter()->save($newsletter);

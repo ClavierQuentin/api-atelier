@@ -24,9 +24,9 @@ class UpdateTroisiemeBanniereRequest extends FormRequest
     public function rules()
     {
         return [
-            'titre_principal' => 'string:250',
-            'titre_1'=>'string:250',
-            'titre_2'=>'string:250',
+            'titre_principal' => 'string|max:250',
+            'titre_1'=>'string|max:250',
+            'titre_2'=>'string|max:250',
             'texte_1'=>'string',
             'texte_2'=>'string',
             'image'=>'image',
