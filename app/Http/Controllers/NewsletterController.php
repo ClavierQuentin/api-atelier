@@ -24,10 +24,6 @@ class NewsletterController extends Controller
         //On récupère tous les inscrits à la newsletter
         $users = ListEmail::all();
 
-        //On déclare un tableau
-        $mails_adress = array();
-        $ids = array();
-
         /**On parcours tous les utilisateurs inscrits pour la newsletter
          * On envoie un mail à chacun, avec l'identifiant unique affilié à l'adresse mail
          * On controle ainsi un minimum car l'url est publique

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ListEmail;
 use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -39,17 +40,40 @@ class MessageController extends Controller
                 'prenom' => 'required|string|max:200',
                 'nom' => 'required|string|max:200',
                 'sujet' => 'required|string|max:250',
-                'email' => 'required|email:rfc,dns',
-                'message' => 'required|string'
+                'email' => 'required|email:rfc,dns|max:250',
+                'message' => 'required|string',
+                'newsletter' => 'boolean'
             ]);
 
             //si vérification échoue, on retourne le message d'erreur
             if($validator->fails()){
-                return response()->json(['status' => false, 'errors'=> $validator->errors()], 404);
+                return response()->json(['status' => false, 'errors'=> $validator->errors()->first()], 404);
             }
 
             //Si validation passe, on récupère les données validées
             $validated = $validator->validated();
+
+            //Si checkbox newsletter true pour inscription
+            if($validated['newsletter']){
+
+                //On contrôle si la donnée entrante est déjà existante en BDD
+                $alreadyIn = ListEmail::where('email','=', $validated['email'])->first();
+
+                if($alreadyIn == NULL){
+                    $item = new ListEmail($validated);
+
+                    //Génération d'un id unique par email
+                    $item->identifiant = uniqid();
+
+                    $savedEmail = $item->save();
+                    //En cas d'erreur
+                    if(!$savedEmail){
+                        return response()->json(['status' => false, 'message' => 'Une erreur est survenue'], 404);
+                    }
+                }
+                return response()->json(['status' => false, 'message' => 'Vous êtes déjà inscrit à la newsletter'], 404);
+            }
+
 
             //Nouvel objet
             $message = new Message($validated);

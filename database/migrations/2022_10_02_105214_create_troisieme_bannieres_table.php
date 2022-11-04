@@ -23,7 +23,7 @@ return new class extends Migration
             $table->text('texte_2');
             $table->string('url_image');
             $table->string('url_image_2');
-            $table->foreignIdFor(User::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(User::class)->constrained();
             $table->boolean('online')->nullable();
             $table->timestamps();
         });

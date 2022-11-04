@@ -35,38 +35,34 @@ class ListEmailController extends Controller
 
             //Regles de validation
             $validator = Validator::make($request->all(),[
-                'email' => 'required|email:rfc,dns',
+                'email' => 'required|email:rfc,dns|unique:list_emails|max:255',
             ]);
 
             //Si validation échoue, on interrompe
             if($validator->fails()){
-                return response()->json(['status' => false, 'errors'=> $validator->errors()], 404);
+                $errors = $validator->errors();
+
+                if($errors->first() == "The email has already been taken."){
+                    return response()->json(['status' => false, 'message'=>'Adresse déjà inscrite'], 404);
+                }
+                return response()->json(['status' => false, "message" => $errors->first()], 404);
             }
             //sinon on récupère les données validées
             $validated = $validator->validated();
 
-            //On contrôle si la donnée entrante est déà existante en BDD
-            $alreadyIn = ListEmail::where('email','=', $validated['email'])->first();
+            $item = new ListEmail($validated);
 
-            //Si il n'y a pas de doublons, on procède à l'enregistrement
-            if($alreadyIn == null){
-                $item = new ListEmail($validated);
+            //Génération d'un id unique par email
+            $item->identifiant = uniqid();
 
-                //Génération d'un id unique par email
-                $item->identifiant = uniqid();
+            $saved = $item->save();
 
-                $saved = $item->save();
-
-                //Si la sauvegarde est faite, on retourne un message de succès
-                if($saved){
-                    return response()->json(['status' => true , 'message'=>'Inscription réalisée'], 201);
-                }
-                //Si sauvegarde échouée, message d'erreur
-                return response()->json(['status' => false , 'message'=>'Une erreur est survenue'], 404);
-
+            //Si la sauvegarde est faite, on retourne un message de succès
+            if($saved){
+                return response()->json(['status' => true , 'message'=>'Inscription réalisée'], 201);
             }
-            //Si doublon en BDD, on l'indique par un message
-            return response()->json(['status' => false, 'message'=>'Déja inscrit'], 404);
+            //Si sauvegarde échouée, message d'erreur
+            return response()->json(['status' => false , 'message'=>'Une erreur est survenue'], 404);
 
         }
 
