@@ -160,7 +160,11 @@ Route::middleware('auth','role:admin')->group(function(){
 
 
     /**ROUTES POUR GESTION IMAGES */
-    Route::get('images/create',[ImageController::class, "create"])->name('image.create');
+    Route::get('image/create',[ImageController::class, "create"])->name('image.create');
+
+    Route::get('image/all', [ImageController::class, "index"])->name("image.index");
+
+    Route::post('image/save',[ImageController::class, 'store'])->name('image.store');
 
 }); //Sortie du group middleware
 

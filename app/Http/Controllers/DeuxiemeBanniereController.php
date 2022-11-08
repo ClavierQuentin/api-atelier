@@ -77,7 +77,7 @@ class DeuxiemeBanniereController extends Controller
         if($validator->fails()){
             return redirect('deuxieme-banniere/create')
             ->withErrors($validator)
-            ->withInput();;
+            ->withInput();
         }
 
         //On recupère les données validées

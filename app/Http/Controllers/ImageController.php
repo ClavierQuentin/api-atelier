@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Image;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ImageController extends Controller
 {
@@ -14,7 +16,9 @@ class ImageController extends Controller
      */
     public function index()
     {
-        //
+        $images = Image::all();
+
+        return view('images.index', compact('images'));
     }
 
     /**
@@ -35,7 +39,34 @@ class ImageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //Règles de validation
+        $validator = Validator::make($request->all(), [
+            'image.*' => 'image',
+            'image'=>'required'
+        ],[
+            'image.required' => 'Une image est requise',
+            'image' =>'Le fichier doit être une image'
+        ]);
+
+        if($validator->fails()){
+            return redirect('image/create')
+            ->withErrors($validator);
+        }
+
+        //On recupère les données validées
+        $validatedData = $validator->validated();
+
+        foreach($validatedData['image'] as $file){
+            // $path = cloudinary()->upload($file->getRealPath())->getSecurePath();
+            $path = $file->store('images', 'public');
+            $image = new Image();
+            $image->url = $path;
+
+            Auth::user()->image()->save($image);
+        }
+
+        return redirect('image/all');
+
     }
 
     /**
