@@ -32,7 +32,7 @@ class Newsletter extends Mailable
     {
         return $this->subject($this->details[0]['titre'])
         ->view('mail.newsletter')
-        ->with(['id' => $this->details[1]])
+        ->with(['identifiant' => $this->details[1]])
         ->with(['newsletter'=>$this->details[0]]);
 
     }

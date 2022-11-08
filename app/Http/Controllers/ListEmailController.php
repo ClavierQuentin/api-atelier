@@ -79,13 +79,18 @@ class ListEmailController extends Controller
      */
     public function destroy(Request $request)
         {
+
+        if(!isset($request['identifiant'])){
+            abort(403);
+        }
+
         //Regle de validation
         $validator = Validator::make($request->all(),[
-            'email' => 'email:rfc,dns',
+            'email' => 'email',
             'identifiant' => 'string'
         ]);
         if($validator->fails()){
-            abort(500);
+            abort(403);
         }
 
         //si les données sont validées, on les récupère
@@ -105,7 +110,7 @@ class ListEmailController extends Controller
            if($delete){
             return view('newsletter.delete');
            }
-           abort(404);
+           abort(500);
 
         }
         abort(404);

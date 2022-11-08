@@ -16,7 +16,7 @@
 
 
    {{-- Lien pour désinscription avec id unique en param --}}
-   <p style="font-size: 10px; font-style: italic; ">Si vous souhaitez vous désinscrire de la newsletter, <a href="https://api-atelier.herokuapp.com/edit-email?id={{ $id }}" target="_blank">Cliquez sur ce lien</a></p>
+   <p style="font-size: 10px; font-style: italic; ">Si vous souhaitez vous désinscrire de la newsletter, <a href="https://api-atelier.herokuapp.com/edit-email?id={{ $identifiant }}" target="_blank">Cliquez sur ce lien</a></p>
 
 </body>
 
