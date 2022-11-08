@@ -81,10 +81,17 @@
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Newsletter</a>
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                         <a href="{{ route('newsletter.create') }}" class="dropdown-item">Créer une nouvelle campagne</a>
-                                        <a href="{{ route('newsletter.index') }}"" class="dropdown-item">Voir les anciennes campagnes</a>
+                                        <a href="{{ route('newsletter.index') }}" class="dropdown-item">Voir les anciennes campagnes</a>
                                     </div>
                                 </li>
 
+                                <li class="nav-item dropdown">
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Photos</a>
+                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                        <a href="{{ route('image.create') }}" class="dropdown-item">Enregistrer des nouvelles images</a>
+                                        <a href="" class="dropdown-item">Voir les images</a>
+                                    </div>
+                                </li>
 
                             @endif
                         @endauth
