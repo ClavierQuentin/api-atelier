@@ -13,13 +13,17 @@ class PremiereBanniere extends Model
     protected $fillable = [
         'titre',
         'texte',
-        'url_image',
         'online'
     ];
 
     public function users()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function image()
+    {
+        return $this->belongsTo(Image::class);
     }
 
     //Fonction pour supprimer les images dans le cloud

@@ -14,13 +14,17 @@ class DeuxiemeBanniere extends Model
     protected $fillable = [
         'titre',
         'texte',
-        'url_image',
         'online'
     ];
 
     public function users()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function images()
+    {
+        return $this->belongsToMany(Image::class, "deuxieme_banniere_image");
     }
 
     //On retourne le tableau stocké en JSON décodé

@@ -15,14 +15,22 @@ class TroisiemeBanniere extends Model
         'texte_2',
         'titre_1',
         'titre_2',
-        'url_image',
-        'url_image_2',
         'online'
     ];
 
     public function users()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function image()
+    {
+        return $this->belongsTo(Image::class);
+    }
+
+    public function image2()
+    {
+        return $this->belongsTo(Image::class, "image_id_2");
     }
 
     //FOnction pour supprimer la premiere image

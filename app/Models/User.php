@@ -71,4 +71,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Newsletter::class);
     }
+
+    public function image()
+    {
+        return $this->hasMany(Image::class);
+    }
 }

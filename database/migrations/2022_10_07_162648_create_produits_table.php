@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('nom_produit');
             $table->text('description_courte_produit');
             $table->text('description_longue_produit');
-            $table->string('url_image_produit');
             $table->decimal('prix_produit');
             $table->foreignIdFor(Categorie::class)->constrained();
             $table->boolean('isAccueil')->nullable();

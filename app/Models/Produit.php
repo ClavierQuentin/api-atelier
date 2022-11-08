@@ -13,7 +13,6 @@ class Produit extends Model
         'nom_produit',
         'description_courte_produit',
         'description_longue_produit',
-        'url_image_produit',
         'prix_produit',
         'categorie_id',
         'isAccueil',
@@ -25,6 +24,11 @@ class Produit extends Model
     public function categorie()
     {
         return $this->belongsTo(Categorie::class);
+    }
+
+    public function images()
+    {
+        return $this->belongsToMany(Image::class, "image_produit");
     }
 
     //Fonction pour supprimer les images dans le cloud

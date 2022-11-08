@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\DeuxiemeBanniereController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ListEmailController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PremiereBanniereController;
@@ -156,6 +157,10 @@ Route::middleware('auth','role:admin')->group(function(){
     Route::get('newsletter/{newsletter}',[NewsletterController::class, 'show'])->name('newsletter.show');
 
     Route::delete('newsletter/delete/{newsletter}',[NewsletterController::class, 'destroy'])->name('newsletter.delete');
+
+
+    /**ROUTES POUR GESTION IMAGES */
+    Route::get('images/create',[ImageController::class, "create"])->name('image.create');
 
 }); //Sortie du group middleware
 

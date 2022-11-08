@@ -1,7 +1,7 @@
 <?php
 
+use App\Models\DeuxiemeBanniere;
 use App\Models\Image;
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,13 +15,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('premiere_bannieres', function (Blueprint $table) {
+        Schema::create('deuxieme_banniere_image', function (Blueprint $table) {
             $table->id();
-            $table->string('titre');
-            $table->text('texte');
-            $table->foreignIdFor(User::class)->constrained();
-            $table->foreignIdFor(Image::class)->constrained();
-            $table->boolean('online')->nullable();
+            $table->foreignIdFor(Image::class)->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignIdFor(DeuxiemeBanniere::class)->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }
@@ -33,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('premiere_bannieres');
+        Schema::dropIfExists('deuxieme_banniere_image');
     }
 };

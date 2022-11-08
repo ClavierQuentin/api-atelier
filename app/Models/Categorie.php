@@ -12,7 +12,6 @@ class Categorie extends Model
 
     protected $fillable = [
         'nom_categorie',
-        'url_image_categorie',
         'isAccueil'
     ];
 
@@ -25,6 +24,11 @@ class Categorie extends Model
     public function produits()
     {
         return $this->hasMany(Produit::class);
+    }
+
+    public function image()
+    {
+        return $this->belongsTo(Image::class);
     }
 
 

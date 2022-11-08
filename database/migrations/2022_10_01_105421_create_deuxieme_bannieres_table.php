@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('titre');
             $table->text('texte');
             $table->foreignIdFor(User::class)->constrained();
-            $table->text('url_image');
             $table->boolean('online')->nullable();
             $table->timestamps();
         });
