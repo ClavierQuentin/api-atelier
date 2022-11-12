@@ -1,0 +1,59 @@
+    /*--------------------Banniere qui je suis-----------------*/
+    .quiJeSuis{
+        padding: 80px 0;
+    }
+/*-----------------------Bannière lieu---------------*/
+.lieu{
+    padding: 80px 0;
+}
+.conteneurCarrousel{
+    height: 500px;
+    width: 333px;
+    overflow: hidden;
+}
+.carrousel{
+    max-width: 100%;
+    max-height: 100%;
+    display: flex;
+    transition: 2s ease;
+}
+.tailleImg{
+    min-width: 100%;
+    min-height: 100%;
+}
+
+    /*----------------------------Bannière valeurs-------------------*/
+    .titreValeurs{
+        text-align: center;
+        padding-top: 20px;
+    }
+    .wrapReverse{
+        flex-wrap: wrap-reverse;
+    }
+    .imgDeuxBanDeux{
+        height: 500px;
+    }
+/*--------------------------Responsive------------------*/
+@media screen  and (max-width:400px){
+    .divTexte p{
+        width: 90%;
+    }
+    .divTexte{
+        width: 100%;
+    }
+    .divTexte h2{
+        text-align: center;
+    }
+    .portrait img, .paysage, .conteneurCarrousel, .imgDeuxBanDeux{
+        display: none;
+    }
+
+}
+@media screen  and (min-width:400px) and (max-width:900px){
+    .divTexte p{
+        width: 90%;
+    }
+    .divTexte{
+        width: 100%;
+    }
+}

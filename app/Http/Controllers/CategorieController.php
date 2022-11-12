@@ -180,7 +180,7 @@ class CategorieController extends Controller
     public function destroy(Categorie $categorie)
     {
         //Suppression de l'image sur le cloud
-        // $categorie->deleteImage();
+        $categorie->deleteImage();
 
         //Suppression en DB
         $delete = $categorie->delete();

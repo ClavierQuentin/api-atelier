@@ -31,7 +31,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Auth::routes(['register' => false]); //Désactivation de la route d'enregistrement d'un user
+// Auth::routes(['register' => false]); //Désactivation de la route d'enregistrement d'un user
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 

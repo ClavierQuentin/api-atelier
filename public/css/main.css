@@ -30,3 +30,359 @@ a{
     text-decoration: none;
     color: black;
 }
+
+/*Installation polices spéciales*/
+@font-face {
+    font-family: 'Angella';
+    src: url('./AngellaWhitePersonalUseFont-ywA8e.otf');
+}
+
+
+/* @font-face {
+    font-family: 'Garet';
+    src: url("../fonts/garet.book.otf"),
+        url("../fonts/garet.book.ttf");
+} */
+
+/*Margin 0 sur tous les éléments*/
+*{
+    margin: 0;
+}
+
+/*---------Classes globales--------*/
+body{
+    position: relative;
+    /* font-family: 'Garet'; */
+    background-color: #f8cbc6;
+    font-family: 'Playfair Display', serif;
+
+}
+h2, h3, h4, h5{
+    /* font-family: 'Playfair Display', serif;*/
+    font-weight: lighter;
+    font-size: 1.6rem;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+h4{
+    font-size: 20px;
+}
+label{
+    font-size: 1.2rem;
+}
+.marginRight10{
+    margin-right: 10px;
+}
+.backGroundFleur{
+    background-color: white;
+}
+.divTexte{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.divTexte p{
+    margin: 10px;
+    width: 80%;
+    text-align: justify;
+}
+.banniere{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.portrait img{
+    height: 500px;
+    width: auto;
+}
+.rotate{
+    rotate: 90deg;
+}
+.paysage{
+    width: 400px;
+    height: auto;
+}
+.background{
+    background-color: #f8cbc6;
+    color: white;
+}
+.whiteFont{
+    color: white;
+}
+
+    /*------------------------------------------------Barre de navigation--------------------------------------*/
+    nav{
+        display: none;
+        height: 75vh;
+        transition: 1s;
+        position: relative;
+        flex-direction: column;
+        justify-content: center;
+    }
+    nav p{
+        font-size: 18px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        animation: fadeIn 1s;
+        font-weight: bold;
+    }
+    nav a{
+        padding: 15px;
+    }
+    nav a:hover{
+        transform: scale(1.1);
+    }
+    @keyframes fadeIn{
+        from{
+            opacity: 0;
+        }
+        to{
+            opacity: 1;
+        }
+    }
+
+/*-------------Icone et fenetre panier--------------*/
+.panier{
+    position: fixed;
+    top: 0;
+    left: -500px;
+    z-index: 6000;
+    width: 500px;
+    max-width: 80vw;
+    /*height: 100vh;*/
+    background-color: rgba(255, 255, 255, 0.9);
+    transition: 1s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2%;
+    padding: 20px 0;
+}
+.panier button{
+    border: 0;
+    padding: 2%;
+    cursor: pointer;
+}
+.divPanier{
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    margin: 10px 0;
+    gap: 2%;
+}
+.divProduit{
+    display: flex;
+    gap: 2%;
+    justify-content: space-around;
+    margin: 5px 0;
+}
+.divDescription{
+    text-align: center;
+    width: 50%;
+}
+.blocPanier{
+    position: absolute;
+    top: 30px;
+    left: 1300px;
+    z-index: 2003;
+    cursor: pointer;
+}
+.affichagePanier{
+transform: translateX(500px);
+}
+@media screen and (min-width:600px) and (max-width:1000px) {
+    .blocPanier{
+        left: 80%;
+    }
+}
+@media screen and (max-width:600px) {
+    .blocPanier{
+        left: 80%;
+        top: 10px;
+    }
+    .blocPanier img{
+        width: 25px;
+    }
+
+}
+/*-------------Titre------------*/
+.conteneurName{
+    z-index: 2000;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.name{
+    font-family: 'Angella';
+    font-size: 80px;
+}
+    /*-------------------------Bloc menu--------------------*/
+    .divMenu{
+        position: absolute;
+        top: 30px;
+        left: 100px;
+        z-index: 2001;
+        height: 50px;
+        width: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+    .menu{
+        position: relative;
+        width: 27px;
+        height: 4px;
+        border-radius: 5px;
+        background-color: white;
+        transition: 0.2s ease-in-out;
+    }
+    .menu::before, .menu::after{
+        position: absolute;
+        content: '';
+        width: 27px;
+        height: 4px;
+        border-radius: 5px;
+        background-color: white;
+        transition: 0.5s ease-in-out;
+    }
+    .menu::after{
+        transform: translateY(10px);
+    }
+    .menu::before{
+        transform: translateY(-10px);
+    }
+    .divMenu.ouverture .menu{
+        background: transparent;
+    }
+    .divMenu.ouverture .menu::after{
+        top: 0;
+        transform: rotateZ(45deg);
+    }
+    .divMenu.ouverture .menu::before{
+        bottom: 0;
+        transform: rotateZ(-45deg);
+    }
+/*-----------------------Footer------------------*/
+footer{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 15px 20px;
+}
+.liens:hover{
+    transform: scale(1.05);
+}
+.banniereReseaux{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding-top: 30px;
+}
+.banniereCGV{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+.emailContainer form{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.emailContainer input{
+    border: 1px #f8cbc6 solid;
+    padding: 12px 25px;
+    margin:10px 0 10px 0 ;
+    border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px;
+
+}
+.emailContainer button{
+    padding: 12px 10px;
+    border-bottom-right-radius: 4px;
+    border-top-right-radius: 4px;
+    margin: 0;
+    border: none;
+
+}
+/*---------------------------Responsive---------------------*/
+@media screen  and (max-width:700px) {
+    .name{
+        font-size:40px;
+    }
+    .divMenu{
+        top: 5px;
+        left: 5px;
+    }
+    footer{
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+
+
+
+/*--------------Barre de navigation----------*/
+nav{
+    justify-content:center;
+}
+
+
+
+
+/*--------Premiere page paiement (a faire)--------*/
+/* .basket{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2%;
+    padding: 5%;
+}
+.imgProduitPanier{
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+.imgProduitPanierDefilant{
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.produitPanier{
+    display: flex;
+    gap: 2%;
+    border-top: 2px #f8cbc6 solid;
+
+}
+.pagePanier div{
+    margin: 2%;
+}
+.sousTotal button{
+    margin: 4%;
+} */
+
+
+
+/*---------------PAGE 404------------------*/
+.container404{
+    width: 33%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+.container404 a{
+    margin: 35px;
+    padding: 15px;
+    border: 0;
+    cursor: pointer;
+    font-size: 20px;
+}
