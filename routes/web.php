@@ -166,6 +166,8 @@ Route::middleware('auth','role:admin')->group(function(){
 
     Route::post('image/save',[ImageController::class, 'store'])->name('image.store');
 
+    Route::get('image/delete/{image}',[ImageController::class, 'destroy'])->name('image.delete');
+
 }); //Sortie du group middleware
 
 /**---------------------ROUTES SANS AUTH--------------------- */

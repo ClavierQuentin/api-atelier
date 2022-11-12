@@ -6,6 +6,7 @@ use App\Models\Image;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ImageController extends Controller
 {
@@ -58,7 +59,7 @@ class ImageController extends Controller
 
         foreach($validatedData['image'] as $file){
             // $path = cloudinary()->upload($file->getRealPath())->getSecurePath();
-            $path = $file->store('images', 'public');
+            $path = $file->storeAs('images', $file->getClientOriginalName(), ['disk'=>'public']);
             $image = new Image();
             $image->url = $path;
 
@@ -111,6 +112,23 @@ class ImageController extends Controller
      */
     public function destroy(Image $image)
     {
-        //
+        //On décompose l'url
+        $url = explode("/", $image->url);
+
+        //On récupère le nom du ficher
+        $fileName = $url[count($url)-1];
+
+        if(isset($fileName)){
+            Storage::delete($fileName);
+
+            $delete = $image->delete();
+        }
+
+        if($delete){
+            return redirect('image/all');
+        }
+
+        abort(500);
+
     }
 }
