@@ -17,8 +17,8 @@ return new class extends Migration
     {
         Schema::create('deuxieme_banniere_image', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Image::class)->constrained()->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignIdFor(DeuxiemeBanniere::class)->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignIdFor(Image::class)->constrained();
+            $table->foreignIdFor(DeuxiemeBanniere::class)->constrained();
             $table->timestamps();
         });
     }

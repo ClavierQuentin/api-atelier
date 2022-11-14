@@ -39,10 +39,10 @@
             <div class="form-group mt-2">
 
                 <label for="image">
-                    Images
+                    Télécharges des nouvelles images
                 </label>
                 {{-- Formulaire pour l'image --}}
-                <input type="file" name="image[]" id="image" class="form-control @if ($errors->any()) is-invalid @endif" accept="image/*" multiple>
+                <input type="file" name="imageDL[]" class="form-control @if ($errors->any()) is-invalid @endif" accept="image/*" multiple>
 
                 @if ($errors->any())
                     <div class="alert alert-danger">
@@ -51,6 +51,13 @@
                         @endforeach
                     </div>
                 @endif
+
+                <p>Ou</p>
+
+                {{-- Choix image existante --}}
+                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#ModalImage">Choisir une image existante</a>
+                <div id="containerImage" class="d-flex flex-wrap"></div>
+                @include('deuxiemeBannieres.modal.index')
 
             </div>
 

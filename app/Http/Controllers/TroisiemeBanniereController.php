@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TroisiemeBanniere;
 use App\Http\Requests\StoreTroisiemeBanniereRequest;
 use App\Http\Requests\UpdateTroisiemeBanniereRequest;
+use App\Models\Image;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\VarDumper\VarDumper;
@@ -45,7 +46,8 @@ class TroisiemeBanniereController extends Controller
     //Direction pour le formulaire de création
     public function create()
     {
-        return view('troisiemeBannieres.create');
+        $images = Image::all();
+        return view('troisiemeBannieres.create', compact('images'));
     }
 
     /**
@@ -56,18 +58,85 @@ class TroisiemeBanniereController extends Controller
      */
     public function store(StoreTroisiemeBanniereRequest $request)
     {
-        //On upload chaque image et on garde les urls d'accès
-        $path = cloudinary()->upload($request->validated('image')->getRealPath())->getSecurePath();
-
-        $path2 = cloudinary()->upload($request->validated('image2')->getRealPath())->getSecurePath();
-
         //Création du nouvel objet
         $troisiemeBanniere = new TroisiemeBanniere($request->validated());
 
+        if($request['image']){
+            $image = Image::find($request['image']);
+            $troisiemeBanniere->image()->associate($image);
+        }
+        if($request['image2']){
+            $image = Image::find($request['image2']);
+            $troisiemeBanniere->image2()->associate($image);
+        }
 
-        //On enregistre certain paramètres
-        $troisiemeBanniere->url_image = $path;
-        $troisiemeBanniere->url_image_2 = $path2;
+        //Si une image est fournie via le formulaire
+        if($request['imageDL']){
+            //Règles de validation
+            $validator = Validator::make($request->all(), [
+                'imageDL' => 'image|required',
+            ],[
+                'required' => 'Une image est requise',
+                'image' =>'Le fichier doit être une image'
+            ]);
+
+            if($validator->fails()){
+                return redirect('troisieme-banniere/create')
+                ->withErrors($validator)
+                ->withInput();
+            }
+
+            //On recupère les données validées
+            $validatedData = $validator->validated();
+
+            $path = $validatedData['imageDL']->storeAs('images', $validatedData['imageDL']->getClientOriginalName(), ['disk'=>'public']);
+            $image = new Image();
+            $image->url = $path;
+
+            Auth::user()->image()->save($image);
+
+            $troisiemeBanniere->image()->associate($image);
+        }
+
+        if($request['imageDL2']){
+            //Règles de validation
+            $validator = Validator::make($request->all(), [
+                'imageDL2' => 'image|required',
+            ],[
+                'required' => 'Une image est requise',
+                'image' =>'Le fichier doit être une image'
+            ]);
+
+            if($validator->fails()){
+                return redirect('troisieme-banniere/create')
+                ->withErrors($validator)
+                ->withInput();
+            }
+
+            //On recupère les données validées
+            $validatedData = $validator->validated();
+
+            $path = $validatedData['imageDL2']->storeAs('images', $validatedData['imageDL2']->getClientOriginalName(), ['disk'=>'public']);
+            $image = new Image();
+            $image->url = $path;
+
+            Auth::user()->image()->save($image);
+
+            $troisiemeBanniere->image2()->associate($image);
+        }
+
+        $all = TroisiemeBanniere::all();
+
+        //On passe toutes les entrées à 0
+        if(isset($all)){
+            foreach ($all as $item){
+                $item->online = "0";
+                $item->save();
+            }
+        }
+        //ON passe la nouvelle entrée en ligne
+        $troisiemeBanniere->online = '1';
+
 
         //Enregistrement en DB
         $response = Auth::user()->troisiemeBannieres()->save($troisiemeBanniere);
@@ -87,7 +156,8 @@ class TroisiemeBanniereController extends Controller
      */
     public function edit(TroisiemeBanniere $troisiemeBanniere)
     {
-        return view('troisiemeBannieres.edit',['troisiemeBanniere'=>$troisiemeBanniere]);
+        $images = Image::all();
+        return view('troisiemeBannieres.edit', compact('troisiemeBanniere', 'images'));
     }
 
     /**
@@ -99,46 +169,75 @@ class TroisiemeBanniereController extends Controller
      */
     public function update(UpdateTroisiemeBanniereRequest $request, TroisiemeBanniere $troisiemeBanniere)
     {
-        //Si une image a été fournie au formulaire pour la 1ere image
-        if($request->validated('image') && !$request->validated('image2')){
+        if($request['image']){
+            $troisiemeBanniere->image()->dissociate();
 
-            //Suppression de l'ancienne image
-            $troisiemeBanniere->deleteImage1();
-            //Upload de la nouvelle image
-            $updatedUrl = cloudinary()->upload($request->validated('image')->getRealPath())->getSecurePath();
+            $image = Image::find($request['image']);
+            $troisiemeBanniere->image()->associate($image);
+        }
+        if($request['image2']){
+            $troisiemeBanniere->image2()->dissociate();
 
-            //Enregistrement de la nouvelle URL
-            $troisiemeBanniere->url_image = $updatedUrl;
-
+            $image = Image::find($request['image2']);
+            $troisiemeBanniere->image2()->associate($image);
         }
 
-        //Si une image a été fournie au formulaire pour la deuxieme image
-        if(!$request->validated('image') && $request->validated('image2')){
+        //Si une image est fournie via le formulaire
+        if($request['imageDL']){
+            //Règles de validation
+            $validator = Validator::make($request->all(), [
+                'imageDL' => 'image',
+            ],[
+                'image' =>'Le fichier doit être une image'
+            ]);
 
-            //Suppression de l'image actuelle
-            $troisiemeBanniere->deleteImage2();
+            if($validator->fails()){
+                return redirect('troisieme-banniere/create')
+                ->withErrors($validator)
+                ->withInput();
+            }
 
-            //Enregistrement au cloud et récupération de l'url
-            $updatedUrl = cloudinary()->upload($request->validated('image2')->getRealPath())->getSecurePath();
+            //On recupère les données validées
+            $validatedData = $validator->validated();
 
-            //On enregistre la nouvelle url
-            $troisiemeBanniere->url_image_2 = $updatedUrl;
+            $path = $validatedData['imageDL']->storeAs('images', $validatedData['imageDL']->getClientOriginalName(), ['disk'=>'public']);
+            $image = new Image();
+            $image->url = $path;
+
+            Auth::user()->image()->save($image);
+
+            $troisiemeBanniere->image()->dissociate();
+
+            $troisiemeBanniere->image()->associate($image);
         }
 
-        //Si les 2 images ont été envoyées au formulaire
-        if($request->validated('image') && $request->validated('image2')){
+        if($request['imageDL2']){
+            //Règles de validation
+            $validator = Validator::make($request->all(), [
+                'imageDL2' => 'image|required',
+            ],[
+                'required' => 'Une image est requise',
+                'image' =>'Le fichier doit être une image'
+            ]);
 
-            //On supprime les images existantes
-            $troisiemeBanniere->deleteImage1();
-            $troisiemeBanniere->deleteImage2();
+            if($validator->fails()){
+                return redirect('troisieme-banniere/create')
+                ->withErrors($validator)
+                ->withInput();
+            }
 
-            //On enregistre les nouvelles images et on récupère les urls
-            $updatedUrl = cloudinary()->upload($request->validated('image')->getRealPath())->getSecurePath();
-            $updatedUrl2 = cloudinary()->upload($request->validated('image2')->getRealPath())->getSecurePath();
+            //On recupère les données validées
+            $validatedData = $validator->validated();
 
-            //On enregistre les urls
-            $troisiemeBanniere->url_image = $updatedUrl;
-            $troisiemeBanniere->url_image_2 = $updatedUrl2;
+            $path = $validatedData['imageDL2']->storeAs('images', $validatedData['imageDL2']->getClientOriginalName(), ['disk'=>'public']);
+            $image = new Image();
+            $image->url = $path;
+
+            Auth::user()->image()->save($image);
+
+            $troisiemeBanniere->image2()->dissociate();
+
+            $troisiemeBanniere->image2()->associate($image);
         }
 
         //On enregistre en base
@@ -179,10 +278,6 @@ class TroisiemeBanniereController extends Controller
      */
     public function destroy(TroisiemeBanniere $troisiemeBanniere)
     {
-        //Suppression des images sur le cloud, voir model
-        $troisiemeBanniere->deleteImage1();
-        $troisiemeBanniere->deleteImage2();
-
         //Suppression en base
         $delete = $troisiemeBanniere->delete();
         if(!$delete){

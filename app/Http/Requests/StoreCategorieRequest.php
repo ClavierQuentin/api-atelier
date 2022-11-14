@@ -25,7 +25,6 @@ class StoreCategorieRequest extends FormRequest
     {
         return [
             'nom_categorie' =>'required|string|max:200',
-            'image'=>'required|image'
         ];
     }
 
@@ -34,7 +33,6 @@ class StoreCategorieRequest extends FormRequest
         return [
             'required'=>'Ce champ est obligatoire !',
             'string'=>'Ce champ doit être une chaine de caractères',
-            'image'=>'Le fichier doit être une image'
         ];
     }
 }

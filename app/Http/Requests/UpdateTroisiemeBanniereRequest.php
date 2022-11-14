@@ -29,8 +29,6 @@ class UpdateTroisiemeBanniereRequest extends FormRequest
             'titre_2'=>'string|max:250',
             'texte_1'=>'string',
             'texte_2'=>'string',
-            'image'=>'image',
-            'image2' => 'image'
         ];
     }
 
@@ -38,7 +36,6 @@ class UpdateTroisiemeBanniereRequest extends FormRequest
     {
         return [
             'string' => 'Ce champs doit être une chaîne de caractères !',
-            'image'=>'Ce fichier doit être une image'
         ];
     }
 

@@ -10,6 +10,7 @@ use Illuminate\Validation\Rules\File;
 use Illuminate\Support\Facades\Validator;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use App\Http\Requests\Request;
+use App\Models\Image;
 use Illuminate\Http\Client\Request as ClientRequest;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\DB;
@@ -50,7 +51,8 @@ class DeuxiemeBanniereController extends Controller
     //Affichage du formulaire de création
     public function create()
     {
-        return view('deuxiemeBannieres.create');
+        $images = Image::all();
+        return view('deuxiemeBannieres.create', compact('images'));
     }
 
 
@@ -62,40 +64,50 @@ class DeuxiemeBanniereController extends Controller
      */
     public function store(StoreDeuxiemeBanniereRequest $request)
     {
-        //Déclaration d'un tableau vide
-        $data = array();
 
-        //Règles de validation
-        $validator = Validator::make($request->all(), [
-            'image.*' => 'image',
-            'image'=>'required'
-        ],[
-            'image.required' => 'Une image est requise',
-            'image' =>'Le fichier doit être une image'
-        ]);
-
-        if($validator->fails()){
-            return redirect('deuxieme-banniere/create')
-            ->withErrors($validator)
-            ->withInput();
-        }
-
-        //On recupère les données validées
-        $validatedData = $validator->validated();
-
-        //On upload chaque image et on stocke l'url d'accès
-        foreach($validatedData['image'] as $file){
-            $path = cloudinary()->upload($file->getRealPath())->getSecurePath();
-            $data[] = $path;
-        }
         //Création du nouvel objet
         $deuxiemeBanniere = new DeuxiemeBanniere($request->validated());
 
-        //On enregistre le tableau d'url encodé en JSON
-        $deuxiemeBanniere->url_image = json_encode($data);
-
         //Enregistrement en DB
         $response = Auth::user()->deuxiemeBannieres()->save($deuxiemeBanniere);
+
+        if($request['image']){
+            foreach($request['image'] as $file){
+                $image = Image::find($file);
+                $deuxiemeBanniere->images()->attach($image);
+            }
+        }
+
+        if($request['imageDL']){
+            //Règles de validation
+            $validator = Validator::make($request->all(), [
+                'imageDL.*' => 'image',
+                'imageDL'=>'required'
+            ],[
+                'imageDL.required' => 'Une image est requise',
+                'image' =>'Le fichier doit être une image'
+            ]);
+
+            if($validator->fails()){
+                return redirect('deuxieme-banniere/create')
+                ->withErrors($validator)
+                ->withInput();
+            }
+
+            //On recupère les données validées
+            $validatedData = $validator->validated();
+
+            foreach($validatedData['imageDL'] as $file){
+                $path = $file->storeAs('images', $file->getClientOriginalName(), ['disk'=>'public']);
+                $image = new Image();
+                $image->url = $path;
+
+                Auth::user()->image()->save($image);
+
+                $deuxiemeBanniere->images()->attach($image);
+            }
+
+        }
 
         if($response){
             return redirect('deuxieme-banniere');
@@ -273,6 +285,4 @@ class DeuxiemeBanniereController extends Controller
         }
         abort(404);
     }
-
-
 }

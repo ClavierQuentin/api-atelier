@@ -25,26 +25,41 @@
 
             <div class="form-group m-2">
 
-                <label for="image">
+                <label>
                     Image d'illustration
                 </label>
 
                 {{-- Si une image est stockée en base, on l'affiche --}}
-                @if(isset($categorie->url_image_categorie))
+                @if(isset($categorie->image_id))
+                <?php
+                    $image = DB::select('select * from images where id = ?', [$categorie->image_id]);
+                    $url = $image[0]->url;
+                ?>
 
                     {{-- Image --}}
-                    <div class="border border-info p-1 m-2">
-                        <img src="{{ $categorie->url_image_categorie }}" alt="Image d'illustration" height="200" class=" border-info">
+                    <div>
+                        <img src="{{ asset('storage/'.$url) }}" alt="Image d'illustration" height="200" class=" border border-info p-1 m-2">
                     </div>
 
                 @endif
 
+                <label for="imageDL">Télécharger une nouvelle image</label>
                 {{-- Fomulaire pour l'image --}}
-                <input type="file" name="image" id="image" class="form-control @error('image') is-invalid @enderror" accept="image/*">
+                <input type="file" name="imageDL" class="form-control @if ($errors->any()) is-invalid @endif" accept="image/*">
 
-                @error('image')
-                    <div class="alert alert-danger m-1">{{ $message }}</div>
-                @enderror
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        @foreach ($errors->all() as $error)
+                            <span>{{ $error }}</span>
+                        @endforeach
+                    </div>
+                @endif
+
+                <p>Ou</p>
+
+                {{-- Choix image existante --}}
+                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#ModalImage">Choisir une image existante</a>
+                <div id="containerImage"></div>
 
 
             </div>
@@ -55,7 +70,7 @@
                 <div class="form-check">
                     <input type="checkbox" name="isAccueil" id="isAccueil" class="form-check-input @if ($errors->any()) is-invalid @endif" @if($categorie->isAccueil == 1) checked = 'true'  @endif value = "1">
                     <label for="isAccueil" class="form-check-label">Mettre en avant sur l'accueil</label>
-                    
+
                     @if ($errors->any())
                         <div class="alert alert-danger">
                             @foreach ($errors->all() as $error)
@@ -74,5 +89,6 @@
         </form>
 
     </div>
+    @include('modal.index_image')
 
 @endsection

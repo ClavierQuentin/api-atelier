@@ -29,8 +29,6 @@ class StoreTroisiemeBanniereRequest extends FormRequest
             'titre_2'=>'required|string|max:250',
             'texte_1'=>'required|string',
             'texte_2'=>'required|string',
-            'image'=>'required|image',
-            'image2'=>'required|image'
         ];
     }
 
@@ -39,7 +37,6 @@ class StoreTroisiemeBanniereRequest extends FormRequest
         return [
             'required' => 'Ce champs est obligatoire',
             'string' => 'Ce champs doit être une chaîne de caractères !',
-            'image' => "Le fichier doit être une image"
         ];
     }
 }

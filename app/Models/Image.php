@@ -25,7 +25,7 @@ class Image extends Model
 
     public function deuxiemeBanniere()
     {
-        return $this->belongsToMany(DeuxiemeBanniere::class,"deuxieme_banniere_image");
+        return $this->belongsToMany(DeuxiemeBanniere::class,"deuxieme_banniere_image", "image_id", "deuxieme_banniere_id");
     }
 
     public function troisiemeBanniere()

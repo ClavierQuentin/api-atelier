@@ -42,23 +42,22 @@
                 <label for="image">
                     Images
                 </label>
-
                 {{-- Si des images sont enregistrées en base --}}
-                @if(isset($deuxiemeBanniere->url_image) && sizeof($deuxiemeBanniere->getArrayFromUrlsImages()) > 0)
+                @if(isset($deuxiemeBanniere->images))
 
                     <div class="d-flex flex-wrap">
 
                         {{-- Parcours du tableau d'urls --}}
-                        @foreach ($deuxiemeBanniere->getArrayFromUrlsImages() as $url)
+                        @foreach ($deuxiemeBanniere->images as $image)
 
 
                             <div class="border border-info p-1 m-2 " style="position: relative;">
 
                                 {{-- Image --}}
-                                <img height="200px" src="{{ $url }}" alt="Image d'illustration" title="Image actuelle">
+                                <img height="200px" src="{{ asset('storage/'.$image->url) }}" alt="Image d'illustration" title="Image actuelle">
 
                                     {{-- Lien + icone pour suppression de l'image séléctionnée --}}
-                                    <a href="{{ url('deuxieme-banniere/delete-image/') }}/{{ $deuxiemeBanniere->id }}/{{ $deuxiemeBanniere->getNameFromUrl($url) }} " class="trash custom-btn"><img  src="{{ asset('assets/trash.svg') }}" alt="icone corbeille" title="Supprimer"></a>
+                                    <a href="" class="trash custom-btn"><img  src="{{ asset('assets/trash.svg') }}" alt="icone corbeille" title="Supprimer"></a>
 
                             </div>
 

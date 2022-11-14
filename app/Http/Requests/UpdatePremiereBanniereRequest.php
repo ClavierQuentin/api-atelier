@@ -26,7 +26,6 @@ class UpdatePremiereBanniereRequest extends FormRequest
         return [
             'titre' => 'string|max:250',
             'texte' => 'string',
-            'image'=>'image'
         ];
     }
 
@@ -34,7 +33,6 @@ class UpdatePremiereBanniereRequest extends FormRequest
     {
         return [
             'string' => 'Ce champs doit être une chaîne de caractères !',
-            'image'=>'Le fichier doit être une image'
         ];
     }
 }

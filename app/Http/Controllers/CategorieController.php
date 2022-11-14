@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Categorie;
 use App\Http\Requests\StoreCategorieRequest;
 use App\Http\Requests\UpdateCategorieRequest;
+use App\Models\Image;
 use Carbon\Carbon;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Support\Carbon as SupportCarbon;
@@ -70,7 +71,8 @@ class CategorieController extends Controller
     //Formulaire de création
     public function create()
     {
-        return view('categories.create');
+        $images = Image::all();
+        return view('categories.create', compact('images'));
     }
 
 
@@ -82,11 +84,41 @@ class CategorieController extends Controller
      */
     public function store(StoreCategorieRequest $request)
     {
-      //Enregistrement de l'image au cloud et on stock l'url
-        $path = cloudinary()->upload($request->validated('image')->getRealPath())->getSecurePath();
-
         //Création d'un nouvel objet
         $categorie = new Categorie($request->validated());
+
+        if($request['image']){
+            $image = Image::find($request['image']);
+            $categorie->image()->associate($image);
+        }
+
+        //Si une image est fournie via le formulaire
+        if($request['imageDL']){
+            //Règles de validation
+            $validator = Validator::make($request->all(), [
+                'imageDL' => 'image|required',
+            ],[
+                'required' => 'Une image est requise',
+                'image' =>'Le fichier doit être une image'
+            ]);
+
+            if($validator->fails()){
+                return redirect('categorie/create')
+                ->withErrors($validator)
+                ->withInput();
+            }
+
+            //On recupère les données validées
+            $validatedData = $validator->validated();
+
+            $path = $validatedData['imageDL']->storeAs('images', $validatedData['imageDL']->getClientOriginalName(), ['disk'=>'public']);
+            $image = new Image();
+            $image->url = $path;
+
+            Auth::user()->image()->save($image);
+
+            $categorie->image()->associate($image);
+        }
 
         //Cas où la checbox pour affichage à l'accueil est cochée
         if($request['isAccueil']){
@@ -102,9 +134,6 @@ class CategorieController extends Controller
             //On passe le booléen à 1
             $categorie->isAccueil = 1;
         }
-
-        //On enregistre l'url pour l'image
-        $categorie->url_image_categorie = $path;
 
         //On enregistre en base
         $response = Auth::user()->categories()->save($categorie);
@@ -123,7 +152,8 @@ class CategorieController extends Controller
      */
     public function edit(Categorie $categorie)
     {
-        return view('categories.edit', compact('categorie'));
+        $images = Image::all();
+        return view('categories.edit', compact('categorie','images'));
     }
 
     /**
@@ -135,17 +165,42 @@ class CategorieController extends Controller
      */
     public function update(UpdateCategorieRequest $request, Categorie $categorie)
     {
-        //Dans le cas où une image a été fournie au formulaire
-        if($request->validated('image') != NULL){
+        if($request['image'] != NULL){
+            //On supprime le lien existant en premier
+            $categorie->image()->dissociate();
 
-            //Suppression de l'ancienne image
-            $categorie->deleteImage();
+            $image = Image::find($request['image']);
+            $categorie->image()->associate($image);
+        }
 
-            //Enregistrement de la nouvelle image et on stock l'url
-            $updatedUrl = cloudinary()->upload($request->validated('image')->getRealPath())->getSecurePath();
+        //Si une image est fournie via le formulaire
+        if($request['imageDL'] != NULL){
+            //Règles de validation
+            $validator = Validator::make($request->all(), [
+                'imageDL' => 'image',
+            ],[
+                'image' =>'Le fichier doit être une image'
+            ]);
 
-            //On enregistre l'url
-            $categorie->url_image_categorie = $updatedUrl;
+            if($validator->fails()){
+                return redirect('categorie/edit/'.$categorie->id)
+                ->withErrors($validator)
+                ->withInput();
+            }
+
+            //On recupère les données validées
+            $validatedData = $validator->validated();
+
+            $path = $validatedData['imageDL']->storeAs('images', $validatedData['imageDL']->getClientOriginalName(), ['disk'=>'public']);
+            $image = new Image();
+            $image->url = $path;
+
+            Auth::user()->image()->save($image);
+
+            //On supprime le lien existant en premier
+            $categorie->image()->dissociate();
+
+            $categorie->image()->associate($image);
         }
 
         //Cas où la checbox pour affichage à l'accueil est cochée
@@ -163,7 +218,9 @@ class CategorieController extends Controller
         }
 
         //On enregistre les modifs en base
-        $update = $categorie->update($request->validated());
+        $categorie->nom_categorie = $request->validated('nom_categorie');
+
+        $update = $categorie->save();
 
         if(!$update){
             return redirect('categorie')->with('error', 'Une erreur est survenue pendant l\'enregistrement');
@@ -179,9 +236,6 @@ class CategorieController extends Controller
      */
     public function destroy(Categorie $categorie)
     {
-        //Suppression de l'image sur le cloud
-        // $categorie->deleteImage();
-
         //Suppression en DB
         $delete = $categorie->delete();
         if(!$delete){

@@ -24,7 +24,7 @@ class DeuxiemeBanniere extends Model
 
     public function images()
     {
-        return $this->belongsToMany(Image::class, "deuxieme_banniere_image");
+        return $this->belongsToMany(Image::class, "deuxieme_banniere_image", "deuxieme_banniere_id","image_id");
     }
 
     //On retourne le tableau stocké en JSON décodé
