@@ -1,3 +1,206 @@
+/*------------Listing catégories et produits----------*/
+.sectionProduits{
+    padding: 5% 0;
+}
+.titreProduits{
+    margin-left: 5%;
+    margin-bottom: 2%;
+}
+.titreProduits h3{
+    text-align: center;
+}
+.cardsProduits{
+    width: 90%;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}
+.cardsProduits label{
+    text-align: center;
+    margin-top: 3%;
+}
+.card{
+    display: block;
+    width: 277px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 2%;
+    cursor: pointer;
+}
+.conteneurImgCard{
+    width: 304px;
+    height: 455px;
+    overflow: hidden;
+}
+.imgCardProduit{
+    width: 304px;
+    height: 455px;
+    object-fit: cover;
+    transition: 1s;
+}
+.imgCardProduit:hover{
+    transform: scale(1.05);
+}
+
+.cardProduit{
+    display: block;
+    width: 304px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+.conteneurImgProduit{
+    width: 304px;
+    height: 455px;
+    overflow: hidden;
+}
+.imgProduit{
+    width: 304px;
+    height: 455px;
+    object-fit: cover;
+    transition: 1s;
+}
+.imgProduit:hover{
+    transform: scale(1.05);
+}
+
+
+/*----------Page Produit--------------*/
+.imgProduitUnique{
+    height: 700px;
+    object-fit: cover;
+    margin: 10px 0;
+}
+.sectionPhoto{
+    width: 90%;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding-top: 3%;
+}
+.description1{
+    width: 40%;
+    text-align: center;
+    margin: 35PX;
+}
+
+.description1 h2{
+    margin:  35px;
+}
+.prix{
+    text-align: center;
+    margin: 35px;
+    font-size: 20px;
+}
+.descriptionCourte{
+    margin: 35px;
+    text-align: justify;
+}
+.descriptionCourte p, .compo p{
+    margin: 2% 0;
+}
+
+#boutonAjouter{
+    margin: 35px;
+    padding: 15px;
+    border: 0;
+    cursor: pointer;
+    font-size: 20px;
+}
+hr{
+    width:30%;
+    margin: auto;
+    margin-top: 3%;
+    margin-bottom: 3%;
+    color: #f8cbc6;
+}
+.compo{
+    text-align: center;
+    width: 80%;
+    margin: auto;
+}
+#photoCarrousel{
+    height: 40vh;
+}
+
+.splide__slide img {
+    object-fit: contain;
+    height: 100%;
+    width: 100%;
+  }
+
+  .thumbnails {
+    display: flex;
+    margin: 1rem auto 0;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .thumbnail {
+    width: 70px;
+    height: 70px;
+    overflow: hidden;
+    list-style: none;
+    margin: 0 0.2rem;
+    cursor: pointer;
+  }
+
+  .thumbnail img {
+    width: 100%;
+    height: auto;
+  }
+
+/*Partie produits équvalents*/
+
+.titreProduitEquivalent{
+    text-align: center;
+}
+.produits{
+    width: 50%;
+    margin: 2% auto;
+    padding-bottom: 20px;
+    display: flex;
+    gap: 5%;
+}
+
+.produitEquivalent{
+    display: flex;
+    align-items: center;
+    flex-direction: column-reverse;
+    gap: 2%;
+    padding: 20px 0;
+}
+
+.labels{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2%;
+    padding: 10px 0;
+}
+
+.conteneurImgProduitEquivalent{
+    width: 270px;
+    height: 320px;
+    overflow: hidden;
+}
+.imgProduitEquivalent{
+    width: 270px;
+    height: 320px;
+    object-fit: cover;
+    transition: 1s;
+}
+
+.imgProduitEquivalent:hover{
+    transform: scale(1.05);
+}
+
 
 @media screen and (max-width:1000px) {
     .description1{
