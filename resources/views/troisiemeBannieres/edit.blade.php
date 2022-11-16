@@ -50,21 +50,40 @@
                 </label>
 
                 {{-- Si une image existe en base, on l'affiche --}}
-                @if(isset($troisiemeBanniere->url_image))
+                @if(isset($troisiemeBanniere->image_id))
+                <?php
+                $image = DB::select('select * from images where id = ?', [$troisiemeBanniere->image_id]);
+                $url = $image[0]->url;
+                ?>
                     <div class="d-flex">
                         <div class="border border-info p-1 m-2">
-                            <img  height="200px" src="{{ $troisiemeBanniere->url_image }}" alt="Image d'illustration" title="Image actuelle">
+                            <img  height="200px" src="{{ asset('storage/'.$url) }}" alt="Image d'illustration" title="Image actuelle">
                         </div>
                     </div>
 
                 @endif
 
-                {{-- Formulaire File --}}
-                <input type="file" name="image" id="image" class="form-control @error('image') is-invalid @enderror" accept="image/*">
+                <label for="image">
+                    Télécharger une nouvelle image
+                </label>
+                <input type="file" name="imageDL"  class="form-control @if ($errors->any()) is-invalid @endif" accept="image/*">
 
-                @error('image')
-                    <div class="alert alert-danger m-1">{{ $message }}</div>
-                @enderror
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        @foreach ($errors->all() as $error)
+                            <span>{{ $error }}</span>
+                        @endforeach
+                    </div>
+                @endif
+
+
+                <p>Ou</p>
+
+                {{-- Choix image existante --}}
+                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#ModalImage">Choisir une image existante</a>
+                <div id="containerImage"></div>
+
+                @include('modal.index_image')
 
             </div>
 
@@ -95,23 +114,42 @@
                 </label>
 
                 {{-- Si une image existe en base, on l'affiche --}}
-                @if(isset($troisiemeBanniere->url_image_2))
+                @if(isset($troisiemeBanniere->image_id_2))
+                <?php
+                $image2 = DB::select('select * from images where id = ?', [$troisiemeBanniere->image_id_2]);
+                $url2 = $image2[0]->url;
+                ?>
 
                     <div class="d-flex">
                         <div class="border border-info m-2 p-1">
                             {{-- Image 2--}}
-                            <img height="200px" src="{{ $troisiemeBanniere->url_image_2 }}" alt="Image d'illustration" title="Image actuelle">
+                            <img height="200px" src="{{ asset('storage/'.$url2) }}" alt="Image d'illustration" title="Image actuelle">
                         </div>
                     </div>
 
                 @endif
 
-                {{-- Formulaire FILE --}}
-                <input type="file" name="image2" id="image2" class="form-control @error('image2') is-invalid @enderror" accept="image/*">
+               {{-- Formulaire pour l'image --}}
+               <label for="image">
+                Télécharger une nouvelle image
+                </label>
+                <input type="file" name="imageDL2"  class="form-control @if ($errors->any()) is-invalid @endif" accept="image/*">
 
-                @error('image2')
-                    <div class="alert alert-danger m-1">{{ $message }}</div>
-                @enderror
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        @foreach ($errors->all() as $error)
+                            <span>{{ $error }}</span>
+                        @endforeach
+                    </div>
+                @endif
+
+
+                <p>Ou</p>
+
+                {{-- Choix image existante --}}
+                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#ModalImage2">Choisir une image existante</a>
+                <div id="containerImage2"></div>
+                @include('troisiemeBannieres.modal.index')
 
             </div>
 

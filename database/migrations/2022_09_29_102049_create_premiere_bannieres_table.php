@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Image;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -19,7 +20,7 @@ return new class extends Migration
             $table->string('titre');
             $table->text('texte');
             $table->foreignIdFor(User::class)->constrained();
-            $table->string('url_image');
+            $table->foreignIdFor(Image::class)->constrained();
             $table->boolean('online')->nullable();
             $table->timestamps();
         });

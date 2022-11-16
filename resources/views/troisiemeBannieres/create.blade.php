@@ -45,14 +45,28 @@
                 @enderror
 
                 {{-- Image 1 --}}
-                <label for="image">
-                    Image
+               {{-- Formulaire pour l'image --}}
+               <label for="image">
+                    Télécharger une nouvelle image
                 </label>
-                <input type="file" name="image" id="image" class="form-control @error('image') is-invalid @enderror" accept="image/*">
+                <input type="file" name="imageDL"  class="form-control @if ($errors->any()) is-invalid @endif" accept="image/*">
 
-                @error('image')
-                    <div class="alert alert-danger m-1">{{ $message }}</div>
-                @enderror
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        @foreach ($errors->all() as $error)
+                            <span>{{ $error }}</span>
+                        @endforeach
+                    </div>
+                @endif
+
+
+                <p>Ou</p>
+
+                {{-- Choix image existante --}}
+                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#ModalImage">Choisir une image existante</a>
+                <div id="containerImage"></div>
+
+                @include('modal.index_image')
 
             </div>
 
@@ -79,15 +93,28 @@
                 @enderror
 
                 {{-- Image 2 --}}
-                <label for="image2">
-                    Image
+               {{-- Formulaire pour l'image --}}
+               <label for="image">
+                Télécharger une nouvelle image
                 </label>
-                <input type="file" name="image2" id="image2" class="form-control @error('image2') is-invalid @enderror" accept="image/*">
+                <input type="file" name="imageDL2"  class="form-control @if ($errors->any()) is-invalid @endif" accept="image/*">
 
-                @error('image2')
-                    <div class="alert alert-danger m-1">{{ $message }}</div>
-                @enderror
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        @foreach ($errors->all() as $error)
+                            <span>{{ $error }}</span>
+                        @endforeach
+                    </div>
+                @endif
 
+
+                <p>Ou</p>
+
+                {{-- Choix image existante --}}
+                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#ModalImage2">Choisir une image existante</a>
+                <div id="containerImage2"></div>
+                @include('troisiemeBannieres.modal.index')
+                
             </div>
 
             <button class="btn btn-info mt-2">Valider</button>

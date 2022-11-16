@@ -14,13 +14,17 @@ class DeuxiemeBanniere extends Model
     protected $fillable = [
         'titre',
         'texte',
-        'url_image',
         'online'
     ];
 
     public function users()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function images()
+    {
+        return $this->belongsToMany(Image::class, "deuxieme_banniere_image", "deuxieme_banniere_id","image_id");
     }
 
     //On retourne le tableau stocké en JSON décodé
@@ -41,25 +45,5 @@ class DeuxiemeBanniere extends Model
         return $publicName;
     }
 
-    // Fonction pour supprimer toutes les images stockées en base sur le cloud
-    public function deleteImages()
-    {
-        $urls = $this->getArrayFromUrlsImages();
 
-        foreach($urls as $url) {
-
-            //On récupère  le nom de l'image
-            $fileName = $this->getNameFromUrl($url);
-
-            //On récupère sans l'extension
-            $publicName = explode(".", $fileName)[0];
-
-            //Suppression en ligne
-            $result = Cloudinary::destroy($publicName);
-
-        }
-
-        return;
-
-    }
 }

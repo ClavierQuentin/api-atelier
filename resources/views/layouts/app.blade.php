@@ -15,6 +15,9 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
     <!--CSS-->
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
@@ -48,7 +51,8 @@
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Page "Accueil"</a>
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                         <a href="{{ route('texteAccueil.index') }}" class="dropdown-item">Editer</a>
-                                        <a class="dropdown-item" href="https://atelier-ginette.netlify.app/" target="_blank">Voir sur le site</a>
+                                        <a class="dropdown-item" href="{{ route('accueil') }}" target="_blank">Voir sur le site</a>
+                                        <a href="{{ route('carrousel.index') }}" class="dropdown-item">Carrousel</a>
                                     </div>
                                 </li>
 
@@ -56,7 +60,7 @@
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Page "Présentation"</a>
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                         <a href="{{ route('presentation.index') }}" class="dropdown-item">Editer</a>
-                                        <a class="dropdown-item" href="https://atelier-ginette.netlify.app/#/pages/about" target="_blank">Voir sur le site</a>
+                                        <a class="dropdown-item" href="{{ route('about')}}" target="_blank">Voir sur le site</a>
                                     </div>
                                 </li>
 
@@ -85,6 +89,13 @@
                                     </div>
                                 </li>
 
+                                <li class="nav-item dropdown">
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Médiathèque</a>
+                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                        <a href="{{ route('image.create') }}" class="dropdown-item">Enregistrer des nouvelles images</a>
+                                        <a href="{{ route('image.index') }}" class="dropdown-item">Voir la médiathèque</a>
+                                    </div>
+                                </li>
 
                             @endif
                         @endauth

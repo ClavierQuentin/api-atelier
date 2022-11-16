@@ -56,8 +56,13 @@
 
                     </ul>
 
+                    <?php
+                        $image = DB::select('select * from images where id = ?', [$categorie->image_id]);
+                        $url = $image[0]->url;
+                    ?>
+
                     {{-- Image --}}
-                    <img class="card-img-top" src="{{ $categorie->url_image_categorie }}" alt="Image d'illustration" title="Image d'illustration">
+                    <img class="card-img-top" src="{{ asset('storage/'.$url) }}" alt="Image d'illustration" title="Image d'illustration">
 
                     <div class="card-body">
 
@@ -81,13 +86,6 @@
             <div class=" border border-danger text-center m-4 p-1">
                 Il n'y a aucune catégorie à afficher
             </div>
-
-            <ul class="navbar-nav ">
-                <li class="nav-item">
-                    <a href="{{ route('categorie.create') }}" class="nav-link border d-inline m-2 p-1">Créer des nouvelles entrées</a>
-                </li>
-            </ul>
-
 
         @endif
 

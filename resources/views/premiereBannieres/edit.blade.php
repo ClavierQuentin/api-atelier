@@ -44,27 +44,44 @@
                 </label>
 
                 {{-- Si une image est enregistrée en base on l'affiche --}}
-                @if(isset($premiereBanniere->url_image))
+                @if(isset($premiereBanniere->image_id))
+                <?php
+                $image = DB::select('select * from images where id = ?', [$premiereBanniere->image_id]);
+                $url = $image[0]->url;
+                ?>
+
                     <div class="d-flex">
                         <div class="border border-info p-1 m-2 ">
                             {{-- Image --}}
-                            <img height="200px" src="{{ $premiereBanniere->url_image }}" alt="Image d'illustration" title="Image actuelle">
+                            <img height="200px" src="{{ asset('storage/'.$url) }}" alt="Image d'illustration" title="Image actuelle">
                         </div>
                     </div>
                 @endif
 
-                {{-- Formulaire image --}}
-                <input type="file" name="image" id="image" class="form-control @error('image') is-invalid @enderror" accept="image/*">
+                <label for="imageDL">Télécharger une nouvelle image</label>
+                {{-- Fomulaire pour l'image --}}
+                <input type="file" name="imageDL" class="form-control @if ($errors->any()) is-invalid @endif" accept="image/*">
 
-                @error('image')
-                    <div class="alert alert-danger m-1">{{ $message }}</div>
-                @enderror
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        @foreach ($errors->all() as $error)
+                            <span>{{ $error }}</span>
+                        @endforeach
+                    </div>
+                @endif
+
+                <p>Ou</p>
+
+                {{-- Choix image existante --}}
+                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#ModalImage">Choisir une image existante</a>
+                <div id="containerImage"></div>
 
             </div>
 
             <button class="btn btn-info mt-2">Valider</button>
 
         </form>
+        @include('modal.index_image')
 
     </div>
 

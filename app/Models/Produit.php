@@ -13,35 +13,24 @@ class Produit extends Model
         'nom_produit',
         'description_courte_produit',
         'description_longue_produit',
-        'url_image_produit',
         'prix_produit',
         'categorie_id',
         'isAccueil',
         'url_externe'
     ];
 
-    public $with = ['categorie'];
+    public $with = ['categorie', 'images'];
 
     public function categorie()
     {
         return $this->belongsTo(Categorie::class);
     }
 
-    //Fonction pour supprimer les images dans le cloud
-    public function deleteImage()
+    public function images()
     {
-        //On décompose l'url
-        $fileName = explode("/", $this->url_image_produit);
-
-        //On récupère le nom du fichier
-        $publicId = $fileName[count($fileName)-1];
-
-        //On enlève l'extension
-        $publicName = explode(".", $publicId)[0];
-
-        //Suppresion sur le cloud
-        return $result = Cloudinary::destroy($publicName);
+        return $this->belongsToMany(Image::class, "image_produit")->withPivot('image_id');
     }
+
 
 
 }

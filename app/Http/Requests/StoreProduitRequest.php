@@ -29,7 +29,6 @@ class StoreProduitRequest extends FormRequest
             'description_longue_produit'=>'required|string',
             'prix_produit'=>'required|numeric',
             'categorie_id'=>'required|integer',
-            'image'=>'required|image'
         ];
     }
 
@@ -40,7 +39,6 @@ class StoreProduitRequest extends FormRequest
             'string' => 'Ce champs doit être une chaine de caractère',
             'numeric'=> "Doit être au format nombre",
             'integer'=> 'Il faut choisir une catégorie',
-            'image'=> 'Le fichier doit être une image'
         ];
     }
 

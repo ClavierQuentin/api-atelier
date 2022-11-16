@@ -2,6 +2,8 @@
 
 @section('content')
 
+
+
 {{-- Formulaire de création --}}
     <div class="container">
 
@@ -22,17 +24,28 @@
 
             </div>
 
-            <div class="form-group m-2">
+            <div class="form-group m-2" id="divImage">
 
-                {{-- Formulaire pour l'image --}}
+               {{-- Formulaire pour l'image --}}
                 <label for="image">
-                    Image d'illustration
+                        Télécharger une nouvelle image
                 </label>
-                <input type="file" name="image" id="image" class="form-control @error('image') is-invalid @enderror" accept="image/*">
+                <input type="file" name="imageDL"  class="form-control @if ($errors->any()) is-invalid @endif" accept="image/*">
 
-                @error('image')
-                    <div class="alert alert-danger m-1">{{ $message }}</div>
-                @enderror
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        @foreach ($errors->all() as $error)
+                            <span>{{ $error }}</span>
+                        @endforeach
+                    </div>
+                @endif
+
+
+                <p>Ou</p>
+
+                {{-- Choix image existante --}}
+                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#ModalImage">Choisir une image existante</a>
+                <div id="containerImage"></div>
 
             </div>
 
@@ -40,16 +53,8 @@
 
                 {{-- Checkbox pour mettre sur la page d'accueil du site vitrine --}}
                 <div class="form-check">
-                    <input type="checkbox" name="isAccueil" id="isAccueil" class="form-check-input @if ($errors->any()) is-invalid @endif"  value = "1">
+                    <input type="checkbox" name="isAccueil" id="isAccueil" class="form-check-input"  value = "1">
                     <label for="isAccueil" class="form-check-label">Mettre en avant sur l'accueil</label>
-
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            @foreach ($errors->all() as $error)
-                                <span>{{ $error }}</span>
-                            @endforeach
-                        </div>
-                    @endif
 
                 </div>
 
@@ -58,7 +63,7 @@
             <button class="btn btn-info m-2">Valider</button>
 
         </form>
-
+        @include('modal.index_image')
     </div>
 
 @endsection

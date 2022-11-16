@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PremiereBanniere;
 use App\Http\Requests\StorePremiereBanniereRequest;
 use App\Http\Requests\UpdatePremiereBanniereRequest;
+use App\Models\Image;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Support\Facades\Validator;
@@ -26,24 +27,12 @@ class PremiereBanniereController extends Controller
 
     }
 
-    //Controller pour l'API coté Front
-    public function indexApi()
-    {
-        $premiereBanniere = DB::table('premiere_bannieres')
-                        ->where('online', '=', '1')
-                        ->first();
-
-        //On contrôle la présence des données
-        if(isset($premiereBanniere)){
-            return response()->json($premiereBanniere, 200);
-        }
-        return response()->json(['status'=> false], 404);
-    }
 
     //affichage du formulaire
     public function create()
     {
-        return view('premiereBannieres.create');
+        $images = Image::all();
+        return view('premiereBannieres.create', compact('images'));
     }
 
     /**
@@ -54,14 +43,53 @@ class PremiereBanniereController extends Controller
      */
     public function store(StorePremiereBanniereRequest $request)
     {
-        //ON enregistre l'image au cloud en récupérant l'url d'acces
-        $path = cloudinary()->upload($request->validated('image')->getRealPath())->getSecurePath();
 
         //CRéation d'un nouvel objet
         $premiereBanniere = new PremiereBanniere($request->validated());
 
-        //on enregistre le chemin d'acces de l'image
-        $premiereBanniere->url_image = $path;
+        if($request['image']){
+            $image = Image::find($request['image']);
+            $premiereBanniere->image()->associate($image);
+        }
+
+        //Si une image est fournie via le formulaire
+        if($request['imageDL']){
+            //Règles de validation
+            $validator = Validator::make($request->all(), [
+                'imageDL' => 'image|required',
+            ],[
+                'required' => 'Une image est requise',
+                'image' =>'Le fichier doit être une image'
+            ]);
+
+            if($validator->fails()){
+                return redirect('premiere-banniere/create')
+                ->withErrors($validator)
+                ->withInput();
+            }
+
+            //On recupère les données validées
+            $validatedData = $validator->validated();
+
+            $path = $validatedData['imageDL']->storeAs('images', $validatedData['imageDL']->getClientOriginalName(), ['disk'=>'public']);
+            $image = new Image();
+            $image->url = $path;
+
+            Auth::user()->image()->save($image);
+
+            $premiereBanniere->image()->associate($image);
+        }
+        $all = PremiereBanniere::all();
+
+        //On passe toutes les entrées à 0
+        if(isset($all)){
+            foreach ($all as $item){
+                $item->online = "0";
+                $item->save();
+            }
+        }
+        //ON passe la nouvelle entrée en ligne
+        $premiereBanniere->online = '1';
 
         //Enregistrement en DB
         $response = Auth::user()->premiereBannieres()->save($premiereBanniere);
@@ -80,7 +108,8 @@ class PremiereBanniereController extends Controller
      */
     public function edit(PremiereBanniere $premiereBanniere)
     {
-        return view('premiereBannieres.edit',['premiereBanniere'=>$premiereBanniere]);
+        $images = Image::all();
+        return view('premiereBannieres.edit',compact('premiereBanniere', 'images'));
     }
 
 
@@ -93,17 +122,42 @@ class PremiereBanniereController extends Controller
      */
     public function update(UpdatePremiereBanniereRequest $request, PremiereBanniere $premiereBanniere)
     {
-        //Si une image a été fournie au formulaire
-        if(isset($validated['image'])){
+        if($request['image'] != NULL){
+            //On supprime le lien existant en premier
+            $premiereBanniere->image()->dissociate();
 
-            //Suppression de l'ancienne image
-            $premiereBanniere->deleteImage();
+            $image = Image::find($request['image']);
+            $premiereBanniere->image()->associate($image);
+        }
 
-            //Upload de la nouvelle image
-            $updatedUrl = cloudinary()->upload($request->validated('image')->getRealPath())->getSecurePath();
+        //Si une image est fournie via le formulaire
+        if($request['imageDL'] != NULL){
+            //Règles de validation
+            $validator = Validator::make($request->all(), [
+                'imageDL' => 'image',
+            ],[
+                'image' =>'Le fichier doit être une image'
+            ]);
 
-            //Enregistrement de la nouvelle URL
-            $premiereBanniere->url_image = $updatedUrl;
+            if($validator->fails()){
+                return redirect('premiere-banniere/edit/'.$premiereBanniere->id)
+                ->withErrors($validator)
+                ->withInput();
+            }
+
+            //On recupère les données validées
+            $validatedData = $validator->validated();
+
+            $path = $validatedData['imageDL']->storeAs('images', $validatedData['imageDL']->getClientOriginalName(), ['disk'=>'public']);
+            $image = new Image();
+            $image->url = $path;
+
+            Auth::user()->image()->save($image);
+
+            //On supprime le lien existant en premier
+            $premiereBanniere->image()->dissociate();
+
+            $premiereBanniere->image()->associate($image);
         }
 
         //Enregistrement en base
@@ -149,9 +203,6 @@ class PremiereBanniereController extends Controller
      */
     public function destroy(PremiereBanniere $premiereBanniere)
     {
-        //Suppression de l'image sur le cloud, voir Model
-        $premiereBanniere->deleteImage();
-
         //Suppression en BDD
         $delete = $premiereBanniere->delete();
 
@@ -160,6 +211,5 @@ class PremiereBanniereController extends Controller
         }
         return redirect('premiere-banniere');
     }
-
 
 }

@@ -25,7 +25,6 @@ class UpdateCategorieRequest extends FormRequest
     {
         return [
             'nom_categorie' => 'string|max:250',
-            'image'=>'image'
         ];
     }
 
@@ -33,7 +32,6 @@ class UpdateCategorieRequest extends FormRequest
     {
         return [
             'string' => 'Ce champs doit être une chaîne de caractères !',
-            'image'=>"Le fichier doit être une image !"
         ];
     }
 }

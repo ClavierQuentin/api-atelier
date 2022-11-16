@@ -71,4 +71,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Newsletter::class);
     }
+
+    public function image()
+    {
+        return $this->hasMany(Image::class);
+    }
+
+    public function carrousel()
+    {
+        return $this->hasMany(Carrousel::class);
+    }
 }

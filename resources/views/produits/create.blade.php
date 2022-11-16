@@ -66,16 +66,26 @@
 
             <div class="form-group m-3">
 
-                {{-- Formulaire image --}}
                 <label for="image">
-                    Image d'illustration
+                    Télécharger des nouvelles images
                 </label>
-                <input type="file" name="image" id="image"  class="form-control @error('image') is-invalid @enderror" accept="image/*">
+                {{-- Formulaire pour l'image --}}
+                <input type="file" name="imageDL[]" class="form-control @if ($errors->any()) is-invalid @endif" accept="image/*" multiple>
 
-                @error('image')
-                    <div class="alert alert-danger m-1">{{ $message }}</div>
-                @enderror
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        @foreach ($errors->all() as $error)
+                            <span>{{ $error }}</span>
+                        @endforeach
+                    </div>
+                @endif
 
+                <p>Ou</p>
+
+                {{-- Choix image existante --}}
+                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#ModalImage">Choisir une image existante</a>
+                <div id="containerImage" class="d-flex flex-wrap"></div>
+                @include('modal.index_array')
 
             </div>
 
