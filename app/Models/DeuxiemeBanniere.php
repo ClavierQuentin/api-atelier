@@ -45,25 +45,5 @@ class DeuxiemeBanniere extends Model
         return $publicName;
     }
 
-    // Fonction pour supprimer toutes les images stockées en base sur le cloud
-    public function deleteImages()
-    {
-        $urls = $this->getArrayFromUrlsImages();
 
-        foreach($urls as $url) {
-
-            //On récupère  le nom de l'image
-            $fileName = $this->getNameFromUrl($url);
-
-            //On récupère sans l'extension
-            $publicName = explode(".", $fileName)[0];
-
-            //Suppression en ligne
-            $result = Cloudinary::destroy($publicName);
-
-        }
-
-        return;
-
-    }
 }

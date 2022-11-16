@@ -43,7 +43,7 @@
                     Images
                 </label>
                 {{-- Si des images sont enregistrées en base --}}
-                @if(isset($deuxiemeBanniere->images))
+                @if(sizeof($deuxiemeBanniere->images) > 0)
 
                     <div class="d-flex flex-wrap">
 
@@ -57,7 +57,7 @@
                                 <img height="200px" src="{{ asset('storage/'.$image->url) }}" alt="Image d'illustration" title="Image actuelle">
 
                                     {{-- Lien + icone pour suppression de l'image séléctionnée --}}
-                                    <a href="" class="trash custom-btn"><img  src="{{ asset('assets/trash.svg') }}" alt="icone corbeille" title="Supprimer"></a>
+                                    <a href="{{ url('deuxieme-banniere/delete-image/') }}/{{ $deuxiemeBanniere->id }}/{{ $image->id }} " class="trash custom-btn"><img  src="{{ asset('assets/trash.svg') }}" alt="icone corbeille" title="Supprimer"></a>
 
                             </div>
 
@@ -67,8 +67,11 @@
 
                 @endif
 
-                {{-- Formulaire pour plusieurs images --}}
-                <input type="file" name="image[]" id="image" class="form-control @if($errors->any()) is-invalid @endif" accept="image/*" multiple>
+                <label for="image">
+                    Télécharger des nouvelles images
+                </label>
+                {{-- Formulaire pour l'image --}}
+                <input type="file" name="imageDL[]" class="form-control @if ($errors->any()) is-invalid @endif" accept="image/*" multiple>
 
                 @if ($errors->any())
                     <div class="alert alert-danger">
@@ -77,6 +80,14 @@
                         @endforeach
                     </div>
                 @endif
+
+                <p>Ou</p>
+
+                {{-- Choix image existante --}}
+                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#ModalImage">Choisir une image existante</a>
+                <div id="containerImage" class="d-flex flex-wrap"></div>
+                @include('modal.index_array')
+
 
                 <div class="form-check">
 

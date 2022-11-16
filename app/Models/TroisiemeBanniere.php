@@ -33,36 +33,5 @@ class TroisiemeBanniere extends Model
         return $this->belongsTo(Image::class, "image_id_2");
     }
 
-    //FOnction pour supprimer la premiere image
-    public function deleteImage1()
-    {
-        //On décompose l'url stockée en DB
-        $fileName = explode("/", $this->url_image);
-
-        //On récupère  le nom de l'image
-        $publicId = $fileName[count($fileName)-1];
-
-        //On récupère sans l'extension
-        $publicName = explode(".", $publicId)[0];
-
-        //Suppression au cloud
-        return $result = Cloudinary::destroy($publicName);
-    }
-
-        //FOnction pour supprimer la deuxieme image
-        public function deleteImage2()
-        {
-        //On décompose l'url stockée en DB
-        $fileName = explode("/", $this->url_image_2);
-
-        //On récupère  le nom de l'image
-        $publicId = $fileName[count($fileName)-1];
-
-        //On récupère sans l'extension
-        $publicName = explode(".", $publicId)[0];
-
-            //Suppression au cloud
-            return $result = Cloudinary::destroy($publicName);
-        }
 
 }

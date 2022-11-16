@@ -29,7 +29,6 @@ class UpdateProduitRequest extends FormRequest
             'description_longue_produit'=>'string',
             'prix_produit'=>'numeric',
             'categorie_id'=>'integer',
-            'image' => 'image'
         ];
     }
 
@@ -39,7 +38,6 @@ class UpdateProduitRequest extends FormRequest
             'string' => 'Doit être une chaîne de caractères',
             'numeric' => 'Doit être au format nombre',
             'integer' => 'Doit être un nombre entier',
-            'image' => "Le fichier doit être une image"
         ];
     }
 }

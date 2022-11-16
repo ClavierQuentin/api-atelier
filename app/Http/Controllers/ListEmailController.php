@@ -27,7 +27,7 @@ class ListEmailController extends Controller
 
         //Si échec on interrompe
         if($response->failed()){
-            return response()->json(['status' => false, 'errors'=>$response], 500);
+            return redirect('accueil')->with('message', $response);
         }
 
         //Si captcha OK et honeypot vide, on procède à la suite
@@ -43,9 +43,9 @@ class ListEmailController extends Controller
                 $errors = $validator->errors();
 
                 if($errors->first() == "The email has already been taken."){
-                    return response()->json(['status' => false, 'message'=>'Adresse déjà inscrite'], 404);
+                    return redirect('accueil')->with('message', 'Adresse déjà inscrite');
                 }
-                return response()->json(['status' => false, "message" => $errors->first()], 404);
+                return redirect('accueil')->with('message', $errors->first());
             }
             //sinon on récupère les données validées
             $validated = $validator->validated();
@@ -59,15 +59,15 @@ class ListEmailController extends Controller
 
             //Si la sauvegarde est faite, on retourne un message de succès
             if($saved){
-                return response()->json(['status' => true , 'message'=>'Inscription réalisée'], 201);
+                return redirect('accueil')->with('message', 'Inscription réalisée');
             }
             //Si sauvegarde échouée, message d'erreur
-            return response()->json(['status' => false , 'message'=>'Une erreur est survenue'], 404);
+            return redirect('accueil')->with('message', 'Une erreur est survenue');
 
         }
 
         //Si une erreur survient au captcha ou que le honeypot est utilisée, un indique un message d'erreur
-        return response()->json(['status' => false , 'message'=>'Une erreur est survenue'], 404);
+        return redirect('accueil')->with('message', 'Une erreur est survenue');
 
     }
 

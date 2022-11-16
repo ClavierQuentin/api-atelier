@@ -76,4 +76,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Image::class);
     }
+
+    public function carrousel()
+    {
+        return $this->hasMany(Carrousel::class);
+    }
 }

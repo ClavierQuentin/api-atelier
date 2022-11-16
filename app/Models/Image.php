@@ -47,4 +47,9 @@ class Image extends Model
     {
         return $this->belongsToMany(Produit::class);
     }
+
+    public function carrousel()
+    {
+        return $this->hasMany(Carrousel::class);
+    }
 }

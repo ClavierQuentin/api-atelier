@@ -31,22 +31,6 @@ class DeuxiemeBanniereController extends Controller
 
     }
 
-    //Controller pour l'API coté Front
-    public function indexApi()
-    {
-        //On récupère les données dont Online est à 1
-        $deuxiemeBanniere = DB::table('deuxieme_bannieres')
-                        ->where('online', '=', '1')
-                        ->first();
-
-        //On contrôle que la donnée est existante
-        if(isset($deuxiemeBanniere)){
-            //on retourne le tableau d'urls d'image décodé pour la lecture au front
-            return response()->json(['data'=>$deuxiemeBanniere,'urls'=>json_decode($deuxiemeBanniere->url_image)], 200);
-        }
-
-        return response()->json(['status'=>false], 404);
-    }
 
     //Affichage du formulaire de création
     public function create()
@@ -124,7 +108,8 @@ class DeuxiemeBanniereController extends Controller
      */
     public function edit(DeuxiemeBanniere $deuxiemeBanniere)
     {
-        return view('deuxiemeBannieres.edit',['deuxiemeBanniere'=>$deuxiemeBanniere]);
+        $images = Image::all();
+        return view('deuxiemeBannieres.edit',compact('deuxiemeBanniere', 'images'));
     }
 
     /**
@@ -136,25 +121,26 @@ class DeuxiemeBanniereController extends Controller
      */
     public function update(UpdateDeuxiemeBanniereRequest $request, DeuxiemeBanniere $deuxiemeBanniere)
     {
-        //On récupère les urls existantes en base
-        $data = $deuxiemeBanniere->getArrayFromUrlsImages();
 
         //Si checkbox deleteImage = true, on supprime les images existantes
         if(isset($request['deleteAllImages']) && $request['deleteAllImages'] == true) {
-
-            //Suppression en ligne
-            $deuxiemeBanniere->deleteImages(); //Voir model
-
-            //On vide le tableau d'urls
-            $data= [];
+            foreach($deuxiemeBanniere->images as $image){
+                $deuxiemeBanniere->images()->detach($image);
+            }
         }
 
+        //Si choix d'images déjà existantes
+        if($request['image']){
+            foreach($request['image'] as $file){
+                $image = Image::find($file);
+                $deuxiemeBanniere->images()->attach($image);
+            }
+        }
 
-        //Si une image a été envoyée au formulaire
-        if($request->file('image') != null){
+        if($request['imageDL']){
             //Règles de validation
             $validator = Validator::make($request->all(), [
-                'image.*' => 'image',
+                'imageDL.*' => 'image',
             ],[
                 'image' =>'Le fichier doit être une image'
             ]);
@@ -168,15 +154,18 @@ class DeuxiemeBanniereController extends Controller
             //On recupère les données validées
             $validatedData = $validator->validated();
 
-            //On upload chaque image et on stocke l'url d'accès
-            foreach($validatedData['image'] as $file){
-                $path = cloudinary()->upload($file->getRealPath())->getSecurePath();
-                $data[] = $path;
+            foreach($validatedData['imageDL'] as $file){
+                $path = $file->storeAs('images', $file->getClientOriginalName(), ['disk'=>'public']);
+                $image = new Image();
+                $image->url = $path;
+
+                Auth::user()->image()->save($image);
+
+                $deuxiemeBanniere->images()->attach($image);
             }
+
         }
 
-        //On enregistre les nouvelles urls si présentent, sinon le tableau vide
-        $deuxiemeBanniere->url_image = json_encode($data);
 
         //Update
         $update = $deuxiemeBanniere->update($request->validated());
@@ -197,18 +186,12 @@ class DeuxiemeBanniereController extends Controller
      */
     public function destroy(DeuxiemeBanniere $deuxiemeBanniere)
     {
-        //Suppression des images stockées au cloud
-        if($deuxiemeBanniere->url_image != NULL){
-            $deuxiemeBanniere->deleteImages(); //Voir model
-        }
-
-
         //On supprime l'objet selectionné
         $delete = $deuxiemeBanniere->delete();
         if(!$delete){
             abort(404);
         }
-        return view('deuxiemeBannieres.index');
+        return redirect('deuxieme-banniere');
     }
 
     //Fonction pour supprimer 1 image précise
@@ -219,47 +202,13 @@ class DeuxiemeBanniereController extends Controller
      */
     public function deleteImage(DeuxiemeBanniere $deuxiemeBanniere, $image)
     {
+        $image = Image::find($image);
 
-        //On récupère toutes les urls, on les stock et on les parcours
-        $array = $deuxiemeBanniere->getArrayFromUrlsImages();
+        $deuxiemeBanniere->images()->detach($image);
 
-        for($i = 0; $i < sizeof($array); $i++){
+        $images = Image::all();
 
-            //Déclaration des variables
-            $publicId = "";
-            $fileName = "";
-
-            //On décompose l'url stockée en DB
-            $fileName = explode("/", $array[$i]);
-
-            //On récupère  le nom de l'image dans l'url
-            $publicId = $fileName[count($fileName)-1];
-
-            //On récupère le nom sans l'extension
-            $publicName = explode(".", $publicId)[0];
-
-            //Comparaison avec les valeurs en DB
-            if($publicId == $image){
-
-                //ON efface dans le tableau
-                array_splice($array, $i, 1);
-
-                //On efface sur cloudinary
-                $result = Cloudinary::destroy($publicName);
-
-            }//if
-
-        }//For
-
-        //On enregistre le nouveau tableau d'url
-        $deuxiemeBanniere->url_image = json_encode($array);
-
-        $delete = $deuxiemeBanniere->save();
-
-        if($delete){
-            return view('deuxiemeBannieres.edit', compact('deuxiemeBanniere'));
-        }
-        abort(404);
+        return view('deuxiemeBannieres.edit', compact('deuxiemeBanniere', 'images'));
     }
 
     //Fonction pour mettre a jour le booleen en DB pour mettre en avant sur le front une donnée

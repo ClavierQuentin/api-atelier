@@ -39,15 +39,15 @@ class CategorieController extends Controller
     }
 
     //Fonction pour gérer la route de l'API pour le front
-    public function indexApi()
+    public function indexFront()
     {
         $categories = Categorie::all();
 
         //On controle que des données soient présentes
         if(isset($categories) && sizeof($categories) > 0){
-            return response()->json($categories, 200);
+            return view('front.categories', compact('categories'));
         }
-        return response()->json(['status'=>false], 404);
+        abort(404);
 
     }
 
@@ -258,8 +258,8 @@ class CategorieController extends Controller
 
         //On contrôle si des données sont présentes
         if(isset($produits) && sizeof($produits) > 0){
-            return response()->json($produits, 200);
+            return view('front.produits', compact('produits', 'categorie'));
         }
-        return response()->json(['status'=>false], 404);
+        abort(404);
     }
 }

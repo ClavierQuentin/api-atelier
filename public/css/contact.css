@@ -1,0 +1,70 @@
+/*--------------------------PAGE CONTACT----------------------------------*/
+.conteneurContact{
+    background-color: white;
+}
+.conteneurContact h2{
+    margin: 10px 0;
+    font-size: 28px;
+}
+.conteneurContact form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    margin: auto;
+    padding: 2% 0;
+    width: 33%;
+}
+
+.containerForm{
+    display: flex;
+    flex-direction: column;
+    margin:auto;
+}
+.firstInput{
+    margin-right: 10px;
+    /* margin-left: 10px; */
+}
+
+.conteneurContact input{
+    border: 1px #f8cbc6 solid;
+    padding: 15px 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+.conteneurContact input::placeholder, .conteneurContact textarea::placeholder{
+    color: black;
+}
+.conteneurContact textarea{
+    border: 1px #f8cbc6 solid;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+.submit-div{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+#contactBtn{
+    display: block;
+    border: none;
+    padding: 15px 40px;
+    margin-top: 10px;
+    font-size: 18px;
+}
+.visually-hidden {
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    border: 0;
+    padding: 0;
+  }
+@media screen and (max-width:1000px) {
+    .conteneurContact form{
+        width: 90%;
+    }
+}

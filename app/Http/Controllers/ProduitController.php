@@ -6,6 +6,7 @@ use App\Models\Produit;
 use App\Http\Requests\StoreProduitRequest;
 use App\Http\Requests\UpdateProduitRequest;
 use App\Models\Categorie;
+use App\Models\Image;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
@@ -21,15 +22,15 @@ class ProduitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function indexApi()
+    public function indexFront()
     {
         $produits = Produit::all();
 
         //On controle une présence des données
         if(isset($produits) && sizeof($produits) > 0){
-            return response()->json($produits, 200);
+
         }
-        return response()->json(['status'=>false],404);
+        abort(404);
     }
 
     //Listing de tous les produits
@@ -46,9 +47,11 @@ class ProduitController extends Controller
         //On récupère les catégories pour les affiches dans le select lors de la création d'un produit
         $categories = Categorie::all();
 
+        $images = Image::all();
+
         //On controle que les catégories existent
         if(isset($categories) && sizeof($categories) > 0){
-            return view('produits.create', compact('categories'));
+            return view('produits.create', compact('categories','images'));
         }
         abort(404);
     }
@@ -62,17 +65,11 @@ class ProduitController extends Controller
      */
     public function store(StoreProduitRequest $request)
     {
-        //Upload de l'image sur le cloud
-        $path = cloudinary()->upload($request->validated('image')->getRealPath())->getSecurePath();
-
         //On instancie un nouvel objet Produit avec la requete du formulaire
         $produit = new Produit($request->validated());
 
         //On récupère la catégorie sélectionnée au formulaire
         $categorie = Categorie::find($produit->categorie_id);
-
-        //Enregistrement du chemin d'acces de l'image
-        $produit->url_image_produit = $path;
 
         //On enregistre une valeur par défaut
         $produit->url_externe = "#";
@@ -107,6 +104,44 @@ class ProduitController extends Controller
         //Enregistrement en DB
         $response = $categorie->produits()->save($produit);
 
+        if($request['image']){
+            foreach($request['image'] as $file){
+                $image = Image::find($file);
+                $produit->images()->attach($image);
+            }
+        }
+
+        if($request['imageDL']){
+            //Règles de validation
+            $validator = Validator::make($request->all(), [
+                'imageDL.*' => 'image',
+                'imageDL'=>'required'
+            ],[
+                'imageDL.required' => 'Une image est requise',
+                'image' =>'Le fichier doit être une image'
+            ]);
+
+            if($validator->fails()){
+                return redirect('produit/create')
+                ->withErrors($validator)
+                ->withInput();
+            }
+
+            //On recupère les données validées
+            $validatedData = $validator->validated();
+
+            foreach($validatedData['imageDL'] as $file){
+                $path = $file->storeAs('images', $file->getClientOriginalName(), ['disk'=>'public']);
+                $image = new Image();
+                $image->url = $path;
+
+                Auth::user()->image()->save($image);
+
+                $produit->images()->attach($image);
+            }
+
+        }
+
         //On controle la sortie, si l'update a bien été faite
         if(empty($response)){
             return redirect('categorie/'.$produit->categorie_id.'/produits')->with('error', 'Une erreur est survenue pendant l\'enregistrement');
@@ -120,9 +155,17 @@ class ProduitController extends Controller
      * @param  \App\Models\Produit  $produit
      * @return \Illuminate\Http\Response
      */
-    public function show(Produit $produit)
+    public function showFront(Produit $produit)
     {
-        return response()->json($produit, 200);
+        //On requête les produits de la même catégorie en ommettant le produit actuel, limité à 3 produits, dans l'ordre decroissant de date de création
+        $produits = DB::table('produits')
+        ->where('id', '!=', $produit->id)
+        ->where('categorie_id', '=', $produit->categorie_id)
+        ->limit(3)
+        ->orderByDesc('created_at')
+        ->get();
+
+        return view('front.produit', compact('produit', 'produits'));
     }
 
     /**
@@ -136,9 +179,11 @@ class ProduitController extends Controller
         //On récupère les catégories pour les affiches dans le select lors de la création d'un produit
          $categories = Categorie::all();
 
+         $images = Image::all();
+
          //On controle la présence des données
          if(isset($categories) && sizeof($categories) > 0){
-            return view('produits.edit', compact('produit','categories'));
+            return view('produits.edit', compact('produit','categories', 'images'));
         }
         abort(404);
     }
@@ -153,17 +198,43 @@ class ProduitController extends Controller
     public function update(UpdateProduitRequest $request, Produit $produit)
     {
 
-        //Si une image a été fournie au formulaire
-        if(isset($validated['image'])){
+        //Si choix d'images déjà existantes
+        if($request['image']){
+            foreach($request['image'] as $file){
+                $image = Image::find($file);
+                $produit->images()->attach($image);
+            }
+        }
 
-            //Suppression de l'ancienne image
-            $produit->deleteImage();
+        if($request['imageDL']){
+            //Règles de validation
+            $validator = Validator::make($request->all(), [
+                'imageDL.*' => 'image',
+            ],[
+                'image' =>'Le fichier doit être une image'
+            ]);
 
-            //Upload de la nouvelle image
-            $updatedUrl = cloudinary()->upload($request->validated('image')->getRealPath())->getSecurePath();
+            if($validator->fails()){
+                $categories = Categorie::all();
+                return redirect('produit/edit/'.$produit->id)
+                ->with($categories)
+                ->withErrors($validator)
+                ->withInput();
+            }
 
-            //CHangement de l'url de l'image
-            $produit->url_image_produit = $updatedUrl;
+            //On recupère les données validées
+            $validatedData = $validator->validated();
+
+            foreach($validatedData['imageDL'] as $file){
+                $path = $file->storeAs('images', $file->getClientOriginalName(), ['disk'=>'public']);
+                $image = new Image();
+                $image->url = $path;
+
+                Auth::user()->image()->save($image);
+
+                $produit->images()->attach($image);
+            }
+
         }
 
         //Cas où la checbox pour affichage à l'accueil est cochée
@@ -192,7 +263,7 @@ class ProduitController extends Controller
                 ->withInput();
             };
             $validatedUrl = $validatorUrl->validated();
-            $produit->url_externe = $validatedUrl('url_externe');
+            $produit->url_externe = $validatedUrl['url_externe'];
         }
 
         //Enregistrement des changements en DB
@@ -214,9 +285,6 @@ class ProduitController extends Controller
      */
     public function destroy(Produit $produit)
     {
-        // //Suppression de l'image sur le cloud, voir model
-        $produit->deleteImage();
-
         //Suppression en DB
         $delete = $produit->delete();
         if(!$delete){
@@ -226,37 +294,19 @@ class ProduitController extends Controller
 
     }
 
-
-    //Fonction pour récupérer les produits à afficher sur l'acceuil
-    public function indexAccueil()
+    public function deleteImage(Produit $produit, $image)
     {
-        $produits = DB::table('produits')
-                    ->where('isAccueil', '=', 1)
-                    ->get();
+        $image = Image::find($image);
 
-        //On controle la présence des données
-        if(isset($produits) && sizeof($produits) > 0){
-            return response()->json($produits, 200);
-        }
-        return response()->json(['status' => false], 404);
+        $produit->images()->detach($image);
+
+        //On récupère les catégories pour les affiches dans le select lors de la création d'un produit
+        $categories = Categorie::all();
+
+        $images = Image::all();
+
+
+        return view('produits.edit', compact('produit', 'categories', 'images'));
     }
 
-    //Fonction pour afficher les autres produits de la catégorie d'un produit en séléction
-    public function sameProduct(Produit $produit)
-    {
-        //On requête les produits de la même catégorie en ommettant le produit actuel, limité à 3 produits, dans l'ordre decroissant de date de création
-        $produits = DB::table('produits')
-                    ->where('id', '!=', $produit->id)
-                    ->where('categorie_id', '=', $produit->categorie_id)
-                    ->limit(3)
-                    ->orderByDesc('created_at')
-                    ->get();
-
-        //On controle la présence des données
-        if(isset($produits) && sizeof($produits) > 0){
-            return response()->json($produits,200);
-        }
-
-        return response()->json(['status'=>false], 404);
-    }
 }

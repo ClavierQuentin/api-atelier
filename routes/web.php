@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\CarrouselController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\DeuxiemeBanniereController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ListEmailController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PremiereBanniereController;
 use App\Http\Controllers\PresentationController;
@@ -55,7 +57,7 @@ Route::middleware('auth','role:admin')->group(function(){
 
     Route::delete('texte-accueil/delete/{texteAccueil}',[TexteAccueilController::class,'destroy'])->name('texteAccueil.delete'); //Route delete
 
-
+    Route::resource('carrousel', CarrouselController::class);
 
     //----------------------------Route d'affichage pour les bannières de la page de présentation------------------------------//
     Route::get('presentation',[PresentationController::class, 'index'])->name('presentation.index');
@@ -146,6 +148,9 @@ Route::middleware('auth','role:admin')->group(function(){
 
     Route::delete('produit/delete/{produit}',[ProduitController::class, 'destroy'])->name('produit.delete'); //Route de suppression
 
+    Route::get('produit/delete-image/{produit}/{image}', [ProduitController::class, 'deleteImage'])->name('produit.deleteImage');
+
+    //-------------------------------------------ROUTE NEWsLETTER-------------------------------------------------------//
 
 
     Route::get('newsletter/create',[NewsletterController::class, 'create'])->name('newsletter.create');
@@ -174,3 +179,21 @@ Route::middleware('auth','role:admin')->group(function(){
 Route::get('edit-email',[ListEmailController::class, 'edit'])->name('email.edit'); //Route pour le formulaire pour supprimer adresse email
 
 Route::post('delete-email',[ListEmailController::class, 'destroy'])->name('email.delete'); //Route pour suppression email de newsletter
+
+Route::get('accueil', [TexteAccueilController::class, 'indexFront'])->name('accueil');
+
+Route::get('about', [PresentationController::class, 'indexFront'])->name('about');
+
+Route::get('categories',[CategorieController::class, 'indexFront'])->name('categories');
+
+Route::get('categories/{categorie}/produits',[CategorieController::class, 'getAllProducts'])->name('produits'); //Affiche tous les produits appartenant à une catégorie
+
+Route::get('produits/{produit}',[ProduitController::class, 'showFront'])->name('produit.front');
+
+Route::get('contact', function () {
+    return view('front.contact');
+})->name('contact');
+
+Route::post('message',[MessageController::class,'store'])->name('message'); //Route pour reception de message et gestion d'envoie de l'email
+
+Route::post('add-email', [ListEmailController::class, 'store'])->name('email'); //Route pour l'enregistrement d'une adresse mail

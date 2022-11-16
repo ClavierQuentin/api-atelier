@@ -67,25 +67,57 @@
 
             <div class="form-group m-3">
 
+
+
+                {{-- Si une image est enregistrée en base, on l'affiche --}}
+                @if(sizeof($produit->images) > 0)
+
                 {{-- Formulaire image --}}
                 <label for="url_image_produit">
                     Image d'illustration
                 </label>
 
-                {{-- Si une image est enregistrée en base, on l'affiche --}}
-                @if(isset($produit->url_image_produit))
-                    {{-- Image --}}
-                    <div class="border border-info p-1 m-2">
-                        <img src="{{ $produit->url_image_produit }}" alt="Image d'illustration" height="200" class=" border-info">
+                <div class="d-flex flex-wrap">
+
+                    {{-- Parcours du tableau d'urls --}}
+                    @foreach ($produit->images as $image)
+
+
+                        <div class="border border-info p-1 m-2 " style="position: relative;">
+
+                            {{-- Image --}}
+                            <img height="200px" src="{{ asset('storage/'.$image->url) }}" alt="Image d'illustration" title="Image actuelle">
+
+                                {{-- Lien + icone pour suppression de l'image séléctionnée --}}
+                                <a href="{{ url('produit/delete-image/') }}/{{ $produit->id }}/{{ $image->id }} " class="trash custom-btn"><img  src="{{ asset('assets/trash.svg') }}" alt="icone corbeille" title="Supprimer"></a>
+
+                        </div>
+
+                    @endforeach
+
+                </div>
+            @endif
+
+                <label for="image">
+                    Télécharger des nouvelles images
+                </label>
+                {{-- Formulaire pour l'image --}}
+                <input type="file" name="imageDL[]" class="form-control @if ($errors->any()) is-invalid @endif" accept="image/*" multiple>
+
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        @foreach ($errors->all() as $error)
+                            <span>{{ $error }}</span>
+                        @endforeach
                     </div>
                 @endif
 
-                {{-- Input file --}}
-                <input type="file" name="image" id="url_image_produit"  class="form-control @error('image') is-invalid @enderror" accept="image/*">
+                <p>Ou</p>
 
-                @error('image')
-                    <div class="alert alert-danger m-1">{{ $message }}</div>
-                @enderror
+                {{-- Choix image existante --}}
+                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#ModalImage">Choisir une image existante</a>
+                <div id="containerImage" class="d-flex flex-wrap"></div>
+                @include('modal.index_array')
 
             </div>
 

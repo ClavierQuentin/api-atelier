@@ -53,7 +53,7 @@
                         </ul>
 
                         {{-- Image --}}
-                        <img class="card-img-top" src="{{ $produit->url_image_produit }}" alt="Image de produit">
+                        <img class="card-img-top" src="{{ asset('storage/'.$produit->images->first()->url) }}" alt="Image de produit">
 
                         <div class="card-body overflow-auto" style="height: 250px !important;">
                             <h5 class="card-title text-center text-info">{{ $produit->nom_produit }}</h5>

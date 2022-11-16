@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\TexteAccueil;
 use App\Http\Requests\StoreTexteAccueilRequest;
 use App\Http\Requests\UpdateTexteAccueilRequest;
+use App\Models\Carrousel;
+use App\Models\Produit;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -25,15 +27,31 @@ class TexteAccueilController extends Controller
     }
 
     //Fonction pour l'accès via API
-    public function indexApi()
+    public function indexFront()
     {
         $texteAccueil = DB::table('texte_accueils')
                         ->where('online', '=', 1)
                         ->first();
 
+        $categories = DB::table('categories')
+        ->where('isAccueil','=', 1)
+        ->orderByDesc('updated_at')
+        ->limit("4")
+        ->get();
+
+        $produits = DB::select('select * from produits where isAccueil = ?', [1]);
+
+        $url = [];
+        foreach($produits as $produit){
+            $produit = Produit::find($produit->id);
+            $url[] = $produit->images->first()->url;
+        }
+
+        $carrousels = Carrousel::all();
+
         //On contrôle la présence des données
-        if(isset($texteAccueil)){
-            return response()->json($texteAccueil, 200);
+        if(isset($texteAccueil) && isset($categories)){
+            return view('front.home', compact('texteAccueil', 'categories', 'carrousels'));
         }
         return response()->json(['status' => false], 404);
     }

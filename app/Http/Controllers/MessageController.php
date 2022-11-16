@@ -22,19 +22,18 @@ class MessageController extends Controller
     public function store(Request $request)
     {
         //Récupération du Token google côté client pour le faire vérifier
-        $recaptchaToken = $request['token'];
+        $recaptchaToken = $request['recaptcha'];
         $secretKey = env('SECRET_KEY');
 
         $response = Http::post('https://www.google.com/recaptcha/api/siteverify?secret='.$secretKey.'&response='.$recaptchaToken);
 
         //Si une erreur survient, on interrompe
         if($response->failed()){
-            return response()->json(['status' => 'false'], 500);
+            abort(500);
         }
 
         //Si captcha OK et honeypot vide, on procèe à la suite
         if($response->ok() && $request['pot'] == NULL){
-
             //Regles de validation
             $validator = Validator::make($request->all(),[
                 'prenom' => 'required|string|max:200',
@@ -47,31 +46,35 @@ class MessageController extends Controller
 
             //si vérification échoue, on retourne le message d'erreur
             if($validator->fails()){
-                return response()->json(['status' => false, 'errors'=> $validator->errors()->first()], 404);
+                return redirect('contact')
+                ->with('error',$validator->errors()->first())
+                ->withInput();
             }
 
             //Si validation passe, on récupère les données validées
             $validated = $validator->validated();
 
             //Si checkbox newsletter true pour inscription
-            if($validated['newsletter']){
+            if($request['newsletter'] && $validated['newsletter']){
 
                 //On contrôle si la donnée entrante est déjà existante en BDD
                 $alreadyIn = ListEmail::where('email','=', $validated['email'])->first();
 
-                if($alreadyIn == NULL){
-                    $item = new ListEmail($validated);
-
-                    //Génération d'un id unique par email
-                    $item->identifiant = uniqid();
-
-                    $savedEmail = $item->save();
-                    //En cas d'erreur
-                    if(!$savedEmail){
-                        return response()->json(['status' => false, 'message' => 'Une erreur est survenue'], 404);
-                    }
+                if($alreadyIn != NULL){
+                    return redirect('contact')->with('error','Vous êtes déjà inscrit à la newsletter, veuillez écrire à nouveau votre message');
                 }
-                return response()->json(['status' => false, 'message' => 'Vous êtes déjà inscrit à la newsletter'], 404);
+
+                $item = new ListEmail($validated);
+
+                //Génération d'un id unique par email
+                $item->identifiant = uniqid();
+
+                $savedEmail = $item->save();
+
+                //En cas d'erreur
+                if(!$savedEmail){
+                    return redirect('contact')->with('error','Une erreur est survenue');
+                }
             }
 
 
@@ -85,13 +88,13 @@ class MessageController extends Controller
             $saved = $message->save();
 
             if($saved){
-                return response()->json(['status' => true, 'message' => 'Votre message a bien été envoyé'], 200);
+                return redirect('contact')->with('message','Votre message est bien envoyé !');
             }
-            return response()->json(['status' => false, 'message' => 'Une erreur est survenue'], 404);
+            return redirect('contact')->with('error','Une erreur est survenue');
         }
 
-        return response()->json(['status' => false, 'message' => 'Une erreur est survenue'], 404);
+        return redirect('contact')->with('error','Une erreur est survenue ');
+
 
     }
-
 }

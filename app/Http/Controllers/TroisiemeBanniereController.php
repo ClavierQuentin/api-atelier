@@ -28,20 +28,6 @@ class TroisiemeBanniereController extends Controller
         return view('troisiemeBannieres.index',['troisiemeBannieres' => $troisiemeBannieres]);
     }
 
-    //Controller pour l'API coté Front
-    public function indexApi()
-    {
-        $troisiemeBanniere = DB::table('troisieme_bannieres')
-                        ->where('online', '=', '1')
-                        ->first();
-
-        //Controle de la présence des données
-        if(isset($troisiemeBanniere)){
-            return response()->json($troisiemeBanniere, 200);
-        }
-        return response()->json(['status'=> false],404);
-
-    }
 
     //Direction pour le formulaire de création
     public function create()

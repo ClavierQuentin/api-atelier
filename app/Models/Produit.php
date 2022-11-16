@@ -19,7 +19,7 @@ class Produit extends Model
         'url_externe'
     ];
 
-    public $with = ['categorie'];
+    public $with = ['categorie', 'images'];
 
     public function categorie()
     {
@@ -28,24 +28,9 @@ class Produit extends Model
 
     public function images()
     {
-        return $this->belongsToMany(Image::class, "image_produit");
+        return $this->belongsToMany(Image::class, "image_produit")->withPivot('image_id');
     }
 
-    //Fonction pour supprimer les images dans le cloud
-    public function deleteImage()
-    {
-        //On décompose l'url
-        $fileName = explode("/", $this->url_image_produit);
-
-        //On récupère le nom du fichier
-        $publicId = $fileName[count($fileName)-1];
-
-        //On enlève l'extension
-        $publicName = explode(".", $publicId)[0];
-
-        //Suppresion sur le cloud
-        return $result = Cloudinary::destroy($publicName);
-    }
 
 
 }

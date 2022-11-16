@@ -27,19 +27,6 @@ class PremiereBanniereController extends Controller
 
     }
 
-    //Controller pour l'API coté Front
-    public function indexApi()
-    {
-        $premiereBanniere = DB::table('premiere_bannieres')
-                        ->where('online', '=', '1')
-                        ->first();
-
-        //On contrôle la présence des données
-        if(isset($premiereBanniere)){
-            return response()->json($premiereBanniere, 200);
-        }
-        return response()->json(['status'=> false], 404);
-    }
 
     //affichage du formulaire
     public function create()
@@ -224,6 +211,5 @@ class PremiereBanniereController extends Controller
         }
         return redirect('premiere-banniere');
     }
-
 
 }
