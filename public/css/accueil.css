@@ -135,11 +135,12 @@ header{
         margin-top: 250px;
     }
     .banniereCitation{
-        height: 100%;
+        height: auto;
         font-size: 15px;
+        margin: 5px 0;
     }
     .categories{
-        height: 100%;
+        height: auto;
     }
     .imgCategorie{
         width: 250px;

@@ -28,13 +28,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return redirect('/home');
-});
+Route::get('/', [TexteAccueilController::class, 'indexFront'])->name('accueil');
 
 Auth::routes();
 
-Auth::routes(['register' => false]); //Désactivation de la route d'enregistrement d'un user
+// Auth::routes(['register' => false]); //Désactivation de la route d'enregistrement d'un user
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -180,7 +178,7 @@ Route::get('edit-email',[ListEmailController::class, 'edit'])->name('email.edit'
 
 Route::post('delete-email',[ListEmailController::class, 'destroy'])->name('email.delete'); //Route pour suppression email de newsletter
 
-Route::get('accueil', [TexteAccueilController::class, 'indexFront'])->name('accueil');
+// Route::get('accueil', [TexteAccueilController::class, 'indexFront'])->name('accueil');
 
 Route::get('about', [PresentationController::class, 'indexFront'])->name('about');
 

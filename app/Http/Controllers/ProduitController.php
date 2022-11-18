@@ -158,12 +158,14 @@ class ProduitController extends Controller
     public function showFront(Produit $produit)
     {
         //On requête les produits de la même catégorie en ommettant le produit actuel, limité à 3 produits, dans l'ordre decroissant de date de création
-        $produits = DB::table('produits')
-        ->where('id', '!=', $produit->id)
-        ->where('categorie_id', '=', $produit->categorie_id)
-        ->limit(3)
-        ->orderByDesc('created_at')
-        ->get();
+        // $produits = DB::table('produits')
+        // ->where('id', '!=', $produit->id)
+        // ->where('categorie_id', '=', $produit->categorie_id)
+        // ->limit(3)
+        // ->orderByDesc('created_at')
+        // ->get();
+
+        $produits = Produit::where('id', '!=', $produit->id)->get();
 
         return view('front.produit', compact('produit', 'produits'));
     }

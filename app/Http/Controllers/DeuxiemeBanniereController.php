@@ -51,6 +51,18 @@ class DeuxiemeBanniereController extends Controller
 
         //Création du nouvel objet
         $deuxiemeBanniere = new DeuxiemeBanniere($request->validated());
+        
+        $all = DeuxiemeBanniere::all();
+
+        //On passe toutes les entrées à 0
+        if(isset($all)){
+            foreach ($all as $item){
+                $item->online = "0";
+                $item->save();
+            }
+        }
+        //ON passe la nouvelle entrée en ligne
+        $deuxiemeBanniere->online = '1';
 
         //Enregistrement en DB
         $response = Auth::user()->deuxiemeBannieres()->save($deuxiemeBanniere);

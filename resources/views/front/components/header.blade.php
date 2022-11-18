@@ -35,7 +35,6 @@
 
     <script src="{{ asset('js/splide.min.js') }}"></script>
 
-
     <!-- Script google pour recaptcha -->
    <script src="https://www.google.com/recaptcha/api.js?render=6LepuxohAAAAAChJ_a-bx9KO4nqIfEw8iCt5Jk3y"></script>
    {{-- <script src="https://www.google.com/recaptcha/api.js"></script> --}}

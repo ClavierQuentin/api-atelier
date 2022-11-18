@@ -178,7 +178,7 @@ class CarrouselController extends Controller
                 ->withInput();
             };
             $validatedUrl = $validatorUrl->validated();
-            $carrousel->url = $validatedUrl('url');
+            $carrousel->url = $validatedUrl['url'];
         }
 
         //Enregistrement en base

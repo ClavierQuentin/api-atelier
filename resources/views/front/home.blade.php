@@ -50,7 +50,7 @@
         $url = $image[0]->url;
         ?>
                 <!--CATEGORIE-->
-                <a href="" >
+                <a href="{{ route('produits',['categorie'=>$categorie->id]) }}" >
                     <div>
                         <div class="divImg">
                             <img class="imgCategorie" src="{{asset('storage/'.$url)}}" alt="{{ $categorie->nom_categorie }}">

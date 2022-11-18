@@ -1,6 +1,11 @@
 @include('front.components.header')
 <main id="main-conteneur">
-
+    <div aria-label="breadcrumb" class="backGroundFleur">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item " ><a class="" href="{{ route('accueil') }}">Accueil&nbsp;</a></li>
+            <li class="breadcrumb-item active" aria-current="page">A propos</li>
+        </ol>
+    </div>
     <!-----------------BANNIERE QUI JE SUIS--------------------->
     <div class="banniere quiJeSuis backGroundFleur">
         <div class="divTexte">

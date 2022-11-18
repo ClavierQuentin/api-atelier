@@ -1,5 +1,14 @@
 @include('front.components.header')
 <main id="main-conteneur">
+
+    <div aria-label="breadcrumb" class="backGroundFleur">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item " ><a class="" href="{{ route('accueil') }}">Accueil&nbsp;</a></li>
+            <li class="breadcrumb-item "><a href="{{ route('categories') }}">Catégories&nbsp;</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ $categorie->nom_categorie }}</li>
+        </ol>
+    </div>
+
     <div class="sectionProduits backGroundFleur">
 
         <!--TITRE DE LA CATEGORIE-->

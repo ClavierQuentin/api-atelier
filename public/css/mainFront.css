@@ -26,7 +26,7 @@ body{
 }
 h2, h3, h4, h5{
     /* font-family: 'Playfair Display', serif;*/
-    font-weight: lighter; 
+    font-weight: lighter;
     font-size: 1.6rem;
 }
 a{
@@ -239,7 +239,7 @@ transform: translateX(500px);
 footer{
     display: flex;
     flex-direction: column;
-    gap: 30px;    
+    gap: 30px;
     padding: 15px 20px;
 }
 .liens:hover{
@@ -291,8 +291,19 @@ footer{
         flex-direction: column;
         align-items: center;
     }
-}
 
+
+}
+@media screen and (max-width:392px){
+    .emailContainer input{
+        margin: auto;
+        border-radius: 4px;
+    }
+    .emailContainer button{
+        margin: auto;
+        border-radius: 4px;
+    }
+}
 
 
 
@@ -301,7 +312,27 @@ nav{
     justify-content:center;
 }
 
-
+/*-------------------Breadcrumb-----------------------*/
+.breadcrumb{
+    list-style-type: none;
+    /* color: white; */
+    display: flex;
+}
+.active{
+    font-style: italic;
+}
+.breadcrumb a{
+    text-decoration: underline;
+}
+.breadcrumb-item::before{
+    content: " / ";
+}
+.breadcrumb-item:first-child::before{
+    content: " ";
+}
+.breadcrumb-item:first-child::after{
+    content: " ";
+}
 
 
 /*--------Premiere page paiement (a faire)--------*/
@@ -336,7 +367,7 @@ nav{
 } */
 
 
-    
+
 /*---------------PAGE 404------------------*/
 .container404{
     width: 33%;

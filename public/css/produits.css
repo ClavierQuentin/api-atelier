@@ -103,7 +103,7 @@
     text-align: justify;
 }
 .descriptionCourte p, .compo p{
-    margin: 2% 0;
+    padding: 2% 0;
 }
 
 #boutonAjouter{
